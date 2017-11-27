@@ -1,0 +1,28 @@
+Seznam razsirjenih storitev, ki jih bova implementirala.
+Varnost(15%) + Uporabniski vmesnik(15%) + Mobile app(20%) = 50%
+
+
+Varnost
+
+- Vodenje dnevnika uporabnikov Administrator in Prodajalec. (5%)
+- Registracija strank z uporabo filtriranja CAPTCHA. (5%)
+- Registracija strank z uporabo potrditvenega e-maila. (5%) 
+
+Uporabniški vmesnik
+
+- Predstavitev artiklov s slikami. (10%) 
+- Implementacija ocenjevanja artiklov prijavljenega uporabnika ter predstavitev njihove povprečne ocene pri njihovem ogledu.(5%) 
+
+
+
+Napredne funkcije mobilne aplikacije 
+
+Mobilno aplikacijo razširite, tako da bo podpirala naslednje funkcije vloge Stranka
+- Prijava in odjava. (5%) 
+- Pregled profilnih podatkov (ime, priimek, email, geslo, naslov ipd.) ter možnost njihovega spreminjanja. (5%) 
+- Izvajanje nakupa. Implementirajte zaslon, kjer boste prikazali vsebino nakupovalne košarice skupaj z ustreznimi kontrolami za manipulacijo artiklov v košarici ter dialogom, kjer bo uporabnik lahko nakup tudi zaključil. (10 %) 
+
+
+
+
+
