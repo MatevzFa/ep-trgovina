@@ -1,7 +1,12 @@
+
 CREATE DATABASE IF NOT EXISTS ep_trgovina;
+
 USE ep_trgovina;
+
 DROP TABLE IF EXISTS uporabnik;
+
 CREATE TABLE uporabnik (
+
     id INT NOT NULL AUTO_INCREMENT,
     vloga VARCHAR(45) NOT NULL,
 
@@ -14,7 +19,8 @@ CREATE TABLE uporabnik (
     telefon VARCHAR(45),
     
     PRIMARY KEY (id)
-);
+
+) COLLATE utf8mb4_unicode_ci;
 
 
 DELIMITER $$
@@ -32,8 +38,7 @@ END;$$
 DELIMITER ;
 
 INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('administrator', 'Janez', 'Novak', 'jno@mail.com', 'geslo123');
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', 'heymomma', 'vecna 123, lj', '0123456789');
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', 'heymomma', NULL, '0123456789');
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', 'heymomma', 'večšžna 123, lj', '0123456789');
 
 
 SELECT * FROM uporabnik;
