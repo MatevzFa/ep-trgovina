@@ -1,5 +1,5 @@
 Seznam razsirjenih storitev, ki jih bova implementirala.
-Varnost(15%) + Uporabniski vmesnik(15%) + Mobile app(20%) = 50%
+Varnost(15%) + Uporabniski vmesnik(15%) + Mobile app(25%) = 55%
 
 
 Varnost
@@ -21,10 +21,7 @@ Mobilno aplikacijo razširite, tako da bo podpirala naslednje funkcije vloge Str
 - Prijava in odjava. (5%) 
 - Pregled profilnih podatkov (ime, priimek, email, geslo, naslov ipd.) ter možnost njihovega spreminjanja. (5%) 
 - Izvajanje nakupa. Implementirajte zaslon, kjer boste prikazali vsebino nakupovalne košarice skupaj z ustreznimi kontrolami za manipulacijo artiklov v košarici ter dialogom, kjer bo uporabnik lahko nakup tudi zaključil. (10 %) 
-
-Mogoce lahko namesto neke razsiritve narediva to. Itak je ze obvezna pri spletni aplikaciji, je pa dokaj straight forward branje iz baze recimo, ne?:
-
-(5%) Pregled preteklih nakupov. Implementacija naj obsega tako pregled seznama vseh nakupov kot tudi ogled podrobnosti posameznega nakupa kot so seznam artiklov, končni znesek ipd.
+- Pregled preteklih nakupov. Implementacija naj obsega tako pregled seznama vseh nakupov kot tudi ogled podrobnosti posameznega nakupa kot so seznam artiklov, končni znesek ipd. (5%) 
 
 
 
