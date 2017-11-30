@@ -14,6 +14,7 @@
         var_dump(Uporabnik::findById(2));
         
         var_dump(Uporabnik::getAllItems());
+        var_dump(Uporabnik::getItemInformation(2));
     ?>
     čćšž
 </body>
