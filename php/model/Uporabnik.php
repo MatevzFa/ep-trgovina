@@ -35,4 +35,18 @@ class Uporabnik
         
         return $stmt->fetch();
     }
+    
+    public function getAllItems() {
+        $db = DBInit::getInstance();
+        
+        $stmt = $db->prepare("SELECT * FROM izdelek");
+        $stmt->execute();
+        
+        return $stmt->fetchAll();
+    }
+    
+    // potrebno dobiti informacije o izdlku, path slike in ocena
+    public function getItemInformation($id) {
+        
+    }
 }

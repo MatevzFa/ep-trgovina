@@ -4,7 +4,7 @@ class DBInit {
 
     private static $host = "localhost";
     private static $user = "root";
-    private static $password = "";
+    private static $password = "ep";
     private static $schema = "ep_trgovina";
     private static $instance = null;
 

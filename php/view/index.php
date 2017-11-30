@@ -8,10 +8,12 @@
 <body>
     <?php
     
-        require_once '../dbaccess/Uporabnik.php';
+        require_once '../model/Uporabnik.php';
         var_dump(Uporabnik::findAll());
         var_dump(Uporabnik::findById(1));
         var_dump(Uporabnik::findById(2));
+        
+        var_dump(Uporabnik::getAllItems());
     ?>
     čćšž
 </body>
