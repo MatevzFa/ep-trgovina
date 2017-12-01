@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/DB.php';
+require_once 'DBInit.php';
 
 abstract class AbstractDB {
 
@@ -158,7 +158,7 @@ abstract class AbstractDB {
         return $result;
     }
 
-    public static abstract function get(array $id);
+    public static abstract function get($id);
 
     public static abstract function getAll();
 
@@ -166,5 +166,5 @@ abstract class AbstractDB {
 
     public static abstract function update(array $params);
 
-    public static abstract function delete(array $id);
+    public static abstract function delete($id);
 }
