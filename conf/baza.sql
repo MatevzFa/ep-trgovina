@@ -37,7 +37,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`izdelek` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `ime` VARCHAR(200) NOT NULL,
-  `cena` DECIMAL NOT NULL,
+  `cena` DECIMAL(10,2) NOT NULL,
   `opis` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
