@@ -13,8 +13,9 @@
         var_dump(Uporabnik::findById(1));
         var_dump(Uporabnik::findById(2));
         
-        var_dump(Uporabnik::getAllItems());
-        var_dump(Uporabnik::getItemInformation(2));
+        require_once '../model/Izdelek.php';
+        var_dump(Izdelek::getAllItems());
+        var_dump(Izdelek::getItemInformation(2));
     ?>
     čćšž
 </body>
