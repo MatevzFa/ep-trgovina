@@ -1,0 +1,12 @@
+# Ignore IDE specific folders
+
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VS Code
+.vscode/
