@@ -39,13 +39,18 @@ class UporabnikDB extends AbstractDB {
     }
 
     /**
+     * Samo za testiranje. Za produkcijo uporabi $salt ki ga nastavi password_hash(...)
+     */
+    private static $SALT = 'salt_intensifies123456';
+
+    /**
      * Doda uporabnika v PB, z zgoščenim geslom
      * @param array $params uporabnik
      */
     public static function dodajUporabnika(array $params) {
 
         $geslo = $params['geslo'];
-        $params['geslo'] = password_hash($geslo, PASSWORD_DEFAULT);
+        $params['geslo'] = password_hash($geslo, PASSWORD_DEFAULT, array('salt' => self::$SALT));
 
         self::insert($params);
     }
@@ -61,7 +66,7 @@ class UporabnikDB extends AbstractDB {
                 . "SET geslo = :gesloHash "
                 . "WHERE id = :id", array(
             'id' => $id,
-            'gesloHash' => password_hash($novoGeslo, PASSWORD_DEFAULT)
+            'gesloHash' => password_hash($novoGeslo, PASSWORD_DEFAULT, array('salt' => self::$SALT))
                 )
         );
     }
