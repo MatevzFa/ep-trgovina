@@ -7,16 +7,19 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema ep_trgovina
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `ep_trgovina` ;
 
 -- -----------------------------------------------------
 -- Schema ep_trgovina
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 ;
 USE `ep_trgovina` ;
 
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`uporabnik`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`uporabnik` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`uporabnik` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `vloga` VARCHAR(45) NOT NULL DEFAULT 'stranka',
@@ -34,6 +37,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`izdelek`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`izdelek` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`izdelek` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `ime` VARCHAR(200) NOT NULL,
@@ -46,6 +51,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`ocena`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`ocena` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`ocena` (
   `uporabnik_id` INT NOT NULL,
   `izdelek_id` INT NOT NULL,
@@ -69,6 +76,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`slika`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`slika` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`slika` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `path` VARCHAR(500) NOT NULL,
@@ -86,6 +95,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`narocilo`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`narocilo` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `datum` DATETIME NOT NULL,
@@ -112,6 +123,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ep_trgovina`.`narocilo_vsebuje`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`narocilo_vsebuje` ;
+
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo_vsebuje` (
   `kolicina` INT NOT NULL COMMENT 'Kolicina dolocenega izdelka\n',
   `izdelek_id` INT NOT NULL,
@@ -138,6 +151,9 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `ep_trgovina`;
 
 DELIMITER $$
+
+USE `ep_trgovina`$$
+DROP TRIGGER IF EXISTS `ep_trgovina`.`uporabnik_BEFORE_INSERT` $$
 USE `ep_trgovina`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `ep_trgovina`.`uporabnik_BEFORE_INSERT` BEFORE INSERT ON `uporabnik` FOR EACH ROW
 BEGIN
@@ -152,10 +168,13 @@ BEGIN
 	END IF;
 END;$$
 
+
+USE `ep_trgovina`$$
+DROP TRIGGER IF EXISTS `ep_trgovina`.`uporabnik_BEFORE_UPDATE` $$
 USE `ep_trgovina`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `ep_trgovina`.`uporabnik_BEFORE_UPDATE` BEFORE UPDATE ON `uporabnik` FOR EACH ROW
 BEGIN
-	IF NEW.vloga = 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
+	IF NEW.vloga = 'administrator' AND OLD.vloga != 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
 		SIGNAL SQLSTATE '45000' SET message_text = 'Obstaja lahko le en administrator';
 	END IF;
 	IF NEW.vloga = 'stranka' AND (NEW.naslov IS NULL OR NEW.telefon IS NULL) THEN
