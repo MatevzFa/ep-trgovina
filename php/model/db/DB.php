@@ -1,6 +1,6 @@
 <?php
 
-class DBInit {
+class DB {
 
     private static $host = "localhost";
     private static $user = "root";

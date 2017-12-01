@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DBInit.php';
+require_once 'DB.php';
 
 abstract class AbstractDB {
 
@@ -19,7 +19,7 @@ abstract class AbstractDB {
      */
     public static function getConnection() {
         if (is_null(self::$dbh)) {
-            self::$dbh = DBInit::getInstance();
+            self::$dbh = DB::getInstance();
         }
 
         return self::$dbh;

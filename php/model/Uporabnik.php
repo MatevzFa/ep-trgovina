@@ -19,7 +19,7 @@ class Uporabnik
     }
     
     public function findAll() {
-        $db = DBInit::getInstance();
+        $db = DB::getInstance();
         
         $stmt = $db->prepare("SELECT * FROM " . self::table);
         $stmt->execute();
@@ -28,7 +28,7 @@ class Uporabnik
     }
     
     public function findById($id) {
-        $db = DBInit::getInstance();
+        $db = DB::getInstance();
         $stmt = $db->prepare("SELECT * FROM " . self::table . " WHERE id = :id");
         $stmt->bindValue("id", $id);
         $stmt->execute();

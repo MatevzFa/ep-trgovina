@@ -11,7 +11,7 @@ class Izdelek
     
 //prikaz vseh izdelkov. Rabimo samo ime, ceno in id
     public function getAllItems() {
-        $db = DBInit::getInstance();
+        $db = DB::getInstance();
         
         $stmt = $db->prepare("SELECT id, ime, cena FROM " . self::table);
         $stmt->execute();
@@ -21,7 +21,7 @@ class Izdelek
     
     // potrebno dobiti se opis, pot do slike in oceno
     public function getItemInformation($id) {
-        $db = DBInit::getInstance();
+        $db = DB::getInstance();
         
         // TODO moram naredit tako, da dobim povprecno oceno, ne pa vseh ocen
         $stmt = $db->prepare("SELECT i.id, i.ime, i.cena, i.opis, s.path, o.ocena"
