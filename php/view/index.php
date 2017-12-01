@@ -19,10 +19,10 @@
         
         require_once '../model/db/UporabnikDB.php';
         
-        var_dump(UporabnikDB::getAll());
-        UporabnikDB::delete(1);
-        // fail zaradi FK constrainta
-        var_dump(UporabnikDB::getAll());
+        var_dump(UporabnikDB::get(1));
+        UporabnikDB::posodobiGeslo(1, "7ffedf68");
+        var_dump(UporabnikDB::get(1));
+        var_dump(UporabnikDB::preveriGeslo(1, "7ffedf68"));
     ?>
 <!--</body>
 
