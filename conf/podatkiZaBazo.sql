@@ -22,4 +22,6 @@ INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUE
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (2,2,4);
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Xiaomi Mi Robot Vacuum', '274.59', 'Forget about vacuum cleaning. Get a robot.');
 
+INSERT INTO slika(path, izdelek_id) VALUES ('PotDoDrugeSlikeIstegaIzdelka', 2);
+
 SET FOREIGN_KEY_CHECKS = 1;

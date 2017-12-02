@@ -17,8 +17,8 @@ class UporabnikDB extends AbstractDB {
 
     public static function insert(array $params) {
         self::modify(
-                "INSERT INTO uporabnik (id, vloga, ime, priimek, email, geslo, naslov, telefon) "
-                . "VALUES (:id, :vloga, :ime, :priimek, :email, :geslo, :naslov, :telefon)", $params);
+                "INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) "
+                . "VALUES (:vloga, :ime, :priimek, :email, :geslo, :naslov, :telefon)", $params);
     }
 
     public static function update(array $params) {
