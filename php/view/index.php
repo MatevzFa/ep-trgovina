@@ -35,7 +35,7 @@
 
         <?php
         require_once '../model/db/IzdelekDB.php';
-        var_dump(IzdelekDB::get(array('id' => 2)));
+        var_dump(IzdelekDB::pridobiSlike(array('id' => 2)));
         var_dump(IzdelekDB::getAll());
         ?>
 

@@ -51,18 +51,12 @@ class IzdelekDB extends AbstractDB {
     /**
      * Podatki o dolocenem izdelku
      * @param type $id id izdelka
-     * @return vse o izdelku, povprecna ocena in slike
+     * @return vse o izdelku, povprecna ocena 
      */
-    public static function pridobiZOceno($id) {
+    public static function pridobiZOceno(array $params) {
         return self::query(""
-                        . "SELECT s.path, i.*, povprecnaOcena(i.id) AS povprecnaOcena "
-                        . "FROM izdelek i, slika s WHERE i.id = :id", array('id' => $id));
-        /**
-         * TODO
-         * Ali se da spremeniti, da bi nekako dobil seznam ali pa nekaj 
-         * z vsemi slikami? Zdaj vrne dejansko vec tabel, kjer je vse isto razen 
-         * razlicne poti do razlicnih slik.
-         */
+                        . "SELECT i.*, povprecnaOcena(i.id) AS povprecnaOcena "
+                        . "FROM izdelek i WHERE i.id = :id", $params)[0];
     }
 
     /**
@@ -72,8 +66,8 @@ class IzdelekDB extends AbstractDB {
      */
     public static function pridobiSlike(array $params) {
         return self::query(""
-                        . "SELECT path FROM slika"
-                        . "WHERE id_izdelka = :id", $params);
+        				. "SELECT path "
+        				. "FROM slika WHERE izdelek_id = :id", $params);
     }
 
 }

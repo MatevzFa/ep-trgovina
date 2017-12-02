@@ -14,11 +14,12 @@ class IzdelkiController {
         ];
 
         $data = filter_input_array(INPUT_GET, $rules);
-
         if (self::checkValues($data)) {
             echo ViewHelper::render("view/izdelki-detail.php", [
-                "izdelek" => IzdelekDB::get($data)
-            ]);
+                "izdelek" => IzdelekDB::pridobiZOceno($data),
+                "slike" => IzdelekDB::pridobiSlike($data)
+            ]
+        );
         } else {
             echo ViewHelper::render("view/izdelki-list.php", [
                 "izdelki" => IzdelekDB::getAll()
