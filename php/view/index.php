@@ -30,6 +30,7 @@
         var_dump(IzdelekDB::get(2));
         var_dump(IzdelekDB::getAll());
     ?>
+<!--
 <h2> Testiranje inserta Izdelka. ID je auto increment. </h2>
 	<?php
 		$izdelekZaDodat = [ 'ime' => 'Adobe Photoshop', 'cena' => '13.37', 'opis' =>'Edit pictures and stuff.'];
@@ -37,6 +38,7 @@
 		var_dump(IzdelekDB::getAll());
 
 	?>
+-->
 <!--</body>
 
 </html>-->
