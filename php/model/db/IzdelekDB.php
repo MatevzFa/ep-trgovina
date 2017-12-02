@@ -24,6 +24,12 @@ class IzdelekDB extends AbstractDB {
     }
 
     public static function update(array $params) {
+    	self::modify(""
+    			. "UPDATE izdelek SET "
+    			. "ime = :ime, "
+    			. "cena = :cena, "
+    			. "opis = :opis "
+    			. " WHERE id = :id", $params);
         
     }
 
