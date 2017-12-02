@@ -7,8 +7,8 @@ require_once 'AbstractDB.php';
  */
 class UporabnikDB extends AbstractDB {
 
-    public static function get($id) {
-        return self::query("SELECT * FROM uporabnik WHERE id = :id", array('id' => $id))[0];
+    public static function get(array $params) {
+        return self::query("SELECT * FROM uporabnik WHERE id = :id", $params)[0];
     }
 
     public static function getAll() {
@@ -16,33 +16,37 @@ class UporabnikDB extends AbstractDB {
     }
 
     public static function insert(array $params) {
-        self::modify(
-                "INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) "
+        self::modify(""
+                . "INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) "
                 . "VALUES (:vloga, :ime, :priimek, :email, :geslo, :naslov, :telefon)", $params);
     }
 
     public static function update(array $params) {
-        self::modify("UPDATE uporabnik\n"
-                . "SET \n"
-                . "vloga = :vloga, \n"
-                . "ime = :ime, \n"
-                . "priimek = :priimek, \n"
-                . "email = :email, \n"
-                . "geslo = :geslo, \n"
-                . "naslov = :naslov, \n"
-                . "telefon = :telefon \n"
+        self::modify(""
+                . "UPDATE uporabnik"
+                . "SET "
+                . "vloga = :vloga, "
+                . "ime = :ime, "
+                . "priimek = :priimek, "
+                . "email = :email, "
+                . "geslo = :geslo, "
+                . "naslov = :naslov, "
+                . "telefon = :telefon "
                 . "WHERE id = :id", $params);
     }
 
-    public static function delete($id) {
-        self::modify("DELETE FROM uporabnik WHERE id = :id", array('id' => $id));
+    public static function delete(array $params) {
+        self::modify("DELETE FROM uporabnik WHERE id = :id", $params);
     }
 
     /**
      * Samo za testiranje. Za produkcijo uporabi $salt ki ga nastavi password_hash(...)
      */
-    private static $SALT = 'salt_intensifies123456';
-
+    private static $HASH_OPTIONS = [
+        'salt' => 'salt_intensifies123456',
+        'cost' => '10'
+    ];
+  
     /**
      * Doda uporabnika v PB, z zgoščenim geslom
      * @param array $params uporabnik
@@ -50,7 +54,7 @@ class UporabnikDB extends AbstractDB {
     public static function dodajUporabnika(array $params) {
 
         $geslo = $params['geslo'];
-        $params['geslo'] = password_hash($geslo, PASSWORD_DEFAULT, array('salt' => self::$SALT));
+        $params['geslo'] = password_hash($geslo, PASSWORD_DEFAULT, self::$HASH_OPTIONS);
 
         self::insert($params);
     }
@@ -62,11 +66,12 @@ class UporabnikDB extends AbstractDB {
      */
     public static function posodobiGeslo($id, $novoGeslo) {
 
-        self::modify("UPDATE uporabnik "
+        self::modify(""
+                . "UPDATE uporabnik "
                 . "SET geslo = :gesloHash "
                 . "WHERE id = :id", array(
             'id' => $id,
-            'gesloHash' => password_hash($novoGeslo, PASSWORD_DEFAULT, array('salt' => self::$SALT))
+            'gesloHash' => password_hash($novoGeslo, PASSWORD_DEFAULT, self::$HASH_OPTIONS)
                 )
         );
     }
@@ -79,7 +84,7 @@ class UporabnikDB extends AbstractDB {
      */
     public static function preveriGeslo($id, $geslo) {
 
-        $gesloHash = self::get($id)['geslo'];
+        $gesloHash = self::get(array('id' => $id))['geslo'];
 
         return password_verify($geslo, $gesloHash);
     }
