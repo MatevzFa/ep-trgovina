@@ -24,4 +24,10 @@ INSERT INTO izdelek(ime, cena, opis) VALUES ('Xiaomi Mi Robot Vacuum', '274.59',
 
 INSERT INTO slika(path, izdelek_id) VALUES ('PotDoDrugeSlikeIstegaIzdelka', 2);
 
+INSERT INTO narocilo(datum, uporabnik_id, stanje, stornirano, postavka) VALUES ('2016-1-23' , 4, 'oddano', null, '442.3');
+INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id) VALUES (1, 2, 1);
+INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id) VALUES (4, 1, 1);
+INSERT INTO narocilo(datum, uporabnik_id, stanje, stornirano, postavka) VALUES ('2016-7-07' , 2, 'oddano', null, '274.59');
+INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id) VALUES (1, 4, 2);
+
 SET FOREIGN_KEY_CHECKS = 1;

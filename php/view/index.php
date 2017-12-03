@@ -30,6 +30,13 @@
         var_dump(UporabnikDB::preveriGeslo(1, "testnogesloooo"));
         ?>
 
+        <h2> Testiranje getAll, getAllFromCustomer in getOrderDetails narocil </h2>
+        <?php
+        require_once '../model/db/NarociloDB.php';
+        var_dump(NarociloDB::getAll());
+        var_dump(NarociloDB::getAllFromCustomer(array('uporabnik_id' => 4)));
+        var_dump(NarociloDB::getOrderDetails(array('id' => 1)));
+        ?>
 
         <h2> Testiranje get za izdelek z ID 2 in getAll </h2>
 
