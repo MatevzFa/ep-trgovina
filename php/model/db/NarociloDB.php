@@ -29,6 +29,17 @@ class NarociloDB extends AbstractDB {
     }
 
     /**
+     * Vrne vsa narocila z dolocenim stanjem - stornirana, oddana, ...
+     * @param stanje narocil, ki jih zelimo prikazati
+     * @return vsa narocila s taksnim stanjem
+     */
+    public static function vsaNarocilaSStanjem(array $params) {
+        return self::query(""
+                . "SELECT * FROM narocilo "
+                . "WHERE stanje = :stanje", $params);
+    }
+
+    /**
      * Vrne podrobnosti narocila - izdelki, kolicine
      * @param id narocila
      * @return id_izdelek, kolicina, ime izdelka, cena izdelka
