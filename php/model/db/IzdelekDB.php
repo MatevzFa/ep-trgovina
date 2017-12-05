@@ -39,6 +39,33 @@ class IzdelekDB extends AbstractDB {
                 . "WHERE id = :id", $params);
     }
 
+
+    //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
+
+    /**
+     * Posodobitev slike izdelka
+     * @param type $id id od slike, type $path path do nove slike
+     * izdelek_id ostane isti
+     */
+    public static posodobiSliko(array $params) {
+        self::modify(""
+                . "UPDATE slika SET "
+                . "path = :path "
+                . "WHERE id = :id", $params);
+
+    }
+
+    /**
+     * Tako kot getAll, samo da so zraven se slike.
+     * ko so prikazani vsi izdelki, je najboljse da so tam tudi slike njih
+     */
+    public static pridobiVseSSlikami() {
+        // TODO - kako bi dobil slike, ce obstajajo. Ce ne obstajajo pa pac ne bi bilo slike
+        self::query(""
+                . "SELECT i.id, i.ime, i.cena, s.path "
+                . "FROM izdelek i, slika s "
+                . "WHERE s.izdelek_id = i.id");
+    }
     /**
      * Pridobivanje izdelkov z ostranjevanjem
      * @param type $offset offset

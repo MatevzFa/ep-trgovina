@@ -19,6 +19,39 @@ class NarociloDB extends AbstractDB {
     }
 
     /**
+     * Za stornacijo vneses negativno postavko
+     * in kot :stornirano id narocila, ki ga storniras
+     */
+    public static function insert(array $params) {
+        self::modify(""
+                . "INSERT INTO narocilo (datum, "
+                . " uporabnik_id, stanje, stornirano, postavka) "
+                . "VALUES (:datum, :uporabnik_id, :stanje, "
+                . ":stornirano, :postavka)", $params);
+    }
+
+    public static function update(array $params) {
+        self::modify(""
+                . "UPDATE narocilo"
+                . "SET "
+                . "datum = :datum, "
+                . "uporabnik_id = :uporabnik_id, "
+                . "stanje = :stanje, "
+                . "stornirano = :stornirano, "
+                . "postavka = :postavka "
+                . "WHERE id = :id", $params);
+        
+    }
+
+    public static function delete(array $params) {
+        self::modify(""
+                . "DELETE FROM narocilo "
+                . "WHERE id = :id", $params);
+    }
+
+    //--------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------
+
+    /**
      * Vrne vse narocila ene stranke
      * @param id_uporabnika
      */
@@ -40,9 +73,9 @@ class NarociloDB extends AbstractDB {
     }
 
     /**
-     * Vrne podrobnosti narocila - izdelki, kolicine
+     * Vrne podrobnosti narocila 
      * @param id narocila
-     * @return id_izdelek, kolicina, ime izdelka, cena izdelka
+     * @return id_izdelek, kolicina, ime izdelka, cena izdelka(na kos)
      */
     public static function getOrderDetails(array $params) {
         return self::query(""
@@ -54,35 +87,6 @@ class NarociloDB extends AbstractDB {
     }
 
 
-    /**
-	 * Za stornacijo vneses negativno postavko
-	 * in kot :stornirano id narocila, ki ga storniras
-     */
-    public static function insert(array $params) {
-        self::modify(""
-                . "INSERT INTO narocilo (datum, uporabnik_id, 
-                stanje, stornirano, postavka) "
-                . "VALUES (:datum, :uporabnik_id, :stanje, 
-                	:stornirano, :postavka)", $params);
-    }
-
-    public static function update(array $params) {
-    	self::modify(""
-                . "UPDATE narocilo"
-                . "SET "
-                . "datum = :datum, "
-                . "uporabnik_id = :uporabnik_id, "
-                . "stanje = :stanje, "
-                . "stornirano = :stornirano, "
-                . "postavka = :postavka "
-                . "WHERE id = :id", $params);
-        
-    }
-
-    public static function delete(array $params) {
-        self::modify(""
-                . "DELETE FROM narocilo "
-                . "WHERE id = :id", $params);
-    }
+    
 
 }
