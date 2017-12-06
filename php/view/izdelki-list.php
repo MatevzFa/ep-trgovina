@@ -26,6 +26,7 @@
 				        <div class="col-md-4">
 				            <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
 				                <?= $izdelek["ime"] ?> (<?= $izdelek["cena"] ?>)
+				                <?= $izdelek["slika"] ?>
 				            </a>
 				        </div>
 				    <?php endforeach; ?>

@@ -22,7 +22,7 @@ class IzdelkiController {
         );
         } else {
             echo ViewHelper::render("view/izdelki-list.php", [
-                "izdelki" => IzdelekDB::getAll()
+                "izdelki" => IzdelekDB::pridobiVseSSlikami()
             ]);
         }
     }

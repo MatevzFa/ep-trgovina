@@ -58,13 +58,11 @@ class IzdelekDB extends AbstractDB {
     /**
      * Tako kot getAll, samo da so zraven se slike.
      * ko so prikazani vsi izdelki, je najboljse da so tam tudi slike njih
+     * @return izdelek(id, ime, cena, slika)
      */
     public static pridobiVseSSlikami() {
-        // TODO - kako bi dobil slike, ce obstajajo. Ce ne obstajajo pa pac ne bi bilo slike
-        self::query(""
-                . "SELECT i.id, i.ime, i.cena, s.path "
-                . "FROM izdelek i, slika s "
-                . "WHERE s.izdelek_id = i.id");
+       return self::query(""
+                . "SELECT i.id,i.ime,i.cena,(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) as slika FROM izdelek i");
     }
     /**
      * Pridobivanje izdelkov z ostranjevanjem

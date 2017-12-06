@@ -21,6 +21,7 @@
 //        var_dump(Izdelek::getAllItems());
 //        var_dump(Izdelek::getItemInformation(2));
 
+        
         require_once '../model/db/UporabnikDB.php';
 
         var_dump(UporabnikDB::get(array('id' => 1)));
