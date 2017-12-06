@@ -26,13 +26,12 @@
 % ######################################
 
 \newcommand{\naslov}     {Vzorčni naslov seminarske naloge}
-\newcommand{\prviavtor}  {Janez Novak}
+\newcommand{\prviavtor}  {Matevž Fabjančič}
 \newcommand{\prviindeks} {63000000}
-\newcommand{\drugiavtor} {Jana Novak}
-\newcommand{\drugiindeks}{63000001}
-\newcommand{\tretjiavtor} {Marija Novak}
-\newcommand{\tretjiindeks}{63000002}
-\newcommand{\kraj}       {Vzorčni kraj}
+\newcommand{\drugiavtor} {Andraž Povše}
+\newcommand{\drugiindeks}{63150224}
+
+\newcommand{\kraj}       {Ljubljana}
 
 % -----------------------------------------------------------------------------
 % ###################
@@ -80,7 +79,6 @@ pdfkeywords={spletna prodajalna, PHP, SSL, MySQL}, a4paper, pagebackref=true, un
 	{\bf Študenti}\\
 	{\prviavtor} ({\prviindeks})\\ 
 	{\drugiavtor} ({\drugiindeks})\\
-	{\tretjiavtor} ({\tretjiindeks})
 \end{minipage}
 %\hfill
 \begin{minipage}[t]{50mm}
@@ -117,6 +115,8 @@ pdfkeywords={spletna prodajalna, PHP, SSL, MySQL}, a4paper, pagebackref=true, un
 
 V uvodu podajte kratko predstavitev teme seminarske naloge ter navedite seznam uporabljene tehnologije.
 
+PHP, MySQL, --
+
 % -----------------------------------------------------------------------------
 % ###################
 % # JEDRO DOKUMENTA #
@@ -133,7 +133,24 @@ Prav tako navedite, če katero od obveznih storitev niste implementirali v celot
 % -----------------------------------------------
 \chapter{Podatkovni model}
 
-Podajte sliko logičnega podatkovnega modela (denimo iz programa MySQL Workbench) ter navedite in kratko opišite uporabljene tabele. Če katera vsebuje netrivialne atribute, jih pojasnite.
+\textbf{\textit{Podajte sliko logičnega podatkovnega modela (denimo iz programa MySQL Workbench) ter navedite in kratko opišite uporabljene tabele. Če katera vsebuje netrivialne atribute, jih pojasnite.}}
+
+V podatkovni bazi sva ustvarila naslednje tabele: \\
+- Uporabnik. Tabela vsebuje stranke, prodajalce in administratorje. \\
+- Narocilo. Tabela vsebuje narocila. \\
+- Izdelek. Tabela vsebuje izdelke z imenom, ceno in opisom. \\
+- Slika. Tabela vsebuje tuji kljuc do izdelka in pot do slike v datotecnem sistemu. \\
+- Ocena. Tabela vsebuje tuji kljuc do osebe, izdelka in podano oceno. \\
+- Narocilo\_vsebuje. Tabela vsebuje tuji kljuc do izdelka, narocila in kolicino narocenega izdelka.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=13cm]{img/logicni_model.png}
+	\caption{Slika logicnega modela}
+\label{fig:1}
+\end{figure}
+
+
 
 % -----------------------------------------------
 \chapter{Varnost sistema}
