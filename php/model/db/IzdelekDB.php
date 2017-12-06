@@ -47,7 +47,7 @@ class IzdelekDB extends AbstractDB {
      * @param type $id id od slike, type $path path do nove slike
      * izdelek_id ostane isti
      */
-    public static posodobiSliko(array $params) {
+    public static function posodobiSliko(array $params) {
         self::modify(""
                 . "UPDATE slika SET "
                 . "path = :path "
@@ -60,7 +60,7 @@ class IzdelekDB extends AbstractDB {
      * ko so prikazani vsi izdelki, je najboljse da so tam tudi slike njih
      * @return izdelek(id, ime, cena, slika)
      */
-    public static pridobiVseSSlikami() {
+    public static function pridobiVseSSlikami() {
        return self::query(""
                 . "SELECT i.id,i.ime,i.cena,(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) as slika FROM izdelek i");
     }
