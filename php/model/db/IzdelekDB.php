@@ -70,7 +70,7 @@ class IzdelekDB extends AbstractDB {
      * @param type $limit limit
      * @return type array(izdelek)
      */
-    public static function getAllPagination($offset = 0, $limit = 25) {
+    public static function pridobiZOstranjevanjem($offset = 0, $limit = 25) {
         return self::query(""
                         . "SELECT * FROM izdelek "
                         . "LIMIT :limit OFFSET :offset", array(

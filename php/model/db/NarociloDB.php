@@ -55,7 +55,7 @@ class NarociloDB extends AbstractDB {
      * Vrne vse narocila ene stranke
      * @param id_uporabnika
      */
-    public static function getAllFromCustomer(array $params) {
+    public static function pridobiVsaNarocilaStranke(array $params) {
     	return self::query(""
     			. "SELECT * FROM narocilo "
     			. "WHERE uporabnik_id = :uporabnik_id", $params);
@@ -77,7 +77,7 @@ class NarociloDB extends AbstractDB {
      * @param id narocila
      * @return id_izdelek, kolicina, ime izdelka, cena izdelka(na kos)
      */
-    public static function getOrderDetails(array $params) {
+    public static function pridobiPodrobnostiONarocilu(array $params) {
         return self::query(""
                 . "SELECT nv.izdelek_id, nv.kolicina, i.ime, i.cena "
                 . "FROM narocilo_vsebuje nv, izdelek i "

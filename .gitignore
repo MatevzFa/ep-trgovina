@@ -1,2 +1,3 @@
 *.bak
 ._.DS_Store
+/nbproject/private/
