@@ -18,9 +18,6 @@
 	                Vsi izdelki
 	            </h1>
 	            <br>
-					<p>[
-			    		<a href="<?= BASE_URL . "izdelki" ?>">Vsi izdelki</a>
-			    	]</p>
 	            <div class="row">
 	            	<?php foreach ($izdelki as $izdelek): ?>
 				        <div class="col-md-4">
@@ -47,7 +44,11 @@
 	            </ul>
 	        </div>
 	        <div class="col-md-3">
-	        	<h1> <a href="<?= BASE_URL . "izdelki/add" ?>">Add new</a></h1>
+                    <h1>
+                    <button type="button" class="btn btn-info" value="Input Button" onclick="location.href = '<?= BASE_URL . "izdelki/add" ?>';">
+                      Dodaj nov izdelek
+                    </button>
+                    </h1>
 	        </div>
 	    </div>
 	</div>
