@@ -24,6 +24,13 @@ $urls = [
     "izdelki" => function () {
         IzdelkiController::izdelki();
     },
+    "izdelki/add" => function () {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            IzdelkiController::add();
+        } else {
+            IzdelkiController::addForm();
+        }
+    },   
     "registracija" => function () {
         UporabnikiController::registracija();
     },

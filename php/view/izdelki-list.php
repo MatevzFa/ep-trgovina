@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<?php
-//var_dump($stIzdelkov);
-//var_dump($izdelki);
-
-?>
 
 <head>
     <title>Trgovina</title>
@@ -20,7 +15,7 @@
                 <h1 class="p-md-5">
                     Vsi izdelki
                 </h1>
-                
+
                 <ul class="pagination">
                     <!--<li class="page-item"><a class="page-link" href="#">Nazaj</a></li>-->
                     <?php foreach (range(0, floor($stIzdelkov / 18)) as $stran): ?>
@@ -30,7 +25,7 @@
                     <?php endforeach; ?>
                     <!--<li class="page-item"><a class="page-link" href="#">Naprej</a></li>-->
                 </ul>
-                
+
                 <div class="row">
                     <?php foreach ($izdelki as $izdelek): ?>
                         <div class="col-md-4 p-md-1">
@@ -47,12 +42,12 @@
 
                     <?php endforeach; ?>
                 </div>
-                
+
                 <ul class="pagination">
                     <!--<li class="page-item"><a class="page-link" href="#">Nazaj</a></li>-->
-                    <?php foreach(range(0, floor($stIzdelkov / 18)) as $stran): ?>
+                    <?php foreach (range(0, floor($stIzdelkov / 18)) as $stran): ?>
                         <li class="page-item">
-                            <a class="page-link" href="izdelki?offset=<?= $stran * 18 ?>&limit=18"><?= $stran+1 ?></a>
+                            <a class="page-link" href="izdelki?offset=<?= $stran * 18 ?>&limit=18"><?= $stran + 1 ?></a>
                         </li>
                     <?php endforeach; ?>
                     <!--<li class="page-item"><a class="page-link" href="#">Naprej</a></li>-->

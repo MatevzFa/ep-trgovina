@@ -38,6 +38,8 @@ class UporabnikDB extends AbstractDB {
     public static function delete(array $params) {
         self::modify("DELETE FROM uporabnik WHERE id = :id", $params);
     }
+    
+    // ----------------------- CUT "NON TRIVIAL" QUERIES HERE -----------
 
     /**
      * Samo za testiranje. Za produkcijo uporabi $salt ki ga nastavi password_hash(...)

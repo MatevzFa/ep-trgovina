@@ -28,14 +28,32 @@ class IzdelkiController extends AbstractController {
             ]);
         }
     }
-
+    
+    public static function addForm($values = [
+        "ime" => "",
+        "cena" => "",
+        "opis" => ""
+    ]) {
+        echo ViewHelper::render("view/izdelki-add.php", $values);
+    }
+    
+    public static function add() {
+        $data = filter_input_array(INPUT_POST, self::getRules());
+        if (self::checkValues($data)) {
+            $id = IzdelekDB::insert($data);
+            echo ViewHelper::redirect(BASE_URL . "izdelki?id=" . $id);
+        } else {
+            self::addForm($data);
+        }
+    }
+    
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type
      */
     private static function getRules() {
         return [
-            'id' => FILTER_VALIDATE_INT,
+            //'id' => FILTER_VALIDATE_INT, // id je auto increment
             'ime' => FILTER_SANITIZE_SPECIAL_CHARS,
             'cena' => FILTER_VALIDATE_FLOAT,
             'opis' => FILTER_SANITIZE_SPECIAL_CHARS
