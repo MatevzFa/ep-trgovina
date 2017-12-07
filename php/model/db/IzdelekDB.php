@@ -81,24 +81,25 @@ class IzdelekDB extends AbstractDB {
 
     /**
      * Podatki o dolocenem izdelku
-     * @param type $id id izdelka
+     * @param array $params array z 'id' => id
      * @return vse o izdelku, povprecna ocena 
      */
     public static function pridobiZOceno(array $params) {
         return self::query(""
-                        . "SELECT i.*, povprecnaOcena(i.id) AS povprecnaOcena "
-                        . "FROM izdelek i WHERE i.id = :id", $params)[0];
+                . "SELECT i.*, ROUND(AVG(o.ocena), 1) as povprecnaOcena "
+                . "FROM izdelek i LEFT JOIN ocena o ON i.id = o.izdelek_id "
+                . "WHERE i.id = :id", $params)[0];
     }
 
     /**
      * Iz PB pridobi url-je slik za nek izdelek.
-     * @param type $id id izdelka
+     * @param array $params array z 'id' => id
      * @return array slike
      */
     public static function pridobiSlike(array $params) {
         return self::query(""
-        				. "SELECT path "
-        				. "FROM slika WHERE izdelek_id = :id", $params);
+                        . "SELECT path "
+                        . "FROM slika WHERE izdelek_id = :id", $params);
     }
 
 }
