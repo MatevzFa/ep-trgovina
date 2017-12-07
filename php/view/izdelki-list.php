@@ -47,7 +47,7 @@
 	            </ul>
 	        </div>
 	        <div class="col-md-3">
-	        	<h1> Tukaj je lahko cart? </h1>
+	        	<h1> <a href="<?= BASE_URL . "izdelki/add" ?>">Add new</a></h1>
 	        </div>
 	    </div>
 	</div>
