@@ -24,6 +24,9 @@ $urls = [
     "izdelki" => function () {
         IzdelkiController::izdelki();
     },
+    "registracija" => function () {
+        UporabnikiController::registracija();
+    },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");
     },

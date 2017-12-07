@@ -115,6 +115,8 @@ abstract class AbstractDB {
      */
     protected static function filterParams($sql, array $params) {
         $params_altered = self::alterKeys($params);
+        
+        
         $sql_split = preg_split("/[\(\) ,]/", $sql);
         $sql_params = array_values(preg_grep('/^:/', $sql_split));
 
@@ -125,8 +127,8 @@ abstract class AbstractDB {
                 $result[$value] = $params_altered[$value];
             }
         }
-
-        if (count($sql_params) != count($result)) {
+        
+        if (count($sql_params) < count($result)) {
             $message = "Podani in zahtevani parametri se ne ujemajo: "
                     . "zahtevani: (" . implode(", ", $sql_params) . "), "
                     . "podani: (" . implode(", ", array_keys($params)) . ")";

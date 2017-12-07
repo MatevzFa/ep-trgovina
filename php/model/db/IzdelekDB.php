@@ -24,13 +24,12 @@ class IzdelekDB extends AbstractDB {
     }
 
     public static function update(array $params) {
-    	self::modify(""
-    			. "UPDATE izdelek SET "
-    			. "ime = :ime, "
-    			. "cena = :cena, "
-    			. "opis = :opis "
-    			. " WHERE id = :id", $params);
-        
+        self::modify(""
+                . "UPDATE izdelek SET "
+                . "ime = :ime, "
+                . "cena = :cena, "
+                . "opis = :opis "
+                . " WHERE id = :id", $params);
     }
 
     public static function delete(array $params) {
@@ -39,8 +38,11 @@ class IzdelekDB extends AbstractDB {
                 . "WHERE id = :id", $params);
     }
 
-
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
+
+    public static function pridobiStIzdelkov() {
+        return intval(self::query("SELECT COUNT(*) as stIzdelkov FROM izdelek")[0]['stIzdelkov']);
+    }
 
     /**
      * Posodobitev slike izdelka
@@ -52,7 +54,6 @@ class IzdelekDB extends AbstractDB {
                 . "UPDATE slika SET "
                 . "path = :path "
                 . "WHERE id = :id", $params);
-
     }
 
     /**
@@ -61,22 +62,25 @@ class IzdelekDB extends AbstractDB {
      * @return izdelek(id, ime, cena, slika)
      */
     public static function pridobiVseSSlikami() {
-       return self::query(""
-                . "SELECT i.id,i.ime,i.cena,(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) as slika FROM izdelek i");
+        return self::query(""
+                        . "SELECT "
+                        . " i.id, "
+                        . " i.ime, "
+                        . " i.cena, "
+                        . " (SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
+                        . "FROM izdelek i");
     }
+
     /**
      * Pridobivanje izdelkov z ostranjevanjem
      * @param type $offset offset
      * @param type $limit limit
      * @return type array(izdelek)
      */
-    public static function getAllPagination($offset = 0, $limit = 25) {
+    public static function getAllPagination(array $params) {
         return self::query(""
                         . "SELECT * FROM izdelek "
-                        . "LIMIT :limit OFFSET :offset", array(
-                    'limit' => $limit,
-                    'offset' => $offset
-        ));
+                        . "LIMIT :limit OFFSET :offset", $params);
     }
 
     /**
@@ -86,9 +90,9 @@ class IzdelekDB extends AbstractDB {
      */
     public static function pridobiZOceno(array $params) {
         return self::query(""
-                . "SELECT i.*, ROUND(AVG(o.ocena), 1) as povprecnaOcena "
-                . "FROM izdelek i LEFT JOIN ocena o ON i.id = o.izdelek_id "
-                . "WHERE i.id = :id", $params)[0];
+                        . "SELECT i.*, ROUND(AVG(o.ocena), 1) as povprecnaOcena "
+                        . "FROM izdelek i LEFT JOIN ocena o ON i.id = o.izdelek_id "
+                        . "WHERE i.id = :id", $params)[0];
     }
 
     /**

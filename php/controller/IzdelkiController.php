@@ -1,10 +1,11 @@
 <?php
 
+require_once("AbstractController.php");
 require_once("ViewHelper.php");
 require_once("model/db/IzdelekDB.php");
 
-class IzdelkiController {
-    
+class IzdelkiController extends AbstractController {
+
     public static function izdelki() {
         $rules = [
             "id" => [
@@ -18,31 +19,14 @@ class IzdelkiController {
             echo ViewHelper::render("view/izdelki-detail.php", [
                 "izdelek" => IzdelekDB::pridobiZOceno($data),
                 "slike" => IzdelekDB::pridobiSlike($data)
-            ]
-        );
+                    ]
+            );
         } else {
             echo ViewHelper::render("view/izdelki-list.php", [
-                "izdelki" => IzdelekDB::pridobiVseSSlikami()
+                "izdelki" => IzdelekDB::pridobiVseSSlikami(),
+                "stIzdelkov" => IzdelekDB::pridobiStIzdelkov()
             ]);
         }
-    }
-    
-    /**
-     * Returns TRUE if given $input array contains no FALSE values
-     * @param type $input
-     * @return type
-     */
-    private static function checkValues($input) {
-        if (empty($input)) {
-            return FALSE;
-        }
-
-        $result = TRUE;
-        foreach ($input as $value) {
-            $result = $result && $value != false;
-        }
-
-        return $result;
     }
 
     /**

@@ -1,0 +1,8 @@
+.izdelek {
+    /*height: 100px;*/
+    text-decoration: none;
+}
+
+.izdelek img {
+    height: 200px;
+}

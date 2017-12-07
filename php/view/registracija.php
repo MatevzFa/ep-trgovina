@@ -1,23 +1,17 @@
-<!DOCTYPE html>
+<?php
+require_once 'forms/RegistracijaForm.php';
 
+$url = basename(__FILE__);
 
-<meta charset="UTF-8" />
-<title>Registracija</title>
+?>
 
-
-
+<!doctype html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Registracija novega uporabnika</title>
+</head>
 <body>
-
-
-<br>
-	<form action="" method="get">
-		Ime <input type="text" name="ime_uporabnika"> <br>
-		Priimek <input type="text" name="priimek_uporabnika" /><br>
-		Email <input type="text" name="email_uporabnika" /><br>
-		Geslo <input type="password" name="geslo_uporabnika" /><br>
-		Naslov <input type="text" name="naslov_uporabnika" /><br>
-		Telefon <input type="text" name="telefon_uporabnika" /><br>
-		<input type="submit" value="Registriracija">
-	</form>
+    <?php
+    echo $form;
+    ?>
 </body>
-</html>

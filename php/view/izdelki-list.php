@@ -1,54 +1,66 @@
 <!DOCTYPE html>
+<?php
+//var_dump($stIzdelkov);
+//var_dump($izdelki);
 
+?>
 
 <head>
-  <title>Trgovina</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="<?= CSS_URL . "style.css" ?>">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Trgovina</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="<?= CSS_URL . "style.css" ?>">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
-	        <div class="col-md-9">
-	            <h1>
-	                Vsi izdelki
-	            </h1>
-	            <br>
-					<p>[
-			    		<a href="<?= BASE_URL . "izdelki" ?>">Vsi izdelki</a>
-			    	]</p>
-	            <div class="row">
-	            	<?php foreach ($izdelki as $izdelek): ?>
-				        <div class="col-md-4">
-				            <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
-				                <?= $izdelek["ime"] ?> (<?= $izdelek["cena"] ?>)
-				                <?= $izdelek["slika"] ?>
-				            </a>
-				        </div>
-				    <?php endforeach; ?>
-	            </div>
-	            <ul class="pagination">
-	                <li>
-	                    <a href="#">Prev</a>
-	                </li>
-	                <li>
-	                    <a href="#">1</a>
-	                </li>
-	                <li>
-	                    <a href="#">2</a>
-	                </li>
-	                <li>
-	                    <a href="#">Next</a>
-	                </li>
-	            </ul>
-	        </div>
-	        <div class="col-md-3">
-	        	<h1> Tukaj je lahko cart? </h1>
-	        </div>
-	    </div>
-	</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container col-md-9">
+                <h1 class="p-md-5">
+                    Vsi izdelki
+                </h1>
+                
+                <ul class="pagination">
+                    <!--<li class="page-item"><a class="page-link" href="#">Nazaj</a></li>-->
+                    <?php foreach (range(0, floor($stIzdelkov / 18)) as $stran): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="izdelki?offset=<?= $stran * 18 ?>&limit=18"><?= $stran + 1 ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                    <!--<li class="page-item"><a class="page-link" href="#">Naprej</a></li>-->
+                </ul>
+                
+                <div class="row">
+                    <?php foreach ($izdelki as $izdelek): ?>
+                        <div class="col-md-4 p-md-1">
+                            <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
+                                <div class="izdelek card">
+                                    <img class="card-img-top" src="<?= isset($izdelek["slika"]) ? $izdelek['slika'] : '/static/img/default.png' ?>">
+                                    <div class="card-body">
+                                        <h4><?= $izdelek["ime"] ?></h4>
+                                        <p>(<?= $izdelek["cena"] ?>)</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
+                
+                <ul class="pagination">
+                    <!--<li class="page-item"><a class="page-link" href="#">Nazaj</a></li>-->
+                    <?php foreach(range(0, floor($stIzdelkov / 18)) as $stran): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="izdelki?offset=<?= $stran * 18 ?>&limit=18"><?= $stran+1 ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                    <!--<li class="page-item"><a class="page-link" href="#">Naprej</a></li>-->
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h1> Tukaj je lahko cart? </h1>
+            </div>
+        </div>
+    </div>
 </body>
