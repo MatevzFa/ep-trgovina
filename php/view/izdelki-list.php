@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="<?= CSS_URL . "style.css" ?>">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<?= BOOTSTRAP . "css/bootstrap.min.css" ?>">
+    <script src="<?= BOOTSTRAP . "js/bootstrap.min.js" ?>"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -31,7 +31,7 @@
                         <div class="col-md-4 p-md-1">
                             <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
                                 <div class="izdelek card">
-                                    <img class="card-img-top" src="<?= isset($izdelek["slika"]) ? $izdelek['slika'] : '/static/img/default.png' ?>">
+                                    <img class="card-img-top" src="<?= isset($izdelek["slika"]) ? $izdelek['slika'] : '../static/img/default.png' ?>">
                                     <div class="card-body">
                                         <h4><?= $izdelek["ime"] ?></h4>
                                         <p>(<?= $izdelek["cena"] ?>)</p>
