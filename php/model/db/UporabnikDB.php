@@ -90,5 +90,17 @@ class UporabnikDB extends AbstractDB {
 
         return password_verify($geslo, $gesloHash);
     }
+    
+    /**
+     * Pridobi id uporabnika glede na email
+     * @param type $email email uporabnika
+     * @return number Id uporabnika
+     */
+    public static function pridobiId($email) {        
+        return self::query(""
+                . "SELECT id "
+                . "FROM uporabnik "
+                . "WHERE email = :email", array('email' => $email))[0]['id'];
+    }
 
 }

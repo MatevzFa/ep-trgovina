@@ -3,7 +3,8 @@
 require_once("AbstractController.php");
 require_once("ViewHelper.php");
 require_once("model/db/UporabnikDB.php");
-require_once("view/forms/RegistracijaForm.php");
+require_once(FORMS . "RegistracijaForm.php");
+require_once(FORMS . "PrijavaForm.php");
 
 class UporabnikiController extends AbstractController {
 
@@ -30,9 +31,39 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-
+    
     public static function prijava() {
         
+        $form = new PrijavaForm("prijava");
+        
+        if ($form->validate()) {
+            $uporabnik = $form->getValue();
+            
+            $email = $uporabnik['email'];
+            $geslo = $uporabnik['geslo'];
+
+            $idUporabnika = UporabnikDB::pridobiId($email);
+            
+            $pravilnoGeslo = UporabnikDB::preveriGeslo($idUporabnika, $geslo);
+            
+            if ($pravilnoGeslo) {
+                session_regenerate_id();
+                $_SESSION['user_id'] = $idUporabnika;
+                ViewHelper::redirect(BASE_URL);
+            } else {                
+                ViewHelper::redirect(BASE_URL . "prijava");;
+            }
+            
+        } else {
+            echo ViewHelper::render("view/prijava.php", [
+                "form" => $form
+            ]);
+        }
+    }
+    
+    public static function odjava() {
+        session_destroy();
+        ViewHelper::redirect(BASE_URL);
     }
 
     /**

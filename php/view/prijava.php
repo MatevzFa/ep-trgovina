@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title>Registracija novega uporabnika</title>
+        <title>Prijava</title>
         <?php include(HEAD); ?>
     </head>
 
@@ -14,4 +14,4 @@
         </div>
     </body>
 
-</html>
+</html>a
