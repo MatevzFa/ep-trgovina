@@ -45,6 +45,9 @@ $urls = [
     "odjava" => function () {
         UporabnikiController::odjava();
     },
+    "profil" => function () {
+        UporabnikiController::profil();
+    },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");
     },

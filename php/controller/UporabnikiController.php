@@ -31,39 +31,57 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-    
+
     public static function prijava() {
-        
+
         $form = new PrijavaForm("prijava");
-        
+
         if ($form->validate()) {
             $uporabnik = $form->getValue();
-            
+
             $email = $uporabnik['email'];
             $geslo = $uporabnik['geslo'];
 
             $idUporabnika = UporabnikDB::pridobiId($email);
-            
+
             $pravilnoGeslo = UporabnikDB::preveriGeslo($idUporabnika, $geslo);
-            
+
             if ($pravilnoGeslo) {
                 session_regenerate_id();
                 $_SESSION['user_id'] = $idUporabnika;
-                ViewHelper::redirect(BASE_URL);
-            } else {                
-                ViewHelper::redirect(BASE_URL . "prijava");;
+                if (isset($_SESSION['goto'])) {
+                    ViewHelper::redirect(BASE_URL . $_SESSION['goto']);
+                } else {
+                    ViewHelper::redirect(BASE_URL);
+                }
+            } else {
+                ViewHelper::redirect(BASE_URL . "prijava");
             }
-            
         } else {
             echo ViewHelper::render("view/prijava.php", [
                 "form" => $form
             ]);
         }
     }
-    
+
     public static function odjava() {
         session_destroy();
         ViewHelper::redirect(BASE_URL);
+    }
+
+    public static function profil() {
+
+        if (isset($_SESSION['user_id'])) {
+            $uporabnik = UporabnikDB::get(array('id' => $_SESSION['user_id']));
+            if (isset($uporabnik)) {
+                var_dump($uporabnik);
+            } else {
+                echo ViewHelper::redirect(BASE_URL . "prijava");
+            }
+        } else {
+            $_SESSION['goto'] = "profil";
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }
     }
 
     /**

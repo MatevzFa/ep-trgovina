@@ -6,3 +6,7 @@
 .izdelek img {
     height: 200px;
 }
+
+.navbar-brand {
+    font-size: 30px;
+}
