@@ -28,13 +28,9 @@ $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 $urls = [
     "izdelki" => function () {
         IzdelkiController::izdelki();
-    },
-    "izdelki/add" => function () {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            IzdelkiController::add();
-        } else {
-            IzdelkiController::addForm();
-        }
+    },  
+    "izdelki-add" => function () {
+        IzdelkiController::dodajIzdelek();
     },   
     "registracija" => function () {
         UporabnikiController::registracija();

@@ -27,7 +27,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-8">
-                            <p><?= $izdelek['cena'] ?> £</p>
+                            <p><?= $izdelek['cena'] ?> €</p>
                             <p><?= $izdelek['opis'] ?></p>
                             <p>Povprecna ocena: <?= isset($izdelek['povprecnaOcena']) ? $izdelek['povprecnaOcena'] : "Ni ocen" ?></p>
                         </div>

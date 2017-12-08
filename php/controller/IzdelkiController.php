@@ -4,6 +4,8 @@ require_once("AbstractController.php");
 require_once("ViewHelper.php");
 require_once("model/db/IzdelekDB.php");
 
+require_once(FORMS . "DodajanjeIzdelkaForm.php");
+
 class IzdelkiController extends AbstractController {
 
     public static function izdelki() {
@@ -29,21 +31,18 @@ class IzdelkiController extends AbstractController {
         }
     }
     
-    public static function addForm($values = [
-        "ime" => "",
-        "cena" => "",
-        "opis" => ""
-    ]) {
-        echo ViewHelper::render("view/izdelki-add.php", $values);
-    }
-    
-    public static function add() {
-        $data = filter_input_array(INPUT_POST, self::getRules());
-        if (self::checkValues($data)) {
-            $id = IzdelekDB::insert($data);
-            echo ViewHelper::redirect(BASE_URL . "izdelki?id=" . $id);
+    public static function dodajIzdelek() {
+        $form = new DodajanjeIzdelkaForm("izdelki-add");
+        var_dump($form->validate());
+        if ($form->validate()) {
+            $novIzdelek = $form->getValue();
+            var_dump($novIzdelek);
+            IzdelekDB::insert($novIzdelek);
+            ViewHelper::redirect(BASE_URL);
         } else {
-            self::addForm($data);
+            echo ViewHelper::render("view/izdelki-add.php", [
+                "form" => $form
+            ]);
         }
     }
     
@@ -55,8 +54,8 @@ class IzdelkiController extends AbstractController {
         return [
             //'id' => FILTER_VALIDATE_INT, // id je auto increment
             'ime' => FILTER_SANITIZE_SPECIAL_CHARS,
-            'cena' => FILTER_VALIDATE_FLOAT,
-            'opis' => FILTER_SANITIZE_SPECIAL_CHARS
+            'opis' => FILTER_VALIDATE_FLOAT,
+            'cena' => FILTER_SANITIZE_SPECIAL_CHARS
         ];
     }
 

@@ -35,7 +35,7 @@
                                              src="<?= isset($izdelek["slika"]) ? $izdelek['slika'] : IMAGES_URL . 'default.png' ?>">
                                         <div class="card-body">
                                             <h4><?= $izdelek["ime"] ?></h4>
-                                            <p>(<?= $izdelek["cena"] ?>)</p>
+                                            <p>(<?= $izdelek["cena"] ?> €)</p>
                                         </div>
                                     </div>
                                 </a>
