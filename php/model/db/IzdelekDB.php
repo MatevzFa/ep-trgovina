@@ -78,9 +78,15 @@ class IzdelekDB extends AbstractDB {
      * @return type array(izdelek)
      */
     public static function pridobiZOstranjevanjem(array $params) {
+        var_dump($params);
         return self::query(""
-                        . "SELECT * FROM izdelek "
-                        . "LIMIT :limit OFFSET :offset", $params);
+                        . "SELECT "
+                        . "i.id, "
+                        . "i.ime, "
+                        . "i.cena, "
+                        . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
+                        . "FROM izdelek i "
+                        . "LIMIT :limit", $params);
     }
 
     /**

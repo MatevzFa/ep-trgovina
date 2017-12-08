@@ -24,6 +24,10 @@ class IzdelkiController extends AbstractController {
                     ]
             );
         } else {
+            $offsetInLimit = array (
+                "offset" => isset($_GET["offset"]) ? (int)$_GET["offset"] : 0,
+                "limit" => 18
+            );
             echo ViewHelper::render("view/izdelki-list.php", [
                 "izdelki" => IzdelekDB::pridobiVseSSlikami(),
                 "stIzdelkov" => IzdelekDB::pridobiStIzdelkov()
