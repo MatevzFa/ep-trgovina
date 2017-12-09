@@ -13,7 +13,10 @@
                 </li>
             <?php else: ?>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::get(array('id' => $_SESSION['user_id']))['ime'] ?></a>
+                    <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . "narocila?id=". $_SESSION['user_id'] ?>">Pregled narocil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>

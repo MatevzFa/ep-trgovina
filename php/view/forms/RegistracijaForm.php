@@ -68,7 +68,6 @@ class RegistracijaForm extends HTML_QuickForm2 {
         $this->naslov->setAttribute('size', 45);
         $this->naslov->setLabel('Naslov:');
         $this->naslov->addRule('required', 'Vnesite naslov.');
-        $this->naslov->addRule('regex', 'Pri naslovu uporabite le črke.', '/^[a-zA-ZščćžŠČĆŽ ]+$/');
         $this->naslov->addRule('maxlength', 'Naslov naj bo krajši od 255 znakov.', 255);
         
         $this->telefon = new HTML_QuickForm2_Element_InputText('telefon');

@@ -72,7 +72,7 @@ class UporabnikiController extends AbstractController {
     public static function profil() {
 
         if (isset($_SESSION['user_id'])) {
-            $uporabnik = UporabnikDB::get(array('id' => $_SESSION['user_id']));
+            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {
                 var_dump($uporabnik);
             } else {

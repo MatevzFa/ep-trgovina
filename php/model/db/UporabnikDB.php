@@ -50,6 +50,17 @@ class UporabnikDB extends AbstractDB {
     ];
   
     /**
+     * Bolj varno, da posljemo samo stvari, ki jih dejansko rabi
+     * @param array $params id uporabnika
+     * @return 
+     */
+    public static function podatkiOUporabniku(array $params) {
+        return self::query(""
+                . "SELECT ime, priimek, email, telefon "
+                . "FROM uporabnik "
+                . "WHERE id = :id", $params)[0];
+    }
+    /**
      * Doda uporabnika v PB, z zgoščenim geslom
      * @param array $params uporabnik
      */

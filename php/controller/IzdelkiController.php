@@ -58,8 +58,8 @@ class IzdelkiController extends AbstractController {
         return [
             //'id' => FILTER_VALIDATE_INT, // id je auto increment
             'ime' => FILTER_SANITIZE_SPECIAL_CHARS,
-            'opis' => FILTER_VALIDATE_FLOAT,
-            'cena' => FILTER_SANITIZE_SPECIAL_CHARS
+            'cena' => FILTER_VALIDATE_FLOAT,
+            'opis' => FILTER_SANITIZE_SPECIAL_CHARS
         ];
     }
 

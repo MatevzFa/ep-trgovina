@@ -14,6 +14,7 @@ define("BOOTSTRAP", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/bootst
 
 require_once("controller/IzdelkiController.php");
 require_once("controller/UporabnikiController.php");
+require_once("controller/NarocilaController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -34,6 +35,9 @@ $urls = [
     },   
     "registracija" => function () {
         UporabnikiController::registracija();
+    },
+    "narocila" => function () {
+        NarocilaController::narocila();
     },
     "prijava" => function () {
         UporabnikiController::prijava();
