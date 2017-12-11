@@ -37,10 +37,8 @@ class IzdelkiController extends AbstractController {
       
     public static function dodajIzdelek() {
         $form = new DodajanjeIzdelkaForm("izdelki-add");
-        var_dump($form->validate());
         if ($form->validate()) {
             $novIzdelek = $form->getValue();
-            var_dump($novIzdelek);
             IzdelekDB::insert($novIzdelek);
             ViewHelper::redirect(BASE_URL);
         } else {

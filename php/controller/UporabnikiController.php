@@ -82,6 +82,20 @@ class UporabnikiController extends AbstractController {
         }
     }
     
+    public static function prodajalecNadzornaPlosca() {
+        if (isset($_SESSION['user_id'])) {
+            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
+            if (isset($uporabnik)) {
+                echo ViewHelper::render("view/prodajalec-nadzorna-plosca.php");
+            } else {
+                echo ViewHelper::redirect(BASE_URL . "prijava");
+            }
+        } else {
+            $_SESSION['goto'] = "profil";
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }
+    }
+    
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

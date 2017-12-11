@@ -33,6 +33,9 @@ $urls = [
     "izdelki-add" => function () {
         IzdelkiController::dodajIzdelek();
     },   
+    "prodajalec-nadzorna-plosca" => function () {
+        UporabnikiController::prodajalecNadzornaPlosca();
+    },
     "registracija" => function () {
         UporabnikiController::registracija();
     },
