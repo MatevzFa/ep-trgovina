@@ -39,6 +39,16 @@ class IzdelekDB extends AbstractDB {
     }
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
+    
+    /**
+     * 
+     * @param array $params id izdelka
+     */
+    public static function dodajSlikoIzdelku(array $params) {
+        self::modify(""
+                . "INSERT INTO slika (path, izdelek_id) "
+                . "VALUES (:path, :izdelek_id)", $params);
+    }
 
     public static function pridobiStIzdelkov() {
         return intval(self::query("SELECT COUNT(*) as stIzdelkov FROM izdelek")[0]['stIzdelkov']);

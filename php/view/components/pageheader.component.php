@@ -11,6 +11,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Registracija</a>
                 </li>
+            <?php elseif ($_SESSION['user_vloga'] == 'administrator'): ?>
+                 <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
+                </li>
+            <?php elseif ($_SESSION['user_vloga'] == 'prodajalec'): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . " izdelki-add" ?>">Dodaj nov izdelek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
+                </li>     
             <?php else: ?>
                 <li class="nav-item">
                     <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
