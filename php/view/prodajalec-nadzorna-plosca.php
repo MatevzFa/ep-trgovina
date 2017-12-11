@@ -15,13 +15,13 @@
              <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>
         </li>
         <li>
-             Pregled oddanih narocil
+             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=oddano"?>">Pregled oddanih narocil</a>
         </li>
         <li>
-             Pregled potrjenih narocil
+             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=potrjeno"?>">Pregled potrjenih narocil</a>
         </li>
         <li>
-             Pregled vseh narocil
+             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=stornirano"?>">Pregled storniranih narocil</a>
         </li>
     </body>
 </html>

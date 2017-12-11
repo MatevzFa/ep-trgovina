@@ -26,6 +26,25 @@ class NarocilaController extends AbstractController {
         }
     }
     
+    // vsa narocila, ki so v dolocenem stanju
+    public static function vsaNarocilaStanje() {
+        
+        $rules = [
+            "stanje" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
+        ];
+        $data = filter_input_array(INPUT_GET, $rules);
+        if (self::checkValues($data)) {
+            echo ViewHelper::render("view/narocila-list.php", [
+                "narocila" => NarociloDB::vsaNarocilaSStanjem($data)
+                    ]
+            );
+        } else {
+            ViewHelper::redirect(BASE_URL . "prodajalec-nadzorna-plosca");
+        }
+    }
+    
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

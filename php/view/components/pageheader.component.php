@@ -24,6 +24,9 @@
                 </li>     
             <?php else: ?>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
+                </li>
+                <li class="nav-item">
                     <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
                 </li>
                 <li class="nav-item">
