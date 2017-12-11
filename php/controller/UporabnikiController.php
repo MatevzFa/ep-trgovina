@@ -8,14 +8,6 @@ require_once(FORMS . "PrijavaForm.php");
 
 class UporabnikiController extends AbstractController {
 
-    /**
-     * tukaj notri poskrbimo za registracijo, prijavo in update?
-     * ali poseben controller za vsako od teh?
-     */
-    public static function uporabnik() {
-        
-    }
-
     public static function registracija() {
 
         $form = new RegistracijaForm("registracija");
@@ -31,7 +23,7 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-
+    
     public static function prijava() {
 
         $form = new PrijavaForm("prijava");
@@ -89,7 +81,7 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-
+    
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

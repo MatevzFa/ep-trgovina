@@ -12,6 +12,9 @@
         <div class="container">
             <?php echo $form; ?>
         </div>
+        <div class="container">
+           Lahko tudi tukaj dodajSlikoIzdelku
+        </div>
     </body>
 
 </html>

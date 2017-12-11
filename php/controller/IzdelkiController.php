@@ -18,11 +18,11 @@ class IzdelkiController extends AbstractController {
 
         $data = filter_input_array(INPUT_GET, $rules);
         if (self::checkValues($data)) {
-            echo ViewHelper::render("view/izdelki-detail.php", [
+                echo ViewHelper::render("view/izdelki-detail.php", [
                 "izdelek" => IzdelekDB::pridobiZOceno($data),
                 "slike" => IzdelekDB::pridobiSlike($data)
-                    ]
-            );
+                ]
+            );       
         } else {
             $offsetInLimit = array (
                 "offset" => isset($_GET["offset"]) ? (int)$_GET["offset"] : 0,
@@ -34,7 +34,7 @@ class IzdelkiController extends AbstractController {
             ]);
         }
     }
-    
+      
     public static function dodajIzdelek() {
         $form = new DodajanjeIzdelkaForm("izdelki-add");
         var_dump($form->validate());

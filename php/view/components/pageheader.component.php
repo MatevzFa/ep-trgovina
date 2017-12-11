@@ -17,7 +17,7 @@
                 </li>
             <?php elseif ($_SESSION['user_vloga'] == 'prodajalec'): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL . " izdelki-add" ?>">Dodaj nov izdelek</a>
+                    <a class="nav-link" href="<?= BASE_URL . "izdelki-add" ?>">Dodaj nov izdelek</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>

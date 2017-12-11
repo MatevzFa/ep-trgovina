@@ -30,6 +30,9 @@
                             <p><?= $izdelek['cena'] ?> €</p>
                             <p><?= $izdelek['opis'] ?></p>
                             <p>Povprecna ocena: <?= isset($izdelek['povprecnaOcena']) ? $izdelek['povprecnaOcena'] : "Ni ocen" ?></p>
+                            <div class="container">
+                                oceni izdelek
+                            </div>
                         </div>
                     </div>
                 </div>

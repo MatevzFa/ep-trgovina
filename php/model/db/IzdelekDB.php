@@ -40,6 +40,12 @@ class IzdelekDB extends AbstractDB {
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
     
+    public static function oceniIzdelek(array $params) {
+        self::modify(""
+                . "INSERT INTO izdelek (uporabnik_id, izdelek_id, ocena) "
+                . "VALUES (:uporabnik_id, :izdelek_id, :ocena)", $params);
+    }
+
     /**
      * 
      * @param array $params id izdelka
