@@ -107,11 +107,11 @@ class UporabnikDB extends AbstractDB {
      * @param type $email email uporabnika
      * @return number Id uporabnika
      */
-    public static function pridobiId($email) {        
+    public static function pridobiIdInVlogo(array $params) {        
         return self::query(""
-                . "SELECT id "
+                . "SELECT id, vloga "
                 . "FROM uporabnik "
-                . "WHERE email = :email", array('email' => $email))[0]['id'];
+                . "WHERE email = :email", $params)[0];
     }
 
 }

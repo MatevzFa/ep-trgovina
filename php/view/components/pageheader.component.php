@@ -13,6 +13,9 @@
                 </li>
             <?php else: ?>
                 <li class="nav-item">
+                    <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
                 </li>
                 <li class="nav-item">

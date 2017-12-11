@@ -42,13 +42,19 @@ class UporabnikiController extends AbstractController {
             $email = $uporabnik['email'];
             $geslo = $uporabnik['geslo'];
 
-            $idUporabnika = UporabnikDB::pridobiId($email);
-
-            $pravilnoGeslo = UporabnikDB::preveriGeslo($idUporabnika, $geslo);
+            $email = array (
+                "email" => $uporabnik['email']
+             );
+            
+            $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+            $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
             if ($pravilnoGeslo) {
                 session_regenerate_id();
-                $_SESSION['user_id'] = $idUporabnika;
+                $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                var_dump($_SESSION);
+                
                 if (isset($_SESSION['goto'])) {
                     ViewHelper::redirect(BASE_URL . $_SESSION['goto']);
                 } else {
