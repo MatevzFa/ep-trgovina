@@ -21,6 +21,9 @@
              <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=potrjeno"?>">Pregled potrjenih narocil</a>
         </li>
         <li>
+             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=preklicano"?>">Pregled preklicanih narocil</a>
+        </li>
+        <li>
              <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=stornirano"?>">Pregled storniranih narocil</a>
         </li>
     </body>

@@ -26,6 +26,37 @@ class NarocilaController extends AbstractController {
         }
     }
     
+    //spremeni stanje narocila. Klice se iz narocila-list
+    public static function spremeniStanjeNarocila() {
+        $novoStanje = array (
+            "id" => $_POST['id'],
+            "stanje" => $_POST['novoStanje']
+        );
+        if ($novoStanje['stanje'] == 'stornirano') {
+            $narociloKiGaBomoStornirali = NarociloDB::get(array(
+                "id" => $novoStanje['id']));
+            
+            $stornirano = array (
+                "datum" => $narociloKiGaBomoStornirali['datum'],
+                "uporabnik_id" => $narociloKiGaBomoStornirali['uporabnik_id'],
+                "stanje" => 'negativna-stornirano', //Ne bomo nikjer prikazovali
+                //ce bi dali se temu stanje stornirano, bi bila 2 narocila ko bi prikazovali vsa stornirana
+                "stornirano" => $novoStanje['id'],
+                "postavka" => - $narociloKiGaBomoStornirali['postavka']
+            );
+            /**TODO - v vmesni tabeli med narocilom in izdelkom
+             * je potrebno narediti nove vnose z negativno kolicino
+             */
+            NarociloDB::insert($stornirano);
+            NarociloDB::spremeniStanjeNarocila($novoStanje);
+        }
+        else {
+            NarociloDB::spremeniStanjeNarocila($novoStanje);
+        }
+        
+        ViewHelper::redirect(BASE_URL . "narocila-list?stanje=" . $_POST['staroStanje']);
+    }
+    
     // vsa narocila, ki so v dolocenem stanju
     public static function vsaNarocilaStanje() {
         

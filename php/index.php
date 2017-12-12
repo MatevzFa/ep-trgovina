@@ -45,6 +45,9 @@ $urls = [
     "narocila-list" => function () {
         NarocilaController::vsaNarocilaStanje();
     },
+    "spremeni-stanje-narocila" => function () {
+        NarocilaController::spremeniStanjeNarocila();
+    },
     "prijava" => function () {
         UporabnikiController::prijava();
     },

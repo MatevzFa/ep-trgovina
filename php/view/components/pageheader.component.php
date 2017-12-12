@@ -23,6 +23,7 @@
                     <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                 </li>     
             <?php else: ?>
+                <!-- samo za debugganje, drugace bo samo pri prodajalcu -->
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
                 </li>
