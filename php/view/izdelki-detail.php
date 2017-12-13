@@ -18,15 +18,14 @@
                         </li>
                     </ul>
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <h1><?= $izdelek['ime'] ?></h1>
                             <?php foreach ($slike as $slika): ?>
-                                <p> Slika: <?= $slika['path'] ?></p>
+                                <img class="card-img-top" 
+                                             src="<?= IMAGES_URL . $slika ?>">
                             <?php endforeach; ?>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <p><?= $izdelek['cena'] ?> €</p>
                             <p><?= $izdelek['opis'] ?></p>
                             <p>Povprecna ocena: <?= isset($izdelek['povprecnaOcena']) ? $izdelek['povprecnaOcena'] : "Ni ocen" ?></p>
@@ -34,7 +33,7 @@
                                 oceni izdelek
                             </div>
                         </div>
-                    </div>
+                    </div>   
                 </div>
             </div>
         </div>
