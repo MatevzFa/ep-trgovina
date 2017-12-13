@@ -20,9 +20,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h1><?= $izdelek['ime'] ?></h1>
-                            <?php foreach ($slike as $slika): ?>
+                            <?php foreach ($slike as $slika):?>
                                 <img class="card-img-top" 
-                                             src="<?= IMAGES_URL . $slika ?>">
+                                             src="<?= IMAGES_URL . $slika['path'] ?>">
                             <?php endforeach; ?>
                         </div>
                         <div class="col-md-6">
