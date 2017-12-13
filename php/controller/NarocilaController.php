@@ -7,6 +7,9 @@ require_once("model/db/NarociloDB.php");
 
 class NarocilaController extends AbstractController {
 
+    /**
+     * Vrne vsa narocila stranke z id
+     */
     public static function narocila() {
         $rules = [
             "id" => [

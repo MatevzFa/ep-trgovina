@@ -12,7 +12,7 @@ DROP SCHEMA IF EXISTS `ep_trgovina` ;
 -- -----------------------------------------------------
 -- Schema ep_trgovina
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 ;
+CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
 USE `ep_trgovina` ;
 
 -- -----------------------------------------------------
@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`uporabnik` (
   `geslo` VARCHAR(200) NOT NULL,
   `naslov` VARCHAR(200) NULL,
   `telefon` VARCHAR(45) NULL,
+  `aktiven` TINYINT(1) NOT NULL DEFAULT 1,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -44,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`izdelek` (
   `ime` VARCHAR(200) NOT NULL,
   `cena` DECIMAL(10,2) NOT NULL,
   `opis` VARCHAR(1000) NULL,
+  `aktiven` TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
