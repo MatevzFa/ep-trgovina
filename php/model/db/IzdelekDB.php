@@ -102,7 +102,7 @@ class IzdelekDB extends AbstractDB {
                         . "i.cena, "
                         . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
                         . "FROM izdelek i "
-                        . "LIMIT :limit", $params);
+                        . "LIMIT :offset, :limit", $params);
     }
 
     /**

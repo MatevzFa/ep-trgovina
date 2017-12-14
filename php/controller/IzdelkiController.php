@@ -29,7 +29,7 @@ class IzdelkiController extends AbstractController {
                 "limit" => 18
             );
             echo ViewHelper::render("view/izdelki-list.php", [
-                "izdelki" => IzdelekDB::pridobiVseSSlikami(),
+                "izdelki" => IzdelekDB::pridobiZOstranjevanjem($offsetInLimit),
                 "stIzdelkov" => IzdelekDB::pridobiStIzdelkov()
             ]);
         }
