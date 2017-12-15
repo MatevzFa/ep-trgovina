@@ -21,6 +21,7 @@ class NarociloDB extends AbstractDB {
     /**
      * Za stornacijo vneses negativno postavko
      * in kot :stornirano id narocila, ki ga storniras
+     * ce ne storniras, das na mesto :stornirano = null
      */
     public static function insert(array $params) {
         self::modify(""
@@ -52,13 +53,25 @@ class NarociloDB extends AbstractDB {
     //--------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------
 
     /**
+     * 
+     * @param array $params id narocila
+     * spremeni stanje narocila
+     */
+    public static function spremeniStanjeNarocila(array $params) {
+        self::modify(""
+                . "UPDATE narocilo "
+                . "SET "
+                . "stanje = :stanje "
+                . "WHERE id = :id", $params);
+    }
+    /**
      * Vrne vse narocila ene stranke
      * @param id_uporabnika
      */
     public static function pridobiVsaNarocilaStranke(array $params) {
     	return self::query(""
     			. "SELECT * FROM narocilo "
-    			. "WHERE uporabnik_id = :uporabnik_id", $params);
+    			. "WHERE uporabnik_id = :id", $params);
     }
 
     /**

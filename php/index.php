@@ -14,6 +14,7 @@ define("BOOTSTRAP", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/bootst
 
 require_once("controller/IzdelkiController.php");
 require_once("controller/UporabnikiController.php");
+require_once("controller/NarocilaController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -28,16 +29,24 @@ $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 $urls = [
     "izdelki" => function () {
         IzdelkiController::izdelki();
-    },
-    "izdelki/add" => function () {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            IzdelkiController::add();
-        } else {
-            IzdelkiController::addForm();
-        }
+    },  
+    "izdelki-add" => function () {
+        IzdelkiController::dodajIzdelek();
     },   
+    "prodajalec-nadzorna-plosca" => function () {
+        UporabnikiController::prodajalecNadzornaPlosca();
+    },
     "registracija" => function () {
         UporabnikiController::registracija();
+    },
+    "narocila" => function () {
+        NarocilaController::narocila();
+    },
+    "narocila-list" => function () {
+        NarocilaController::vsaNarocilaStanje();
+    },
+    "spremeni-stanje-narocila" => function () {
+        NarocilaController::spremeniStanjeNarocila();
     },
     "prijava" => function () {
         UporabnikiController::prijava();

@@ -8,14 +8,6 @@ require_once(FORMS . "PrijavaForm.php");
 
 class UporabnikiController extends AbstractController {
 
-    /**
-     * tukaj notri poskrbimo za registracijo, prijavo in update?
-     * ali poseben controller za vsako od teh?
-     */
-    public static function uporabnik() {
-        
-    }
-
     public static function registracija() {
 
         $form = new RegistracijaForm("registracija");
@@ -31,7 +23,7 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-
+    
     public static function prijava() {
 
         $form = new PrijavaForm("prijava");
@@ -42,16 +34,21 @@ class UporabnikiController extends AbstractController {
             $email = $uporabnik['email'];
             $geslo = $uporabnik['geslo'];
 
-            $idUporabnika = UporabnikDB::pridobiId($email);
-
-            $pravilnoGeslo = UporabnikDB::preveriGeslo($idUporabnika, $geslo);
+            $email = array (
+                "email" => $uporabnik['email']
+             );
+            
+            $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+            $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
             if ($pravilnoGeslo) {
                 session_regenerate_id();
-                $_SESSION['user_id'] = $idUporabnika;
+                $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                var_dump($_SESSION);
+                
                 if (isset($_SESSION['post_login_redirect'])) {
                     ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
-                    unset($_SESSION['post_login_redirect']);
                 } else {
                     ViewHelper::redirect(BASE_URL);
                 }
@@ -73,7 +70,7 @@ class UporabnikiController extends AbstractController {
     public static function profil() {
 
         if (isset($_SESSION['user_id'])) {
-            $uporabnik = UporabnikDB::get(array('id' => $_SESSION['user_id']));
+            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {
                 var_dump($uporabnik);
             } else {
@@ -84,7 +81,21 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-
+    
+    public static function prodajalecNadzornaPlosca() {
+        if (isset($_SESSION['user_id'])) {
+            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
+            if (isset($uporabnik)) {
+                echo ViewHelper::render("view/prodajalec-nadzorna-plosca.php");
+            } else {
+                echo ViewHelper::redirect(BASE_URL . "prijava");
+            }
+        } else {
+            $_SESSION['post_login_redirect'] = "profil";
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }
+    }
+    
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

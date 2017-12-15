@@ -92,6 +92,7 @@ abstract class AbstractDB {
      * @return type array Rezulat poizvedbe
      */
     protected static function query($sql, array $params = array()) {
+        // ce je int dodamo PARAM INT, ... fix paging
         $stmt = self::getConnection()->prepare($sql);
         $params_filtered = self::filterParams($sql, $params);
         $stmt->execute($params_filtered);

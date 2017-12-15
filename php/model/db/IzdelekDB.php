@@ -39,6 +39,22 @@ class IzdelekDB extends AbstractDB {
     }
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
+    
+    public static function oceniIzdelek(array $params) {
+        self::modify(""
+                . "INSERT INTO izdelek (uporabnik_id, izdelek_id, ocena) "
+                . "VALUES (:uporabnik_id, :izdelek_id, :ocena)", $params);
+    }
+
+    /**
+     * 
+     * @param array $params id izdelka
+     */
+    public static function dodajSlikoIzdelku(array $params) {
+        self::modify(""
+                . "INSERT INTO slika (path, izdelek_id) "
+                . "VALUES (:path, :izdelek_id)", $params);
+    }
 
     public static function pridobiStIzdelkov() {
         return intval(self::query("SELECT COUNT(*) as stIzdelkov FROM izdelek")[0]['stIzdelkov']);
@@ -78,9 +94,15 @@ class IzdelekDB extends AbstractDB {
      * @return type array(izdelek)
      */
     public static function pridobiZOstranjevanjem(array $params) {
+        var_dump($params);
         return self::query(""
-                        . "SELECT * FROM izdelek "
-                        . "LIMIT :limit OFFSET :offset", $params);
+                        . "SELECT "
+                        . "i.id, "
+                        . "i.ime, "
+                        . "i.cena, "
+                        . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
+                        . "FROM izdelek i "
+                        . "LIMIT :offset, :limit", $params);
     }
 
     /**

@@ -4,6 +4,8 @@ require_once("AbstractController.php");
 require_once("ViewHelper.php");
 require_once("model/db/IzdelekDB.php");
 
+require_once(FORMS . "DodajanjeIzdelkaForm.php");
+
 class IzdelkiController extends AbstractController {
 
     public static function izdelki() {
@@ -16,34 +18,33 @@ class IzdelkiController extends AbstractController {
 
         $data = filter_input_array(INPUT_GET, $rules);
         if (self::checkValues($data)) {
-            echo ViewHelper::render("view/izdelki-detail.php", [
+                echo ViewHelper::render("view/izdelki-detail.php", [
                 "izdelek" => IzdelekDB::pridobiZOceno($data),
                 "slike" => IzdelekDB::pridobiSlike($data)
-                    ]
-            );
+                ]
+            );       
         } else {
+            $offsetInLimit = array (
+                "offset" => isset($_GET["offset"]) ? (int)$_GET["offset"] : 0,
+                "limit" => 18
+            );
             echo ViewHelper::render("view/izdelki-list.php", [
-                "izdelki" => IzdelekDB::pridobiVseSSlikami(),
+                "izdelki" => IzdelekDB::pridobiZOstranjevanjem($offsetInLimit),
                 "stIzdelkov" => IzdelekDB::pridobiStIzdelkov()
             ]);
         }
     }
-    
-    public static function addForm($values = [
-        "ime" => "",
-        "cena" => "",
-        "opis" => ""
-    ]) {
-        echo ViewHelper::render("view/izdelki-add.php", $values);
-    }
-    
-    public static function add() {
-        $data = filter_input_array(INPUT_POST, self::getRules());
-        if (self::checkValues($data)) {
-            $id = IzdelekDB::insert($data);
-            echo ViewHelper::redirect(BASE_URL . "izdelki?id=" . $id);
+      
+    public static function dodajIzdelek() {
+        $form = new DodajanjeIzdelkaForm("izdelki-add");
+        if ($form->validate()) {
+            $novIzdelek = $form->getValue();
+            IzdelekDB::insert($novIzdelek);
+            ViewHelper::redirect(BASE_URL);
         } else {
-            self::addForm($data);
+            echo ViewHelper::render("view/izdelki-add.php", [
+                "form" => $form
+            ]);
         }
     }
     
