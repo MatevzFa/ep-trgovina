@@ -1,53 +1,54 @@
 <?php
 
-require_once("AbstractController.php");
-require_once("ViewHelper.php");
-require_once("model/db/IzdelekDB.php");
+require_once('AbstractController.php');
+require_once('ViewHelper.php');
+require_once('model/db/IzdelekDB.php');
 
-require_once(FORMS . "DodajanjeIzdelkaForm.php");
+require_once(FORMS . 'DodajanjeIzdelkaForm.php');
 
 class IzdelkiController extends AbstractController {
 
     public static function izdelki() {
-        $rules = [
-            "id" => [
+        $rulesDetail = [
+            'id' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['min_range' => 1]
             ]
         ];
 
-        $data = filter_input_array(INPUT_GET, $rules);
-        if (self::checkValues($data)) {
-                echo ViewHelper::render("view/izdelki-detail.php", [
-                "izdelek" => IzdelekDB::pridobiZOceno($data),
-                "slike" => IzdelekDB::pridobiSlike($data)
-                ]
-            );       
-        } else {
-            $offsetInLimit = array (
-                "offset" => isset($_GET["offset"]) ? (int)$_GET["offset"] : 0,
-                "limit" => 18
+        $dataDetail = filter_input_array(INPUT_GET, $rulesDetail, TRUE);
+        if (self::checkValues($dataDetail)) {
+            echo ViewHelper::render('view/izdelki-detail.php', [
+                'izdelek' => IzdelekDB::pridobiZOceno($dataDetail),
+                'slike' => IzdelekDB::pridobiSlike($dataDetail)
+                    ]
             );
-            echo ViewHelper::render("view/izdelki-list.php", [
-                "izdelki" => IzdelekDB::pridobiZOstranjevanjem($offsetInLimit),
-                "stIzdelkov" => IzdelekDB::pridobiStIzdelkov()
+        } else {
+
+            $offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT, array('options' => array('default' => 0)));
+            $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, array('options' => array('default' => 18)));
+
+            echo ViewHelper::render('view/izdelki-list.php', [
+//                'izdelki' => IzdelekDB::pridobiZOstranjevanjem($dataList),
+                'izdelki' => IzdelekDB::pridobiZOstranjevanjem($offset, $limit),
+                'stIzdelkov' => IzdelekDB::pridobiStIzdelkov()
             ]);
         }
     }
-      
+
     public static function dodajIzdelek() {
-        $form = new DodajanjeIzdelkaForm("izdelki-add");
+        $form = new DodajanjeIzdelkaForm('izdelki-add');
         if ($form->validate()) {
             $novIzdelek = $form->getValue();
             IzdelekDB::insert($novIzdelek);
             ViewHelper::redirect(BASE_URL);
         } else {
-            echo ViewHelper::render("view/izdelki-add.php", [
-                "form" => $form
+            echo ViewHelper::render('view/izdelki-add.php', [
+                'form' => $form
             ]);
         }
     }
-    
+
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

@@ -39,7 +39,7 @@ class IzdelekDB extends AbstractDB {
     }
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
-    
+
     public static function oceniIzdelek(array $params) {
         self::modify(""
                 . "INSERT INTO izdelek (uporabnik_id, izdelek_id, ocena) "
@@ -89,20 +89,23 @@ class IzdelekDB extends AbstractDB {
 
     /**
      * Pridobivanje izdelkov z ostranjevanjem
-     * @param type $offset offset
-     * @param type $limit limit
+     * @param type array offset=> in limit=>
      * @return type array(izdelek)
      */
-    public static function pridobiZOstranjevanjem(array $params) {
-        var_dump($params);
-        return self::query(""
-                        . "SELECT "
-                        . "i.id, "
-                        . "i.ime, "
-                        . "i.cena, "
-                        . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
-                        . "FROM izdelek i "
-                        . "LIMIT :offset, :limit", $params);
+    public static function pridobiZOstranjevanjem($offset=0, $limit=18) {
+        $stmt = AbstractDB::getConnection()->prepare(""
+                . "SELECT "
+                . "i.id, "
+                . "i.ime, "
+                . "i.cena, "
+                . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
+                . "FROM izdelek i "
+                . "LIMIT :offset, :limit");
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchall();
     }
 
     /**
