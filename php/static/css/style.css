@@ -4,9 +4,27 @@
 }
 
 .izdelek img {
-    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    /*mex-height: 100px;*/
+/*    position: absolute;
+    top: 0;
+    left: 0;*/
+    /*min-width: 100%;*/
+    height: 150px;
+    /*max-width: none;*/
 }
 
 .navbar-brand {
     font-size: 30px;
+}
+
+@media (min-width:34em) {
+    .card-deck > .card
+    {
+        width: 29%;
+        flex-wrap: wrap;
+        flex: initial; 
+    }
 }

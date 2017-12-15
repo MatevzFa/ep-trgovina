@@ -9,7 +9,7 @@
 
     <body>
         <?php include(NAVBAR); ?>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="container col-md-9">
                     <h1 class="p-md-5">
@@ -31,7 +31,7 @@
                             <div class="col-md-4 p-md-1">
                                 <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
                                     <div class="izdelek card">
-                                        <img class="card-img-top" 
+                                        <img class="card-img-top img-fluid" 
                                              src="<?= isset($izdelek["slika"]) ? $izdelek['slika'] : IMAGES_URL . 'default.png' ?>">
                                         <div class="card-body">
                                             <h4><?= $izdelek["ime"] ?></h4>

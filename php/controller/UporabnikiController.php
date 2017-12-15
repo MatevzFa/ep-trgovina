@@ -49,8 +49,9 @@ class UporabnikiController extends AbstractController {
             if ($pravilnoGeslo) {
                 session_regenerate_id();
                 $_SESSION['user_id'] = $idUporabnika;
-                if (isset($_SESSION['goto'])) {
-                    ViewHelper::redirect(BASE_URL . $_SESSION['goto']);
+                if (isset($_SESSION['post_login_redirect'])) {
+                    ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
+                    unset($_SESSION['post_login_redirect']);
                 } else {
                     ViewHelper::redirect(BASE_URL);
                 }
@@ -79,7 +80,7 @@ class UporabnikiController extends AbstractController {
                 echo ViewHelper::redirect(BASE_URL . "prijava");
             }
         } else {
-            $_SESSION['goto'] = "profil";
+            $_SESSION['post_login_redirect'] = "profil";
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
