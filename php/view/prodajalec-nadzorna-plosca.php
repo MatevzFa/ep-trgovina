@@ -15,6 +15,9 @@
              <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>
         </li>
         <li>
+             <a class="nav-link" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=stranka" ?>">Vse stranke</a>
+        </li>
+        <li>
              <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=oddano"?>">Pregled oddanih narocil</a>
         </li>
         <li>

@@ -25,12 +25,13 @@ class NarocilaController extends AbstractController {
                     ]
             );
         } else {
-            //ni uporabnik - 404 error?
+            ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
     
     //spremeni stanje narocila. Klice se iz narocila-list
     public static function spremeniStanjeNarocila() {
+        // TODO - FILTER POST INPUT
         $novoStanje = array (
             "id" => $_POST['id'],
             "stanje" => $_POST['novoStanje']

@@ -40,7 +40,25 @@ class UporabnikDB extends AbstractDB {
     }
     
     // ----------------------- CUT "NON TRIVIAL" QUERIES HERE -----------
-
+    
+    
+    public static function deaktivirajUporabnika(array $params) {
+        self::modify(""
+                . "UPDATE uporabnik "
+                . "SET aktiven = 0 "
+                . "WHERE id = :id", $params);
+    }
+    
+    /**
+     * Vsi uporabniki z doloceno vlogo
+     *  @param vloga
+     */
+    public static function vsiUporabnikiZVlogo(array $params) {
+        return self::query(""
+                . "SELECT id, ime, priimek, aktiven "
+                . "FROM uporabnik "
+                . "WHERE vloga = :vloga", $params);
+    }
     /**
      * Samo za testiranje. Za produkcijo uporabi $salt ki ga nastavi password_hash(...)
      */

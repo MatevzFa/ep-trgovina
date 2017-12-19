@@ -1,8 +1,14 @@
-<?php
+<!DOCTYPE html>
+<html>
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+    <head>
+        <title>Nadzorna plosca</title>
+        <?php include(HEAD); ?>
+    </head>
+    <body>
+        <?php include(NAVBAR); ?>
+       <li>
+             <a class="nav-link" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=prodajalec" ?>">Vsi prodajalci</a>
+        </li>
+    </body>
+</html>

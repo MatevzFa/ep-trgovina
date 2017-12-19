@@ -82,11 +82,65 @@ class UporabnikiController extends AbstractController {
         }
     }
     
+    //prikaz vseh uporabnikov z doloceno vlogo. Uporaba pri nadzornih ploscah
+    public static function prikaziVseUporabnikeZVlogo() {
+        $rules = [
+            "vloga" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
+        ];
+        $data = filter_input_array(INPUT_GET, $rules);
+        if (self::checkValues($data)) {
+            echo ViewHelper::render("view/uporabniki-list.php", [
+                "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
+                    ]
+            );
+        } else {
+            ViewHelper::redirect(BASE_URL . "izdelki");
+        }
+    }
+    
+    //   izbrisi = deaktiviraj uporabnika
+    public static function deaktivirajUporabnika() {
+        // var_dump($_POST);
+        // var_dump(INPUT_POST);
+        $rules = [
+            "id" => [
+                'filter' => FILTER_SANITIZE_INT
+            ]
+        ];
+        // TODO - FILTER POST INPUT
+        // $data = filter_input_array(INPUT_POST, $rules);
+        $data = $_POST;
+        //if (self::checkValues($data)) {
+        UporabnikDB::deaktivirajUporabnika($data);
+        ViewHelper::redirect(BASE_URL . "izdelki");
+        //} else {
+            // ViewHelper::redirect(BASE_URL . "izdelki");
+        //}
+        // ViewHelper::redirect(BASE_URL . "izdelki");
+    }
+    
     public static function prodajalecNadzornaPlosca() {
+        // TODO preveri ce je prodajalec ?
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {
                 echo ViewHelper::render("view/prodajalec-nadzorna-plosca.php");
+            } else {
+                echo ViewHelper::redirect(BASE_URL . "prijava");
+            }
+        } else {
+            $_SESSION['post_login_redirect'] = "profil";
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }
+    }
+    public static function administratorNadzornaPlosca() { 
+        //TODO preveri ce je administrator/
+        if (isset($_SESSION['user_id'])) {
+            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
+            if (isset($uporabnik)) {
+                echo ViewHelper::render("view/administrator-nadzorna-plosca.php");
             } else {
                 echo ViewHelper::redirect(BASE_URL . "prijava");
             }

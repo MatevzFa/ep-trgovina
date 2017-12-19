@@ -17,6 +17,9 @@
             <?php if (isset($_SESSION['user_vloga'])): ?>
                 <?php if ($_SESSION['user_vloga'] == 'administrator'): ?>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>">Nadzorna plosca</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
 
@@ -30,7 +33,10 @@
                 <?php else: ?>
                     <!-- samo za debugganje, drugace bo samo pri prodajalcu -->
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
+                        <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca(prodajalec)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>">Nadzorna plosca(admin)</a>
                     </li>
                     <li class="nav-item">
                         <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>

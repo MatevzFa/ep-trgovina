@@ -32,12 +32,21 @@ $urls = [
     },  
     "izdelki-add" => function () {
         IzdelkiController::dodajIzdelek();
-    },   
+    },
+    "administrator-nadzorna-plosca" => function () {
+        UporabnikiController::administratorNadzornaPlosca();
+    },
     "prodajalec-nadzorna-plosca" => function () {
         UporabnikiController::prodajalecNadzornaPlosca();
     },
     "registracija" => function () {
         UporabnikiController::registracija();
+    },
+    "prikaz-uporabnikov" => function () {
+        UporabnikiController::prikaziVseUporabnikeZVlogo();
+    },
+    "deaktiviraj-uporabnika" => function () {
+        UporabnikiController::deaktivirajUporabnika();
     },
     "narocila" => function () {
         NarocilaController::narocila();
