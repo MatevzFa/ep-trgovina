@@ -102,19 +102,14 @@ class UporabnikiController extends AbstractController {
     
     //   izbrisi = deaktiviraj uporabnika
     public static function deaktivirajUporabnika() {
-        // var_dump($_POST);
-        // var_dump(INPUT_POST);
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
             ]
         ];
-        // TODO - FILTER POST INPUT
         $data = filter_input_array(INPUT_POST, $rules);
-        //$data = $_POST;
         if (self::checkValues($data)) {
         	UporabnikDB::deaktivirajUporabnika($data);
-        	ViewHelper::redirect(BASE_URL . "izdelki");
         } else {
              ViewHelper::redirect(BASE_URL . "izdelki");
         }

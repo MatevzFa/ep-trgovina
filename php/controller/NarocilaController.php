@@ -32,33 +32,49 @@ class NarocilaController extends AbstractController {
     //spremeni stanje narocila. Klice se iz narocila-list
     public static function spremeniStanjeNarocila() {
         // TODO - FILTER POST INPUT
-        $novoStanje = array (
-            "id" => $_POST['id'],
-            "stanje" => $_POST['novoStanje']
-        );
-        if ($novoStanje['stanje'] == 'stornirano') {
-            $narociloKiGaBomoStornirali = NarociloDB::get(array(
-                "id" => $novoStanje['id']));
-            
-            $stornirano = array (
-                "datum" => $narociloKiGaBomoStornirali['datum'],
-                "uporabnik_id" => $narociloKiGaBomoStornirali['uporabnik_id'],
-                "stanje" => 'negativna-stornirano', //Ne bomo nikjer prikazovali
-                //ce bi dali se temu stanje stornirano, bi bila 2 narocila ko bi prikazovali vsa stornirana
-                "stornirano" => $novoStanje['id'],
-                "postavka" => - $narociloKiGaBomoStornirali['postavka']
-            );
-            /**TODO - v vmesni tabeli med narocilom in izdelkom
-             * je potrebno narediti nove vnose z negativno kolicino
-             */
-            NarociloDB::insert($stornirano);
-            NarociloDB::spremeniStanjeNarocila($novoStanje);
+	$rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1]
+            ],
+	    "staroStanje" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "novoStanje" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        //novo stanje ne bo pod 'novoStanje' ampak pod 'stanje'
+        $data['stanje'] = $data['novoStanje'];
+        unset($data['novoStanje']);
+        if (self::checkValues($data)) {
+            if ($data['stanje'] == 'stornirano') {
+                $narociloKiGaBomoStornirali = NarociloDB::get(array(
+                    "id" => $data['id']));
+
+                $stornirano = array (
+                    "datum" => $narociloKiGaBomoStornirali['datum'],
+                    "uporabnik_id" => $narociloKiGaBomoStornirali['uporabnik_id'],
+                    "stanje" => 'negativna-stornirano', //Ne bomo nikjer prikazovali
+                    //ce bi dali se temu stanje stornirano, bi bila 2 narocila ko bi prikazovali vsa stornirana
+                    "stornirano" => $data['id'],
+                    "postavka" => - $narociloKiGaBomoStornirali['postavka']
+                );
+                /**TODO - v vmesni tabeli med narocilom in izdelkom
+                 * je potrebno narediti nove vnose z negativno kolicino
+                 */
+                NarociloDB::insert($stornirano);
+                NarociloDB::spremeniStanjeNarocila($data);
+            }
+            else {
+                NarociloDB::spremeniStanjeNarocila($data);
+            }
         }
         else {
-            NarociloDB::spremeniStanjeNarocila($novoStanje);
+            ViewHelper::redirect(BASE_URL . "prijava");
         }
-        
-        ViewHelper::redirect(BASE_URL . "narocila-list?stanje=" . $_POST['staroStanje']);
+        ViewHelper::redirect(BASE_URL . "narocila-list?stanje=" . $data['staroStanje']);
     }
     
     // vsa narocila, ki so v dolocenem stanju
