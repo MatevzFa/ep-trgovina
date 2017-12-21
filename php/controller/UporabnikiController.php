@@ -5,6 +5,7 @@ require_once("ViewHelper.php");
 require_once("model/db/UporabnikDB.php");
 require_once(FORMS . "RegistracijaForm.php");
 require_once(FORMS . "PrijavaForm.php");
+require_once(FORMS . "DodajProdajalcaForm.php");
 
 class UporabnikiController extends AbstractController {
 
@@ -19,6 +20,23 @@ class UporabnikiController extends AbstractController {
             ViewHelper::redirect(BASE_URL);
         } else {
             echo ViewHelper::render("view/registracija.php", [
+                "form" => $form
+            ]);
+        }
+    }
+    
+    // administrator lahko 'registrira' novega prodajalca
+    public static function registracijaProdajalca() {
+
+        $form = new DodajProdajalcaForm("registracija-prodajalec");
+
+        if ($form->validate()) {
+            $novProdajalec = $form->getValue();
+            $novProdajalec['vloga'] = 'prodajalec';
+            UporabnikDB::dodajUporabnika($novProdajalec);
+            ViewHelper::redirect(BASE_URL);
+        } else {
+            echo ViewHelper::render("view/registracija-prodajalec.php", [
                 "form" => $form
             ]);
         }

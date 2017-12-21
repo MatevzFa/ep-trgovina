@@ -41,7 +41,11 @@ class UporabnikDB extends AbstractDB {
     
     // ----------------------- CUT "NON TRIVIAL" QUERIES HERE -----------
     
-    
+    public static function ustvariProdajalca(array $params) {
+        self::modify(""
+                . "INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) "
+                . "VALUES (:vloga, :ime, :priimek, :email, :geslo)", $params);
+    }
     public static function deaktivirajUporabnika(array $params) {
         self::modify(""
                 . "UPDATE uporabnik "
@@ -87,7 +91,11 @@ class UporabnikDB extends AbstractDB {
         $geslo = $params['geslo'];
         $params['geslo'] = password_hash($geslo, PASSWORD_DEFAULT, self::$HASH_OPTIONS);
 
-        self::insert($params);
+        if ($params['naslov'] != null){ //je uporabnik
+            self::insert($params);
+        } else { //je prodajalec
+            self::ustvariProdajalca($params);
+        }
     }
 
     /**

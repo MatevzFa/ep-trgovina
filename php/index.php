@@ -42,6 +42,9 @@ $urls = [
     "registracija" => function () {
         UporabnikiController::registracija();
     },
+    "registracija-prodajalec" => function () {
+        UporabnikiController::registracijaProdajalca();
+    },
     "prikaz-uporabnikov" => function () {
         UporabnikiController::prikaziVseUporabnikeZVlogo();
     },
