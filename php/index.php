@@ -51,6 +51,9 @@ $urls = [
     "deaktiviraj-uporabnika" => function () {
         UporabnikiController::deaktivirajUporabnika();
     },
+    "oceni-izdelek" => function () {
+        IzdelkiController::oceniIzdelek();
+    },
     "narocila" => function () {
         NarocilaController::narocila();
     },

@@ -61,7 +61,7 @@ class UporabnikiController extends AbstractController {
             // najprej preveri ali uporabnik sploh obstaja
             if ($idInVlogaUporabnika != null) {
                 $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
-
+                // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
                 if ($pravilnoGeslo) {
                     session_regenerate_id();
                     $_SESSION['user_id'] = $idInVlogaUporabnika['id'];

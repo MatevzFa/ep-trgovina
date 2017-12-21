@@ -35,6 +35,33 @@ class IzdelkiController extends AbstractController {
             ]);
         }
     }
+    
+    public static function oceniIzdelek() {
+        $rules = [
+            "ocena" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+            "uporabnik_id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+            "izdelek_id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            if (!IzdelekDB::aliJeUporabnikZeOcenilIzdelek($data)) { //se ni ocenil izdelka
+        	IzdelekDB::oceniIzdelek($data);
+                ViewHelper::redirect(BASE_URL . "izdelki?id=" . $data["izdelek_id"]);
+            } else { // je ze ocenil
+                echo "<script>alert('Izdelek ste ze ocenili.');
+                        window.location.href='".BASE_URL . "izdelki?id=".$data["izdelek_id"]."';</script>";
+            }
+        } else {
+            ViewHelper::redirect(BASE_URL . "izdelki?id=" . $data["izdelek_id"]);
+        }
+        
+    }
 
     public static function dodajIzdelek() {
         $form = new DodajanjeIzdelkaForm('izdelki-add');

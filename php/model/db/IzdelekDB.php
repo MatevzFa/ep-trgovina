@@ -39,10 +39,20 @@ class IzdelekDB extends AbstractDB {
     }
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
-
+    /*
+     * @params izdelek_id in uporabnik_id
+     * @return TRUE, ce je ze ocenil, FALSE ce se ni
+     */
+    public static function aliJeUporabnikZeOcenilIzdelek(array $params) {
+        if (self::query("SELECT * FROM ocena WHERE izdelek_id = :izdelek_id AND "
+                . "uporabnik_id = :uporabnik_id", $params)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
     public static function oceniIzdelek(array $params) {
         self::modify(""
-                . "INSERT INTO izdelek (uporabnik_id, izdelek_id, ocena) "
+                . "INSERT INTO ocena (uporabnik_id, izdelek_id, ocena) "
                 . "VALUES (:uporabnik_id, :izdelek_id, :ocena)", $params);
     }
 
