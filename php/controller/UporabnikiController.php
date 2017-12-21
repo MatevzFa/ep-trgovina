@@ -38,21 +38,28 @@ class UporabnikiController extends AbstractController {
                 "email" => $uporabnik['email']
              );
             
+            
             $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
-            $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
+            // najprej preveri ali uporabnik sploh obstaja
+            if ($idInVlogaUporabnika != null) {
+                $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
-            if ($pravilnoGeslo) {
-                session_regenerate_id();
-                $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
-                $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
-                var_dump($_SESSION);
-                
-                if (isset($_SESSION['post_login_redirect'])) {
-                    ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
+                if ($pravilnoGeslo) {
+                    session_regenerate_id();
+                    $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                    $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                    var_dump($_SESSION);
+
+                    if (isset($_SESSION['post_login_redirect'])) {
+                        ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
+                    } else {
+                        ViewHelper::redirect(BASE_URL);
+                    }
                 } else {
-                    ViewHelper::redirect(BASE_URL);
+                    ViewHelper::redirect(BASE_URL . "prijava");
                 }
-            } else {
+            }
+            else { // uporabnik ne obstaja
                 ViewHelper::redirect(BASE_URL . "prijava");
             }
         } else {
