@@ -31,7 +31,8 @@ class IzdelkiController extends AbstractController {
             echo ViewHelper::render('view/izdelki-list.php', [
 //                'izdelki' => IzdelekDB::pridobiZOstranjevanjem($dataList),
                 'izdelki' => IzdelekDB::pridobiZOstranjevanjem($offset, $limit),
-                'stIzdelkov' => IzdelekDB::pridobiStIzdelkov()
+                'stIzdelkov' => IzdelekDB::pridobiStIzdelkov(),
+                'kosarica' => isset($_SESSION['cart']) ? $_SESSION['cart'] : []
             ]);
         }
     }

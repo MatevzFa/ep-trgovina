@@ -11,10 +11,12 @@ define("BASE_URL", $_SERVER["SCRIPT_NAME"] . "/");
 define("IMAGES_URL", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/img/");
 define("CSS_URL", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/css/");
 define("BOOTSTRAP", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/bootstrap/");
+define("METHOD", $_SERVER['REQUEST_METHOD']);
 
 require_once("controller/IzdelkiController.php");
 require_once("controller/UporabnikiController.php");
 require_once("controller/NarocilaController.php");
+require_once("controller/KosaricaController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -24,12 +26,14 @@ $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 //var_dump(CSS_URL);
 //var_dump($path);
 //exit();
-
 // ROUTER: defines mapping between URLS and controllers
 $urls = [
     "izdelki" => function () {
         IzdelkiController::izdelki();
-    },  
+    },
+    "kosarica" => function () {
+        KosaricaController::kosarica();
+    },
     "izdelki-add" => function () {
         IzdelkiController::dodajIzdelek();
     },

@@ -9,9 +9,9 @@
 
     <body>
         <?php include(NAVBAR); ?>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="container col-md-9">
+                <div class="container col-md-9 border border-top-0 border-bottom-0 border-left-0">
                     <h1 class="p-md-5">
                         Vsi izdelki
                     </h1>
@@ -54,7 +54,8 @@
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h1> Tukaj je lahko cart? </h1>
+                    <a href="<?= BASE_URL . 'kosarica' ?>">Košarica</a>
+                    <?php include('components/kosarica.component.php'); ?>
                 </div>
             </div>
         </div>
