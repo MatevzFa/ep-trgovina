@@ -44,8 +44,20 @@ class KosaricaController extends AbstractController {
             echo ViewHelper::render('view/kosarica.php', $vars);
         }
     }
+    
+    public static function zakljuci() {
+        
+        if (METHOD == 'GET') {
+            $vars = [
+                'kosarica' => isset($_SESSION['cart']) ? $_SESSION['cart'] : []
+            ];
+            echo ViewHelper::render('view/kosarica-zakljuci.php', $vars);
+        } else if (METHOD == 'POST') {
+            
+        }
+    }
 
-    public static function dodajIzdelek($izdelekId) {
+    private static function dodajIzdelek($izdelekId) {
 
         $izdelek = IzdelekDB::get(array('id' => $izdelekId));
 
@@ -61,14 +73,14 @@ class KosaricaController extends AbstractController {
         }
     }
 
-    public static function odstraniIzdelek($izdelekId) {
+    private static function odstraniIzdelek($izdelekId) {
 
         if (isset($_SESSION["cart"][$izdelekId])) {
             unset($_SESSION["cart"][$izdelekId]);
         }
     }
 
-    public static function urediKolicino($izdelekId, $novakolicina) {
+    private static function urediKolicino($izdelekId, $novakolicina) {
         if ($novakolicina > 0) {
             $_SESSION["cart"][$izdelekId]["kolicina"] = $novakolicina;
         } else {
@@ -76,7 +88,7 @@ class KosaricaController extends AbstractController {
         }
     }
 
-    public static function izprazniKosarico() {
+    private static function izprazniKosarico() {
         unset($_SESSION["cart"]);
         ViewHelper::redirect(BASE_URL . 'kosarica');
     }

@@ -31,13 +31,7 @@
                         ?>
                         <tr>
                             <td><a href="<?= BASE_URL . 'izdelki?id=' . $izdelek['id'] ?>"><?= $izdelek['ime'] ?></a></td>
-                            <td>
-                                <form action="<?= BASE_URL . "kosarica" ?>" method="post">
-                                    <input type="hidden" name="do" value="posodobi" />
-                                    <input type="hidden" name="id" value="<?= $izdelek['id'] ?>" />
-                                    <input type="number" name="kolicina" value="<?= $izdelek['kolicina'] ?>" class="short_input" />
-                                    <button class="btn btn-primary" type="submit">✔️</button>
-                                </form></td>
+                            <td><?= $izdelek['kolicina'] ?></td>
                             <td><?= $izdelek['cena'] ?>€</td>
                             <td><?= $izdelek['kolicina'] * $izdelek['cena'] ?>€</td>
                         </tr>
@@ -52,11 +46,12 @@
                     </tr>
                 </tfoot>
             </table>            
-            <form action="<?= BASE_URL . "kosarica" ?>" method="post" id="form_izprazni">
+            
+            <form action="<?= BASE_URL . "kosarica/zakljuci" ?>" method="post" id="form_oddaj">
                 <input type="hidden" name="do" value="izprazni" />
             </form>
-            <button class="btn btn-danger" type="submit" form="form_izprazni">Izprazni košarico</button>
-            <a class="btn btn-primary" href="kosarica/zakljuci">Zaključek naročila</a>
+            <a class="btn btn-outline-primary" href="<?= BASE_URL . "kosarica" ?>">Nazaj na urejanje</a>
+            <button class="btn btn-primary" type="submit" form="form_oddaj">Oddaj naročilo</button>
 
         </div>        
     </body>

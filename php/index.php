@@ -34,6 +34,9 @@ $urls = [
     "kosarica" => function () {
         KosaricaController::kosarica();
     },
+    "kosarica/zakljuci" => function () {
+        KosaricaController::zakljuci();
+    },
     "izdelki-add" => function () {
         IzdelkiController::dodajIzdelek();
     },
