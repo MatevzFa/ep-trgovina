@@ -53,7 +53,7 @@
                         <!--<li class="page-item"><a class="page-link" href="#">Naprej</a></li>-->
                     </ul>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 p-0">
                     <a href="<?= BASE_URL . 'kosarica' ?>">Košarica</a>
                     <?php include('components/kosarica.component.php'); ?>
                 </div>

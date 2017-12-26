@@ -36,7 +36,7 @@
                                     <input type="hidden" name="do" value="posodobi" />
                                     <input type="hidden" name="id" value="<?= $izdelek['id'] ?>" />
                                     <input type="number" name="kolicina" value="<?= $izdelek['kolicina'] ?>" class="short_input" />
-                                    <button class="btn btn-primary" type="submit">V</button>
+                                    <button class="btn btn-primary" type="submit">✔️</button>
                                 </form></td>
                             <td><?= $izdelek['cena'] ?>€</td>
                             <td><?= $izdelek['kolicina'] * $izdelek['cena'] ?>€</td>
