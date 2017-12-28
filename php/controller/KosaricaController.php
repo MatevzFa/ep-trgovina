@@ -53,7 +53,48 @@ class KosaricaController extends AbstractController {
             ];
             echo ViewHelper::render('view/kosarica-zakljuci.php', $vars);
         } else if (METHOD == 'POST') {
+            $rules = [
+                'user_id' => FILTER_VALIDATE_INT,
+                'postavka' => FILTER_VALIDATE_FLOAT
+
+            ];
+            $nakupTotal = 0;
+            foreach($_SESSION['cart'] as $izdelek) {
+                $nakupTotal += $izdelek['kolicina'] * floatval($izdelek['cena']);
+            }
+            $nakup = [
+                'uporabnik_id' => $_SESSION['user_id'],
+                'postavka' => $nakupTotal
+            ];
             
+            $filtriranNakup = filter_var_array($nakup, $rules);
+            NarociloDB::insert($nakup);
+            
+            $idNarocila = NarociloDB::pridobiIDZadnjegaNarocila()['id'];
+            //treba zapisati se delcke narocila v 'dodajVNarociloVsebuje'
+            $rules = [
+                    'kolicina' => [
+                        'filter' => FILTER_VALIDATE_INT,
+                        'min_range' => 0
+                    ],
+                    'narocilo_id' => FILTER_VALIDATE_INT,
+                    'izdelek_id' => FILTER_VALIDATE_INT
+                ];
+            foreach($_SESSION['cart'] as $izdelek) {
+                //:kolicina, :izdelek_id, :narocilo_id
+                $newInsert = [
+                    'narocilo_id' => $idNarocila,
+                    'kolicina' => $izdelek['kolicina'],
+                    'izdelek_id' => $izdelek['id']
+                ];
+               
+                $filtriranInsert = filter_var_array($newInsert, $rules);
+                NarociloDB::dodajVNarociloVsebuje($filtriranInsert);
+            }
+            $_SESSION['cart'] = []; // empty the basket
+            //alert uspesno oddano
+            echo "<script>alert('Narocilo je bilo uspesno oddano.');
+                        window.location.href='".BASE_URL . "izdelki"."';</script>";
         }
     }
 

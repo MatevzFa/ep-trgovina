@@ -26,9 +26,9 @@ class NarociloDB extends AbstractDB {
     public static function insert(array $params) {
         self::modify(""
                 . "INSERT INTO narocilo (datum, "
-                . " uporabnik_id, stanje, stornirano, postavka) "
-                . "VALUES (:datum, :uporabnik_id, :stanje, "
-                . ":stornirano, :postavka)", $params);
+                . " uporabnik_id, postavka) "
+                . "VALUES (now(), :uporabnik_id, "
+                . ":postavka)", $params);
     }
 
     public static function update(array $params) {
@@ -52,6 +52,18 @@ class NarociloDB extends AbstractDB {
 
     //--------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------
 
+   public static function pridobiIDZadnjegaNarocila() {
+       return self::query(""
+               . "SELECT id FROM narocilo "
+               . "ORDER BY id DESC LIMIT 1")[0];
+   }
+    
+    
+   public static function dodajVNarociloVsebuje(array $params) {
+       self::modify(""
+               . "INSERT INTO narocilo_vsebuje (kolicina, izdelek_id, narocilo_id) "
+               . "VALUES (:kolicina, :izdelek_id, :narocilo_id)", $params);
+   }
     /**
      * 
      * @param array $params id narocila

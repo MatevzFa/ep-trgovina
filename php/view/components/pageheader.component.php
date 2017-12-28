@@ -38,11 +38,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>">Nadzorna plosca(admin)</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item"> <!-- to bo slo tudi stran -->
                         <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . 'kosarica' ?>">Moja košarica</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "narocila?id=" . $_SESSION['user_id'] ?>">Pregled narocil</a>
