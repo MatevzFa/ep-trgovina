@@ -10,3 +10,6 @@ nbdist/
 
 # VS Code
 .vscode/
+
+# IntelliJ IDEA
+.idea/
