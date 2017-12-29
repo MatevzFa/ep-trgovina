@@ -26,5 +26,12 @@ class ViewHelper {
 
         echo $html404;
     }
-
+    
+    public static function alert($message, $redirect = NULL) {
+        return ""
+        . "<script>"
+        . "     alert('$message');"
+        .       ($redirect != NULL ? "window.location.href='" . BASE_URL . "$redirect" . "';" : "")
+        . "</script>";
+    }
 }
