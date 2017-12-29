@@ -47,13 +47,27 @@ class KosaricaController extends AbstractController {
     
     public static function zakljuci() {
         
+        $rules = [
+            'do' => [
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => [
+                    'regexp' => "/^(oddaj_narocilo)$/"
+                ]
+            ]
+        ];
+
         if (METHOD == 'GET') {
+            
+            $_SESSION['final_cart'] = $_SESSION['cart'];
+            
             $vars = [
-                'kosarica' => isset($_SESSION['cart']) ? $_SESSION['cart'] : []
+                'kosarica' => isset($_SESSION['final_cart']) ? $_SESSION['final_cart'] : []
             ];
             echo ViewHelper::render('view/kosarica-zakljuci.php', $vars);
         } else if (METHOD == 'POST') {
-            
+            var_dump($_POST);
+            var_dump($_SESSION['final_cart']);
+            NarocilaController::dodajNarocilo($_SESSION['final_cart']);
         }
     }
 

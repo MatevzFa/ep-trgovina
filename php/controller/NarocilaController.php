@@ -3,7 +3,7 @@
 require_once("AbstractController.php");
 require_once("ViewHelper.php");
 require_once("model/db/NarociloDB.php");
-
+require_once("model/db/DB.php");
 
 class NarocilaController extends AbstractController {
 
@@ -28,21 +28,21 @@ class NarocilaController extends AbstractController {
             ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-    
+
     //spremeni stanje narocila. Klice se iz narocila-list
     public static function spremeniStanjeNarocila() {
         // TODO - FILTER POST INPUT
-	$rules = [
+        $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['min_range' => 1]
             ],
-	    "staroStanje" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+            "staroStanje" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "novoStanje" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ]
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         //novo stanje ne bo pod 'novoStanje' ampak pod 'stanje'
@@ -51,9 +51,9 @@ class NarocilaController extends AbstractController {
         if (self::checkValues($data)) {
             if ($data['stanje'] == 'stornirano') {
                 $narociloKiGaBomoStornirali = NarociloDB::get(array(
-                    "id" => $data['id']));
+                            "id" => $data['id']));
 
-                $stornirano = array (
+                $stornirano = array(
                     "datum" => $narociloKiGaBomoStornirali['datum'],
                     "uporabnik_id" => $narociloKiGaBomoStornirali['uporabnik_id'],
                     "stanje" => 'negativna-stornirano', //Ne bomo nikjer prikazovali
@@ -61,25 +61,23 @@ class NarocilaController extends AbstractController {
                     "stornirano" => $data['id'],
                     "postavka" => - $narociloKiGaBomoStornirali['postavka']
                 );
-                /**TODO - v vmesni tabeli med narocilom in izdelkom
+                /*                 * TODO - v vmesni tabeli med narocilom in izdelkom
                  * je potrebno narediti nove vnose z negativno kolicino
                  */
                 NarociloDB::insert($stornirano);
                 NarociloDB::spremeniStanjeNarocila($data);
-            }
-            else {
+            } else {
                 NarociloDB::spremeniStanjeNarocila($data);
             }
-        }
-        else {
+        } else {
             ViewHelper::redirect(BASE_URL . "prijava");
         }
         ViewHelper::redirect(BASE_URL . "narocila-list?stanje=" . $data['staroStanje']);
     }
-    
+
     // vsa narocila, ki so v dolocenem stanju
     public static function vsaNarocilaStanje() {
-        
+
         $rules = [
             "stanje" => [
                 'filter' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -95,7 +93,7 @@ class NarocilaController extends AbstractController {
             ViewHelper::redirect(BASE_URL . "prodajalec-nadzorna-plosca");
         }
     }
-    
+
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type
@@ -109,5 +107,12 @@ class NarocilaController extends AbstractController {
             'datum' => FILTER_SANITIZE_SPECIAL_CHARS //nisem nasel validate date
         ];
     }
-
+    
+    public static function dodajNarocilo(array $izdelki) {
+        $datum = date("Y-m-d H:i:s");
+        $user_id = $_SESSION['user_id'];
+        $uspeh = NarociloDB::dodajNarocilo($datum, $user_id, $izdelki);
+        var_dump($uspeh);
+    }
+    
 }

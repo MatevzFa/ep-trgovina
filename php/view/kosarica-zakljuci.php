@@ -20,7 +20,6 @@
                     </tr>
                 </thead>
 
-                <input type="hidden" name="do" value="posodobi" />
                 <tbody>
 
                     <?php
@@ -36,7 +35,8 @@
                             <td><?= $izdelek['kolicina'] * $izdelek['cena'] ?>€</td>
                         </tr>
                     <?php endforeach; ?>
-                </tbody>
+                </tbody>                    
+
                 <tfoot>
                     <tr class="table-active">
                         <th scope="col"></th>
@@ -46,10 +46,10 @@
                     </tr>
                 </tfoot>
             </table>            
-            
             <form action="<?= BASE_URL . "kosarica/zakljuci" ?>" method="post" id="form_oddaj">
-                <input type="hidden" name="do" value="izprazni" />
+                <input type="hidden" name="do" value="oddaj_narocilo" />
             </form>
+
             <a class="btn btn-outline-primary" href="<?= BASE_URL . "kosarica" ?>">Nazaj na urejanje</a>
             <button class="btn btn-primary" type="submit" form="form_oddaj">Oddaj naročilo</button>
 
