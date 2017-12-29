@@ -12,7 +12,7 @@ DROP SCHEMA IF EXISTS `ep_trgovina` ;
 -- -----------------------------------------------------
 -- Schema ep_trgovina
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
+CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 ;
 USE `ep_trgovina` ;
 
 -- -----------------------------------------------------
@@ -128,11 +128,12 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `ep_trgovina`.`narocilo_vsebuje` ;
 
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo_vsebuje` (
-  `kolicina` INT NOT NULL COMMENT 'Kolicina dolocenega izdelka\n',
-  `izdelek_id` INT NOT NULL,
   `narocilo_id` INT NOT NULL,
+  `izdelek_id` INT NOT NULL,
+  `kolicina` INT NOT NULL COMMENT 'Kolicina dolocenega izdelka\n',
+  `cena` DECIMAL(10,2) NOT NULL,
   INDEX `fk_narocilo_vsebuje_izdelek1_idx` (`izdelek_id` ASC),
-  PRIMARY KEY (`izdelek_id`, `narocilo_id`),
+  PRIMARY KEY (`narocilo_id`, `izdelek_id`),
   INDEX `fk_narocilo_vsebuje_narocilo1_idx` (`narocilo_id` ASC),
   CONSTRAINT `fk_narocilo_vsebuje_izdelek1`
     FOREIGN KEY (`izdelek_id`)
@@ -146,10 +147,6 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo_vsebuje` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `ep_trgovina`;
 
 DELIMITER $$
@@ -186,3 +183,7 @@ END;$$
 
 
 DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
