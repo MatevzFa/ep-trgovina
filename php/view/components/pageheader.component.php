@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="<?= BASE_URL ?>">EP trgovina</a>
-
+    
     <div class="navbar-expand" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
@@ -44,11 +44,11 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . 'kosarica' ?>">Moja košarica</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL . "narocila?id=" . $_SESSION['user_id'] ?>">Pregled narocil</a>
+                        <a class="nav-link" href="<?= BASE_URL . "narocila" ?>">Pregled narocil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>

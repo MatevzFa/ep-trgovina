@@ -19,12 +19,14 @@ class NarocilaController extends AbstractController {
         ];
 
         $data = filter_input_array(INPUT_GET, $rules);
-        if (self::checkValues($data)) {
+
+        if (isset($_SESSION['user_id'])) {
             echo ViewHelper::render("view/narocila.php", [
-                "narocila" => NarociloDB::pridobiVsaNarocilaStranke($data)
+                "narocila" => NarociloDB::pridobiVsaNarocilaStranke(array('id' => $_SESSION['user_id']))
                     ]
             );
         } else {
+            $_SESSION['post_login_redirect'] = 'narocila';
             ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
@@ -107,12 +109,16 @@ class NarocilaController extends AbstractController {
             'datum' => FILTER_SANITIZE_SPECIAL_CHARS //nisem nasel validate date
         ];
     }
-    
+
+    /**
+     * Doda naročilo v DB
+     * @param array $izdelki postavke
+     * @return boolean TRUE če je naročilo uspešno dodano; FALSE sicer
+     */
     public static function dodajNarocilo(array $izdelki) {
         $datum = date("Y-m-d H:i:s");
         $user_id = $_SESSION['user_id'];
-        $uspeh = NarociloDB::dodajNarocilo($datum, $user_id, $izdelki);
-        var_dump($uspeh);
+        return NarociloDB::dodajNarocilo($datum, $user_id, $izdelki);
     }
-    
+
 }
