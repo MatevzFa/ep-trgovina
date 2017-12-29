@@ -63,15 +63,19 @@ class UporabnikiController extends AbstractController {
                 $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
                 // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
                 if ($pravilnoGeslo) {
+                    
                     session_regenerate_id();
                     $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
                     $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
 
                     if (isset($_SESSION['post_login_redirect'])) {
-                        ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
+                        $redirectUrl = $_SESSION['post_login_redirect'];
+                        unset($_SESSION['post_login_redirect']);
+                        ViewHelper::redirect(BASE_URL . $redirectUrl);
                     } else {
                         ViewHelper::redirect(BASE_URL);
                     }
+                    
                 } else {
                     ViewHelper::redirect(BASE_URL . "prijava");
                 }
