@@ -65,8 +65,6 @@ class KosaricaController extends AbstractController {
             ];
             echo ViewHelper::render('view/kosarica-zakljuci.php', $vars);
         } else if (METHOD == 'POST') {
-            var_dump($_POST);
-            var_dump($_SESSION['final_cart']);
             NarocilaController::dodajNarocilo($_SESSION['final_cart']);
         }
     }

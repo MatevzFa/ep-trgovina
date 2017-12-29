@@ -89,13 +89,109 @@ class UporabnikiController extends AbstractController {
         session_destroy();
         ViewHelper::redirect(BASE_URL);
     }
-
+    
+    public static function urejanjeZaposlenih() {
+        $rules = [
+             "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+	    "ime" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "priimek" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "email" => [
+		'filter' => FILTER_SANITIZE_EMAIL
+	    ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            UporabnikDB::urejanjeZaposlenega($data);
+            echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
+                        window.location.href='".BASE_URL . "profil"."';</script>";
+            
+        } else {
+            ViewHelper::redirect(BASE_URL . "profil");
+        }   
+    }
+    public static function urejanjeStranke() {
+        $rules = [
+             "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+	    "ime" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "priimek" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "email" => [
+		'filter' => FILTER_SANITIZE_EMAIL
+	    ],
+            "naslov" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "telefon" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            UporabnikDB::urejanjeStranke($data);
+            echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
+                        window.location.href='".BASE_URL . "profil"."';</script>";
+            
+        } else {
+            ViewHelper::redirect(BASE_URL . "profil");
+        }   
+    }
+    
+    public static function spremeniGeslo() {
+        $rules = [
+             "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+	    "geslo" => [
+		'filter' => FILTER_DEFAULT
+	    ],
+            "staroGeslo" => [
+		'filter' => FILTER_DEFAULT
+	    ]         
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            if (UporabnikDB::preveriGeslo($data['id'], $data['staroGeslo'])) {
+                UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
+                echo "<script>alert('Geslo je bilo spremenjeno.');
+                        window.location.href='".BASE_URL . "profil"."';</script>";
+            } else {
+                echo "<script>alert('Vnesli ste napacno staro geslo.');
+                        window.location.href='".BASE_URL . "profil"."';</script>";
+            }
+            
+        } else {
+            ViewHelper::redirect(BASE_URL . "profil");
+        }   
+    }
     public static function profil() {
 
         if (isset($_SESSION['user_id'])) {
-            $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
+            $uporabnik = UporabnikDB::get(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {
-                var_dump($uporabnik);
+                //prikaz profila uporabika
+                if ($uporabnik['vloga'] == 'stranka') {
+                    echo ViewHelper::render("view/urejanje-stranka.php", [
+                    "podatki" => $uporabnik
+                        ]
+                    );
+                } else {
+                    echo ViewHelper::render("view/urejanje-zaposleni.php", [
+                    "podatki" => $uporabnik
+                        ]
+                    );
+                }
+                
             } else {
                 echo ViewHelper::redirect(BASE_URL . "prijava");
             }

@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `datum` DATETIME NOT NULL,
   `uporabnik_id` INT NOT NULL,
-  `stanje` VARCHAR(45) NOT NULL COMMENT 'Stanje narocila:\n- oddano (neobdelano)\n- potrjeno\n- preklicano\n- stornirano\nponovno vpisano narocilo z negativnim zneskom (stornacija) pa ima lahko stanje ‘stornirano_narocilo’. V atribut ‘stornirano’ pa gre ID narocila, ki ga stornira.',
+  `stanje` VARCHAR(45) NOT NULL DEFAULT 'oddano' COMMENT 'Stanje narocila:\n- oddano (neobdelano)\n- potrjeno\n- preklicano\n- stornirano\nponovno vpisano narocilo z negativnim zneskom (stornacija) pa ima lahko stanje ‘stornirano_narocilo’. V atribut ‘stornirano’ pa gre ID narocila, ki ga stornira.',
   `stornirano` INT NULL COMMENT 'kaze na ID narocila, ki ga stornira. Postavka je negativna postavka tistega narocila',
   `postavka` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id`),

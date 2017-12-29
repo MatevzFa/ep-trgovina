@@ -79,6 +79,15 @@ $urls = [
     "profil" => function () {
         UporabnikiController::profil();
     },
+    "urejanje-stranke" => function () {
+        UporabnikiController::urejanjeStranke();
+    },
+    "urejanje-zaposleni" => function () {
+        UporabnikiController::urejanjeZaposlenih();
+    },
+    "spremeni-geslo" => function () {
+        UporabnikiController::spremeniGeslo();
+    },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");
     },

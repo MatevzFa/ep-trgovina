@@ -40,6 +40,21 @@ class UporabnikDB extends AbstractDB {
     }
     
     // ----------------------- CUT "NON TRIVIAL" QUERIES HERE -----------
+    public static function urejanjeZaposlenega(array $params) {
+        self::modify(""
+                . "UPDATE uporabnik "
+                . "SET ime = :ime, priimek = :priimek, "
+                . "email = :email "
+                . "WHERE id = :id", $params);
+    }
+    public static function urejanjeStranke(array $params) {
+        self::modify(""
+                . "UPDATE uporabnik "
+                . "SET ime = :ime, priimek = :priimek, "
+                . "email = :email, naslov = :naslov, "
+                . "telefon = :telefon "
+                . "WHERE id = :id", $params);
+    }
     
     public static function ustvariProdajalca(array $params) {
         self::modify(""
