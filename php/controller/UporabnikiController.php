@@ -24,7 +24,7 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-    
+
     // administrator lahko 'registrira' novega prodajalca
     public static function registracijaProdajalca() {
 
@@ -41,7 +41,7 @@ class UporabnikiController extends AbstractController {
             ]);
         }
     }
-    
+
     public static function prijava() {
 
         $form = new PrijavaForm("prijava");
@@ -52,11 +52,11 @@ class UporabnikiController extends AbstractController {
             $email = $uporabnik['email'];
             $geslo = $uporabnik['geslo'];
 
-            $email = array (
+            $email = array(
                 "email" => $uporabnik['email']
-             );
-            
-            
+            );
+
+
             $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
             // najprej preveri ali uporabnik sploh obstaja
             if ($idInVlogaUporabnika != null) {
@@ -66,7 +66,6 @@ class UporabnikiController extends AbstractController {
                     session_regenerate_id();
                     $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
                     $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
-                    var_dump($_SESSION);
 
                     if (isset($_SESSION['post_login_redirect'])) {
                         ViewHelper::redirect(BASE_URL . $_SESSION['post_login_redirect']);
@@ -76,8 +75,7 @@ class UporabnikiController extends AbstractController {
                 } else {
                     ViewHelper::redirect(BASE_URL . "prijava");
                 }
-            }
-            else { // uporabnik ne obstaja
+            } else { // uporabnik ne obstaja
                 ViewHelper::redirect(BASE_URL . "prijava");
             }
         } else {
@@ -106,7 +104,7 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-    
+
     //prikaz vseh uporabnikov z doloceno vlogo. Uporaba pri nadzornih ploscah
     public static function prikaziVseUporabnikeZVlogo() {
         $rules = [
@@ -124,7 +122,7 @@ class UporabnikiController extends AbstractController {
             ViewHelper::redirect(BASE_URL . "izdelki");
         }
     }
-    
+
     //   izbrisi = deaktiviraj uporabnika
     public static function deaktivirajUporabnika() {
         $rules = [
@@ -134,13 +132,13 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-        	UporabnikDB::deaktivirajUporabnika($data);
+            UporabnikDB::deaktivirajUporabnika($data);
         } else {
-             ViewHelper::redirect(BASE_URL . "izdelki");
+            ViewHelper::redirect(BASE_URL . "izdelki");
         }
-         ViewHelper::redirect(BASE_URL . "izdelki");
+        ViewHelper::redirect(BASE_URL . "izdelki");
     }
-    
+
     public static function prodajalecNadzornaPlosca() {
         // TODO preveri ce je prodajalec ?
         if (isset($_SESSION['user_id'])) {
@@ -155,7 +153,8 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-    public static function administratorNadzornaPlosca() { 
+
+    public static function administratorNadzornaPlosca() {
         //TODO preveri ce je administrator/
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
@@ -169,7 +168,7 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::redirect(BASE_URL . "prijava");
         }
     }
-    
+
     /**
      * Returns an array of filtering rules for manipulation books
      * @return type

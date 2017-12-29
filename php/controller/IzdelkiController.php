@@ -79,7 +79,7 @@ class IzdelkiController extends AbstractController {
 
     /**
      * Returns an array of filtering rules for manipulation books
-     * @return type
+     * @return array
      */
     private static function getRules() {
         return [

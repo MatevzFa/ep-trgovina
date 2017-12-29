@@ -12,8 +12,15 @@ class DodajanjeIzdelkaForm extends HTML_QuickForm2 {
     public $ime;
     public $opis;
     public $cena;
+    public $gumb;
+    public $fs;
 
-    
+    /**
+     * DodajanjeIzdelkaForm constructor.
+     * @param $id
+     * @throws HTML_QuickForm2_InvalidArgumentException
+     * @throws HTML_QuickForm2_NotFoundException
+     */
     public function __construct($id) {
         parent::__construct($id);
 
