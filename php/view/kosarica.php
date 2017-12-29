@@ -56,8 +56,7 @@
                 <input type="hidden" name="do" value="izprazni" />
             </form>
             <button class="btn btn-danger" type="submit" form="form_izprazni">Izprazni košarico</button>
-            <a class="btn btn-primary" href="kosarica/zakljuci">Zaključek naročila</a>
-
+            <a class="btn <?= empty($kosarica) ? "disabled" : "btn-primary" ?>" href="kosarica/zakljuci">Zaključek naročila</a>
         </div>        
     </body>
 

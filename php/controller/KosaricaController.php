@@ -44,9 +44,9 @@ class KosaricaController extends AbstractController {
             echo ViewHelper::render('view/kosarica.php', $vars);
         }
     }
-    
+
     public static function zakljuci() {
-        
+
         $rules = [
             'do' => [
                 'filter' => FILTER_VALIDATE_REGEXP,
@@ -57,15 +57,24 @@ class KosaricaController extends AbstractController {
         ];
 
         if (METHOD == 'GET') {
-            
+
             $_SESSION['final_cart'] = $_SESSION['cart'];
-            
+
             $vars = [
                 'kosarica' => isset($_SESSION['final_cart']) ? $_SESSION['final_cart'] : []
             ];
             echo ViewHelper::render('view/kosarica-zakljuci.php', $vars);
         } else if (METHOD == 'POST') {
-            NarocilaController::dodajNarocilo($_SESSION['final_cart']);
+            if (isset($_SESSION['final_cart'])) {
+                $uspeh = NarocilaController::dodajNarocilo($_SESSION['final_cart']);
+                if ($uspeh) {
+                    echo ViewHelper::alert("Uspešno oddano naročilo.", "narocila");
+                } else {
+                    echo ViewHelper::alert("Naročila ni bilo mogoče oddati.", "kosarica");
+                }
+            } else {
+                ViewHelper::redirect(BASE_URL . "kosarica");
+            }
         }
     }
 
