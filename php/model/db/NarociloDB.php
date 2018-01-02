@@ -107,6 +107,12 @@ class NarociloDB extends AbstractDB {
     public static function dodajNarocilo($datum, $user_id, array $izdelki) {
 
         $dbconn = DB::getInstance();
+        
+        // Je to ok?
+        $postavka = 0;
+        foreach ($izdelki as $izdelek) {
+            $postavka += $izdelek['kolicina'] * $izdelek['cena'];
+        }
 
         $dbconn->beginTransaction();
 
@@ -123,7 +129,7 @@ class NarociloDB extends AbstractDB {
         $stmtNarocilo->bindValue(':datum', $datum);
         $stmtNarocilo->bindValue(':uporabnik_id', $user_id);
         $stmtNarocilo->bindValue(':stanje', "oddano");
-        $stmtNarocilo->bindValue(':postavka', 0, PDO::PARAM_INT);
+        $stmtNarocilo->bindValue(':postavka', $postavka, PDO::PARAM_INT);
 
         if (!$stmtNarocilo->execute()) {
             $dbconn->rollBack();

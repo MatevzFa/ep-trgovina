@@ -8,26 +8,14 @@
     </head>
     <body>
         <?php include(NAVBAR); ?>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "izdelki-add" ?>">Dodaj nov izdelek</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=stranka" ?>">Vse stranke</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=oddano"?>">Pregled oddanih narocil</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=potrjeno"?>">Pregled potrjenih narocil</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=preklicano"?>">Pregled preklicanih narocil</a>
-        </li>
-        <li>
-             <a class="nav-link" href="<?= BASE_URL . "narocila-list?stanje=stornirano"?>">Pregled storniranih narocil</a>
-        </li>
+        <div class="list-group" style="width: 40%;">
+            <a class="list-group-item" href="<?= BASE_URL . "izdelki-add" ?>">Dodaj nov izdelek</a>
+            <a class="list-group-item" href="<?= BASE_URL . "registracija" ?>">Dodaj novo stranko</a>
+            <a class="list-group-item" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=stranka" ?>">Vse stranke</a>
+            <a class="list-group-item" href="<?= BASE_URL . "narocila-list?stanje=oddano"?>">Pregled oddanih narocil</a>
+            <a class="list-group-item list-group-item-success" href="<?= BASE_URL . "narocila-list?stanje=potrjeno"?>">Pregled potrjenih narocil</a>
+            <a class="list-group-item list-group-item-danger" href="<?= BASE_URL . "narocila-list?stanje=preklicano"?>">Pregled preklicanih narocil</a>
+            <a class="list-group-item list-group-item-warning" href="<?= BASE_URL . "narocila-list?stanje=stornirano"?>">Pregled storniranih narocil</a>
+        </div>
     </body>
 </html>

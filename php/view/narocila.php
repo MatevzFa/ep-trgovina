@@ -20,9 +20,15 @@
                     <div class="row">
                         <div class="col-md-8">
                             <h1>Vsa ustvarjena narocila</h1>
-                            <?php foreach ($narocila as $narocilo): ?>
-                                <p> Narocilo: <?= $narocilo['id'] ?></p>
-                            <?php endforeach; ?>
+                            <ul class="list-group">
+                                <?php foreach ($narocila as $narocilo):?>
+                                    <li class="list-group-item">
+                                        <p> Narocilo: <?= $narocilo['id'] ?></p>
+                                        <p> Stanje narocila: <b> <?= $narocilo['stanje'] ?> </b> </p>
+                                        <p> Skupna cena: <?= $narocilo['postavka'] ?> €</p>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
                         </div>
                     </div>
                 </div>

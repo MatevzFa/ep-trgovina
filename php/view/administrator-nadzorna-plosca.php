@@ -7,11 +7,9 @@
     </head>
     <body>
         <?php include(NAVBAR); ?>
-       <li>
-             <a class="nav-link" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=prodajalec" ?>">Vsi prodajalci</a>
-        </li>
-        <li>
-            <a class="nav-link" href="<?= BASE_URL . "registracija-prodajalec" ?>">Registriraj prodajalca</a>
-        </li>
+       <div class="list-group">
+            <a class="list-group-item" href="<?= BASE_URL . "prikaz-uporabnikov?vloga=prodajalec" ?>">Vsi prodajalci</a>
+            <a class="list-group-item" href="<?= BASE_URL . "registracija-prodajalec" ?>">Registriraj prodajalca</a>
+       </div>
     </body>
 </html>

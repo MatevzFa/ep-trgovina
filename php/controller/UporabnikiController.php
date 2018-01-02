@@ -16,6 +16,7 @@ class UporabnikiController extends AbstractController {
         if ($form->validate()) {
             $novUporabnik = $form->getValue();
             $novUporabnik['vloga'] = 'stranka';
+            // preveri ali email ze obstaja - error
             UporabnikDB::dodajUporabnika($novUporabnik);
             ViewHelper::redirect(BASE_URL);
         } else {
@@ -58,6 +59,7 @@ class UporabnikiController extends AbstractController {
 
 
             $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+
             // najprej preveri ali uporabnik sploh obstaja
             if ($idInVlogaUporabnika != null) {
                 $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
@@ -77,10 +79,13 @@ class UporabnikiController extends AbstractController {
                     }
                     
                 } else {
-                    ViewHelper::redirect(BASE_URL . "prijava");
+                    echo "<script>alert('Napacno geslo.');
+                        window.location.href='".BASE_URL . "prijava"."';</script>";
                 }
-            } else { // uporabnik ne obstaja
-                ViewHelper::redirect(BASE_URL . "prijava");
+            } else { 
+                echo "<script>alert('Napacen e-mail naslov.');
+                        window.location.href='".BASE_URL . "prijava"."';</script>";
+                //ViewHelper::redirect(BASE_URL . "prijava");
             }
         } else {
             echo ViewHelper::render("view/prijava.php", [
