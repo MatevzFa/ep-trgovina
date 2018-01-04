@@ -49,6 +49,12 @@ $urls = [
     "registracija" => function () {
         UporabnikiController::registracija();
     },
+    "registracija-nov-uporabnik" => function () {
+        UporabnikiController::registracijaCaptcha();
+    },
+    "registracija-captcha" => function() {
+   UporabnikiController::registrirajUporabnikaCaptcha();
+    },
     "registracija-prodajalec" => function () {
         UporabnikiController::registracijaProdajalca();
     },
@@ -57,6 +63,9 @@ $urls = [
     },
     "deaktiviraj-uporabnika" => function () {
         UporabnikiController::deaktivirajUporabnika();
+    },
+    "aktiviraj-uporabnika" => function () {
+        UporabnikiController::aktivirajUporabnika();
     },
     "oceni-izdelek" => function () {
         IzdelkiController::oceniIzdelek();
@@ -78,6 +87,12 @@ $urls = [
     },
     "profil" => function () {
         UporabnikiController::profil();
+    },
+    "urejanje-stranka-control-panel" => function () {
+        UporabnikiController::urejanjeIzCMPstranka();
+    },
+    "urejanje-zaposleni-control-panel" => function () {
+        UporabnikiController::urejanjeIzCMPzaposleni();
     },
     "urejanje-stranke" => function () {
         UporabnikiController::urejanjeStranke();

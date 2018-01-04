@@ -26,14 +26,31 @@
                                 <p> Ime: <?= $uporabnik['ime'] ?></p>
                                 <p> Priimek: <?= $uporabnik['priimek'] ?> </p>
                                 <?php if ($uporabnik['aktiven'] == 1): ?>
-                                <div class="alert alert-success"> Uporabnik je aktiven </div>
-                                <!-- ce je aktiven, ga lahko zbrisemo - deaktiviramo -->
-                                <form action="<?= BASE_URL . "deaktiviraj-uporabnika" ?>" method="POST">
-                                    <input type="hidden" name="id" value="<?= $uporabnik['id'] ?>" />
-                                    <input type="submit" value="Izbrisi uporabnika" />
-                                </form>
+                                    <div class="alert alert-success"> Uporabnik je aktiven </div>
+                                    <!-- ce je aktiven, ga lahko zbrisemo - deaktiviramo -->
+                                    <form action="<?= BASE_URL . "deaktiviraj-uporabnika" ?>" method="POST">
+                                        <input type="hidden" name="id" value="<?= $uporabnik['id'] ?>" />
+                                        <input type="hidden" name="oseba" value="<?= $_GET['vloga'] ?>" />
+                                        <input type="submit" value="Deaktiviraj uporabnika" />
+                                    </form>
                                 <?php else: ?>
                                 <div class="alert alert-danger"> Uporabnik je deaktiviran</div>
+                                    <form action="<?= BASE_URL . "aktiviraj-uporabnika" ?>" method="POST">
+                                        <input type="hidden" name="id" value="<?= $uporabnik['id'] ?>" />
+                                        <input type="hidden" name="oseba" value="<?= $_GET['vloga'] ?>" />
+                                        <input type="submit" value="Aktiviraj uporabnika" />
+                                    </form>
+                                <?php endif ?>
+                                <?php if ($_GET['vloga'] == 'stranka'): ?>
+                                    <form action="<?= BASE_URL . "urejanje-stranka-control-panel" ?>" method="GET">
+                                        <input type="hidden" name="id" value="<?= $uporabnik['id'] ?>" />
+                                        <input type="submit" value="Urejanje uporabnika" />
+                                    </form>
+                                <?php else: ?>
+                                    <form action="<?= BASE_URL . "urejanje-zaposleni-control-panel" ?>" method="GET">
+                                        <input type="hidden" name="id" value="<?= $uporabnik['id'] ?>" />
+                                        <input type="submit" value="Urejanje uporabnika" />
+                                    </form>
                                 <?php endif ?>
                             <?php endforeach; ?>
                         </div>

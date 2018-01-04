@@ -10,20 +10,61 @@ require_once(FORMS . "DodajProdajalcaForm.php");
 class UporabnikiController extends AbstractController {
 
     public static function registracija() {
+        if (isset($_SESSION['user_id'])) {
+            $form = new RegistracijaForm("registracija");
 
-        $form = new RegistracijaForm("registracija");
-
-        if ($form->validate()) {
-            $novUporabnik = $form->getValue();
-            $novUporabnik['vloga'] = 'stranka';
-            // preveri ali email ze obstaja - error
-            UporabnikDB::dodajUporabnika($novUporabnik);
-            ViewHelper::redirect(BASE_URL);
-        } else {
-            echo ViewHelper::render("view/registracija.php", [
-                "form" => $form
-            ]);
+            if ($form->validate()) {
+                $novUporabnik = $form->getValue();
+                $novUporabnik['vloga'] = 'stranka';
+                // preveri ali email ze obstaja - error
+                UporabnikDB::dodajUporabnika($novUporabnik);
+                ViewHelper::redirect(BASE_URL);
+            } else {
+                echo ViewHelper::render("view/registracija.php", [
+                    "form" => $form
+                ]);
+            }
+        } else { // uporabniki se registrirajo prek captche
+            echo ViewHelper::render("view/registracija-nov-uporabnik.php");
         }
+    }
+    
+    public static function registracijaCaptcha() {
+        echo ViewHelper::render("view/registracija-nov-uporabnik.php");
+    }
+    public static function registrirajUporabnikaCaptcha() {
+        $rules = [
+	    "ime" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "priimek" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "email" => [
+		'filter' => FILTER_SANITIZE_EMAIL
+	    ],
+            "naslov" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "telefon" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            if (UporabnikDB::aliEmailZeObstaja($data['email'])) {
+                echo "<script>alert('Uporabnik s taksnim emailom ze obstaja');
+                        window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+            } else {
+                $data['vloga'] = 'stranka';
+                UporabnikDB::dodajUporabnika($data);
+                echo "<script>alert('Registracija uspesna');
+                            window.location.href='".BASE_URL . "izdelki"."';</script>";
+            }
+        } else {
+            echo "<script>alert('Napaka');
+                        window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+        } 
     }
 
     // administrator lahko 'registrira' novega prodajalca
@@ -64,22 +105,26 @@ class UporabnikiController extends AbstractController {
             if ($idInVlogaUporabnika != null) {
                 $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
                 // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
-                if ($pravilnoGeslo) {
-                    
-                    session_regenerate_id();
-                    $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
-                    $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
+                    if ($pravilnoGeslo) {
+                        session_regenerate_id();
+                        $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                        $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
 
-                    if (isset($_SESSION['post_login_redirect'])) {
-                        $redirectUrl = $_SESSION['post_login_redirect'];
-                        unset($_SESSION['post_login_redirect']);
-                        ViewHelper::redirect(BASE_URL . $redirectUrl);
+                        if (isset($_SESSION['post_login_redirect'])) {
+                            $redirectUrl = $_SESSION['post_login_redirect'];
+                            unset($_SESSION['post_login_redirect']);
+                            ViewHelper::redirect(BASE_URL . $redirectUrl);
+                        } else {
+                            ViewHelper::redirect(BASE_URL);
+                        }
+
                     } else {
-                        ViewHelper::redirect(BASE_URL);
+                        echo "<script>alert('Napacno geslo.');
+                            window.location.href='".BASE_URL . "prijava"."';</script>";
                     }
-                    
                 } else {
-                    echo "<script>alert('Napacno geslo.');
+                    echo "<script>alert('Uporabnik je deaktiviran.');
                         window.location.href='".BASE_URL . "prijava"."';</script>";
                 }
             } else { 
@@ -117,8 +162,13 @@ class UporabnikiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::urejanjeZaposlenega($data);
-            echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
+            if ($data['id'] == $_SESSION['user_id']) {
+                echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='".BASE_URL . "profil"."';</script>";
+            } else { //edit bil storjen iz nadzorne plosce
+                echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
+                        window.location.href='".BASE_URL . "urejanje-zaposleni-control-panel?id=".$data['id']."';</script>";
+            }
             
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
@@ -148,14 +198,45 @@ class UporabnikiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::urejanjeStranke($data);
-            echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
+            // edit je bil storjen iz uporabnikovega profila
+            if ($data['id'] == $_SESSION['user_id']) {
+                echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='".BASE_URL . "profil"."';</script>";
+            } else { //edit bil storjen iz nadzorne plosce
+                echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
+                        window.location.href='".BASE_URL . "urejanje-stranka-control-panel?id=".$data['id']."';</script>";
+            }
+            
             
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
         }   
     }
     
+    // Lahko spremeni geslo brez da pozna prejsnje geslo
+    public static function spremeniGesloZaposleni() {
+        $rules = [
+             "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+	    "geslo" => [
+		'filter' => FILTER_DEFAULT
+	    ]        
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
+            if ($data['id'] == $_SESSION['user_id']) {
+                echo "<script>alert('Geslo je bilo spremenjeno.');
+                    window.location.href='".BASE_URL . "profil"."';</script>";  
+            } else { //sprememba gesla storjena iz nadzorne plosce
+                echo "<script>alert('Geslo uporabnika spremenjeno.');
+                        window.location.href='".BASE_URL . "urejanje-zaposleni-control-panel?id=".$data['id']."';</script>";
+            }
+        } else {
+            ViewHelper::redirect(BASE_URL . "profil");
+        } 
+    }
     public static function spremeniGeslo() {
         $rules = [
              "id" => [
@@ -163,25 +244,57 @@ class UporabnikiController extends AbstractController {
             ],
 	    "geslo" => [
 		'filter' => FILTER_DEFAULT
-	    ],
-            "staroGeslo" => [
-		'filter' => FILTER_DEFAULT
-	    ]         
+	    ]      
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            if (UporabnikDB::preveriGeslo($data['id'], $data['staroGeslo'])) {
-                UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
+            UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
+            if ($data['id'] == $_SESSION['user_id']) {
                 echo "<script>alert('Geslo je bilo spremenjeno.');
-                        window.location.href='".BASE_URL . "profil"."';</script>";
-            } else {
-                echo "<script>alert('Vnesli ste napacno staro geslo.');
-                        window.location.href='".BASE_URL . "profil"."';</script>";
+                    window.location.href='".BASE_URL . "profil"."';</script>";  
+            } else { //sprememba gesla storjena iz nadzorne plosce
+                echo "<script>alert('Geslo uporabnika spremenjeno.');
+                        window.location.href='".BASE_URL . "urejanje-stranka-control-panel?id=".$data['id']."';</script>";
             }
-            
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
         }   
+    }
+    
+    public static function urejanjeIzCMPstranka() {
+        $rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ]
+        ];
+        $data = filter_input_array(INPUT_GET, $rules);
+        $uporabnik = UporabnikDB::get($data);
+        if (self::checkValues($data)) {
+            echo ViewHelper::render("view/urejanje-stranka.php", [
+                    "podatki" => $uporabnik
+                        ]
+                    );
+        } else {
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }  
+    }
+    
+    public static function urejanjeIzCMPzaposleni() {
+        $rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ]
+        ];
+        $data = filter_input_array(INPUT_GET, $rules);
+        $uporabnik = UporabnikDB::get($data);
+        if (self::checkValues($data)) {
+            echo ViewHelper::render("view/urejanje-zaposleni.php", [
+                    "podatki" => $uporabnik
+                        ]
+                    );
+        } else {
+            echo ViewHelper::redirect(BASE_URL . "prijava");
+        }  
     }
     public static function profil() {
 
@@ -212,36 +325,75 @@ class UporabnikiController extends AbstractController {
 
     //prikaz vseh uporabnikov z doloceno vlogo. Uporaba pri nadzornih ploscah
     public static function prikaziVseUporabnikeZVlogo() {
-        $rules = [
-            "vloga" => [
-                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-            ]
-        ];
-        $data = filter_input_array(INPUT_GET, $rules);
-        if (self::checkValues($data)) {
-            echo ViewHelper::render("view/uporabniki-list.php", [
-                "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
-                    ]
-            );
+        if ($_SESSION['user_vloga'] == 'prodajalec') {
+            $rules = [
+                "vloga" => [
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+                ]
+            ];
+            $data = filter_input_array(INPUT_GET, $rules);
+            if (self::checkValues($data)) {
+                echo ViewHelper::render("view/uporabniki-list.php", [
+                    "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
+                        ]
+                );
+            } else {
+                ViewHelper::redirect(BASE_URL . "izdelki");
+            }
         } else {
             ViewHelper::redirect(BASE_URL . "izdelki");
         }
     }
 
+    public static function aktivirajUporabnika() {
+        $rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ],
+            "oseba" => [
+                'filer' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            UporabnikDB::aktivirajUporabnika($data);
+            if ($data['oseba'] == 'prodajalec') {
+                ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
+            } elseif($data['oseba'] == 'stranka') {
+                ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
+            } else {
+                ViewHelper::redirect(BASE_URL . "izdelki");
+            }
+        } else {
+            ViewHelper::redirect(BASE_URL . "izdelki");
+        }
+    }
+    
+    
     //   izbrisi = deaktiviraj uporabnika
     public static function deaktivirajUporabnika() {
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
+            ],
+            "oseba" => [
+                'filer' => FILTER_SANITIZE_SPECIAL_CHARS
             ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::deaktivirajUporabnika($data);
+            if ($data['oseba'] == 'prodajalec') {
+                ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
+            } elseif($data['oseba'] == 'stranka') {
+                ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
+            } else {
+                ViewHelper::redirect(BASE_URL . "izdelki");
+            }
         } else {
-            ViewHelper::redirect(BASE_URL . "izdelki");
-        }
-        ViewHelper::redirect(BASE_URL . "izdelki");
+            var_dump($_POST);
+            //ViewHelper::redirect(BASE_URL . "izdelki");
+        }  
     }
 
     public static function prodajalecNadzornaPlosca() {
@@ -260,7 +412,6 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function administratorNadzornaPlosca() {
-        //TODO preveri ce je administrator/
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {

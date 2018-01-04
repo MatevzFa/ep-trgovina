@@ -23,7 +23,6 @@
                 </form>
             <br>
                 <form action="<?= BASE_URL . "spremeni-geslo" ?>" method="post">
-                    Staro geslo: <input type="password" name="staroGeslo"><br>
                     Novo geslo (vsaj 6 znakov): <input pattern=".{6,}" oninvalid="this.setCustomValidity('Zahtevana dolzina vsaj 6 znakov')" type="password" name="geslo"><br>
                      <input type="hidden" name="id" value="<?= $podatki['id'] ?>" />
                      <input type="submit" value="Spremeni geslo">

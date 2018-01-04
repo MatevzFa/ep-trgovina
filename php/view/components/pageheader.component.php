@@ -9,7 +9,7 @@
                     <a class="nav-link" href="<?= BASE_URL . "prijava" ?>">Prijava</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL . "registracija" ?>">Registracija</a>
+                    <a class="nav-link" href="<?= BASE_URL . "registracija-nov-uporabnik" ?>">Registracija</a>
                 </li>
             <?php endif; ?>
 
@@ -22,25 +22,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
-
+                    <li class="nav-item"> 
+                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
+                    </li>
                 <?php elseif ($_SESSION['user_vloga'] == 'prodajalec'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
-                    </li>     
-                <?php else: ?>
-                    <!-- samo za debugganje, drugace bo samo pri prodajalcu -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca(prodajalec)</a>
-                    </li>
+                     <!-- samo za debugganje, drugace bo samo pri adminu -->
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>">Nadzorna plosca(admin)</a>
                     </li>
-                    <li class="nav-item"> <!-- to bo slo tudi stran -->
-                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
                     </li>
@@ -52,6 +45,25 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
+                    </li>
+                <?php else: ?>    
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . 'kosarica' ?>">Moja košarica</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . "narocila" ?>">Pregled narocil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
                     </li>
                 <?php endif; ?>
             <?php endif ?>

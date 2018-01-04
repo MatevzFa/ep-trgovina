@@ -40,6 +40,36 @@ class UporabnikDB extends AbstractDB {
     }
     
     // ----------------------- CUT "NON TRIVIAL" QUERIES HERE -----------
+    
+    /*
+     * Vrne True ce je aktiviran, False sicer
+     */
+    public static function aliJeAktiviran(array $params) {
+        $result = self::query(""
+                . "SELECT aktiven "
+                . "FROM uporabnik "
+                . "WHERE id = :id", $params)[0];
+        var_dump($result);
+        if ($result['aktiven'] == 1) {
+            return True;
+        }
+        return False;
+    }
+    /**
+     * 
+     * @param type $input_email, email ob registraciji
+     * @return boolean True ce ze obstaja, False sicer
+     */
+    public static function aliEmailZeObstaja($input_email) {
+        $result = self::query(""
+                . "SELECT * "
+                . "FROM uporabnik "
+                . "WHERE email = :email", array('email' => $input_email))[0];
+        if ($result == NULL) {
+            return False;          
+        }
+        return True;
+    }
     public static function urejanjeZaposlenega(array $params) {
         self::modify(""
                 . "UPDATE uporabnik "
@@ -61,6 +91,15 @@ class UporabnikDB extends AbstractDB {
                 . "INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) "
                 . "VALUES (:vloga, :ime, :priimek, :email, :geslo)", $params);
     }
+    
+    
+    public static function aktivirajUporabnika(array $params) {
+        self::modify(""
+                . "UPDATE uporabnik "
+                . "SET aktiven = 1 "
+                . "WHERE id = :id", $params);
+    }
+    
     public static function deaktivirajUporabnika(array $params) {
         self::modify(""
                 . "UPDATE uporabnik "
