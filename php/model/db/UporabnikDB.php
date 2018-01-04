@@ -64,7 +64,7 @@ class UporabnikDB extends AbstractDB {
         $result = self::query(""
                 . "SELECT * "
                 . "FROM uporabnik "
-                . "WHERE email = :email", array('email' => $input_email))[0];
+                . "WHERE email = :email", array('email' => $input_email));
         if ($result == NULL) {
             return False;          
         }

@@ -48,23 +48,49 @@ class UporabnikiController extends AbstractController {
 	    ],
             "telefon" => [
 		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ]
+	    ],
+            "geslo" => [
+                'filter' => FILTER_DEFAULT
+            ]
         ];
-        $data = filter_input_array(INPUT_POST, $rules);
-        if (self::checkValues($data)) {
-            if (UporabnikDB::aliEmailZeObstaja($data['email'])) {
-                echo "<script>alert('Uporabnik s taksnim emailom ze obstaja');
-                        window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+        
+        // Captcha verification
+        $secretCaptcha = '6LeIVT8UAAAAAAU0jQn2I3e9q5ABxuM--ZR-y0Am';
+        
+        // send a POST request for google to verify it
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $captchaRequest = array('secret' => $secretCaptcha, 'response' => $_POST['g-recaptcha-response']);
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($captchaRequest)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        // vrne json objekt, kjer je eden izmed atributov 'success'
+        $decodedJson = json_decode($result);
+        if ($decodedJson->success == 'true') { // uspesno opravjena captcha
+            $data = filter_input_array(INPUT_POST, $rules);
+            if (self::checkValues($data)) {
+                if (UporabnikDB::aliEmailZeObstaja($data['email'])) {
+                    echo "<script>alert('Uporabnik s taksnim emailom ze obstaja');
+                            window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+                } else {
+                    $data['vloga'] = 'stranka';
+                    UporabnikDB::dodajUporabnika($data);
+                    
+                }
             } else {
-                $data['vloga'] = 'stranka';
-                UporabnikDB::dodajUporabnika($data);
-                echo "<script>alert('Registracija uspesna');
-                            window.location.href='".BASE_URL . "izdelki"."';</script>";
-            }
+                echo "<script>alert('Napaka');
+                            window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+            } 
         } else {
-            echo "<script>alert('Napaka');
-                        window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
-        } 
+            echo "<script>alert('Niste resili reCaptche.');
+                 window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+        }
     }
 
     // administrator lahko 'registrira' novega prodajalca
