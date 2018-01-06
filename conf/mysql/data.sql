@@ -9,8 +9,38 @@ TRUNCATE slika;
 TRUNCATE narocilo;
 TRUNCATE narocilo_vsebuje;
 
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('administrator', 'Janez', 'Novak', 'aj@ep.si', '$2y$10$F5FYbd8DNyGts4oKoMnNcuSuPjdSMjB0ZbyUz9dtFtQmXsj/uS482'); -- geslo123
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', '$2y$10$kTqDDNXfTkg.K98WLyFu9.jrBMze1FZ7ieAk6lUS5H7nNcI4/t2ei', 'večšžna 123, lj', '0123456789'); -- heymomma
+
+-- -----------------------------------------------------
+-- UPORABNIKI
+-- -----------------------------------------------------
+
+-- ADMIN
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo)
+VALUES ('administrator', 'Janez', 'Novak', 'aj@ep.si', '$2y$10$j8Ur7vBUFDXmr9cUyiBAu.ecrAl3VzAmAWwAuOLLBy0u6h9rLMsTq'); -- admin
+
+-- PRODAJALCI
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo)
+VALUES ('prodajalec', 'Prodajalec', 'Andraz', 'pa@ep.si', '$2y$10$xClrznsjdlBvKvzmVLiEfO03/9ZQ5Ywlks55XoSpAHMqiXA0Xelsi'); -- ep
+
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo)
+VALUES ('prodajalec', 'Prodajalec', 'Matevz', 'pm@ep.si', '$2y$10$xClrznsjdlBvKvzmVLiEfO03/9ZQ5Ywlks55XoSpAHMqiXA0Xelsi'); -- ep
+
+
+-- STRANKE
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon)
+VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', '$2y$10$kTqDDNXfTkg.K98WLyFu9.jrBMze1FZ7ieAk6lUS5H7nNcI4/t2ei', 'večšžna 123, lj', '0123456789'); -- heymomma
+
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon)
+VALUES ('stranka', 'Ivan', 'Smith', 'ivan@gmail.com', '$2y$10$zc4c3w8WnBsgwFBySYNhluSY7kT9k8CuEf92yXNitzHwIqMVxTeuK', 'Trubarjeva cesta 5, 1000 Ljubljana', '03124519'); -- ivanivanpass
+
+
+
+
+
+
+-- -----------------------------------------------------
+-- IZDELKI, OCENE, SLIKE, NAROCILA
+-- -----------------------------------------------------
 
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Mountain Dew', '0.60', 'Get your MLG on');
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Capita DOA Snowboard', '439.90', 'Take on the local hill with this beast');
@@ -19,8 +49,6 @@ INSERT INTO izdelek(ime, cena, opis) VALUES ('USB key - 128GB', '22.99', 'Expand
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (1,2,5);
 INSERT INTO slika(path, izdelek_id) VALUES ('PotDoSlike.png', 2);
 
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('prodajalec', 'Prodajalec', 'Andraz', 'pa@ep.si', '$2y$10$Tz1PiIfB8WML0VxAsdpDzect3MZ7s9V865mQnmmAIqc6LZU4RpCaK'); -- abcdefg
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Ivan', 'Smith', 'ivan@gmail.com', '$2y$10$zc4c3w8WnBsgwFBySYNhluSY7kT9k8CuEf92yXNitzHwIqMVxTeuK', 'Trubarjeva cesta 5, 1000 Ljubljana', '03124519'); -- ivanivanpass
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (2,2,4);
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Xiaomi Mi Robot Vacuum', '274.59', 'Forget about vacuum cleaning. Get a robot.');
 
@@ -34,10 +62,8 @@ INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id, cena) VALUES (1,
 
 
 
-/**
- * Izdelki
- * Generirano na http://www.mockaroo.com/
- */
+-- Izdelki
+-- Generirano na http://www.mockaroo.com/
 insert into izdelek (ime, cena, opis) values ('Ecolab - Medallion', '28.97', 'Excision of Inferior Mesenteric Vein, Open Approach');
 insert into izdelek (ime, cena, opis) values ('Food Colouring - Green', '45.31', 'Destruction of Right Thorax Bursa and Ligament, Open Approach');
 insert into izdelek (ime, cena, opis) values ('Spinach - Packaged', '33.59', 'Drainage of Left Lacrimal Duct, Open Approach');
