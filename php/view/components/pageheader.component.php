@@ -22,9 +22,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
-                    <li class="nav-item"> 
-                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
-                    </li>
                 <?php elseif ($_SESSION['user_vloga'] == 'prodajalec'): ?>
                      <!-- samo za debugganje, drugace bo samo pri adminu -->
                     <li class="nav-item">
@@ -46,9 +43,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
-                    <li class="nav-item">
-                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
-                    </li>
                 <?php else: ?>    
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
@@ -62,10 +56,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
-                    <li class="nav-item"> 
-                        <div class="alert alert-warning">Vloga: <?= $_SESSION['user_vloga'] ?></div>
-                    </li>
+
                 <?php endif; ?>
+                <li class="nav-item"> 
+                        <span class="nav-link text-warning">Vloga: <?= $_SESSION['user_vloga'] ?></span>
+                    </li>
             <?php endif ?>
         </ul>
     </div>
