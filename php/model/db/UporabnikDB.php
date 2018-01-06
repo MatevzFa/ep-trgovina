@@ -49,7 +49,6 @@ class UporabnikDB extends AbstractDB {
                 . "SELECT aktiven "
                 . "FROM uporabnik "
                 . "WHERE id = :id", $params)[0];
-        var_dump($result);
         if ($result['aktiven'] == 1) {
             return True;
         }
@@ -176,9 +175,10 @@ class UporabnikDB extends AbstractDB {
      * @return boolean ujemanje gesel
      */
     public static function preveriGeslo($id, $geslo) {
-
+        
         $gesloHash = self::get(array('id' => $id))['geslo'];
-
+        echo $gesloHash;
+        echo $geslo;
         return password_verify($geslo, $gesloHash);
     }
     

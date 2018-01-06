@@ -50,7 +50,7 @@ $urls = [
         UporabnikiController::registracija();
     },
     "registracija-captcha" => function() {
-   UporabnikiController::registracijaCaptcha();
+        UporabnikiController::registracijaCaptcha();
     },
     "registracija-prodajalec" => function () {
         UporabnikiController::registracijaProdajalca();
@@ -105,6 +105,9 @@ $urls = [
     },
     "spremeni-geslo" => function () {
         UporabnikiController::spremeniGeslo();
+    },
+    "x509login" => function () {
+        UporabnikiController::x509Prijava();
     },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");

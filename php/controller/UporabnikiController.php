@@ -28,25 +28,24 @@ class UporabnikiController extends AbstractController {
             echo ViewHelper::render("view/registracija-nov-uporabnik.php");
         }
     }
-    
 
     public static function registracijaCaptcha() {
         $rules = [
-	    "ime" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+            "ime" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "priimek" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "email" => [
-		'filter' => FILTER_SANITIZE_EMAIL
-	    ],
+                'filter' => FILTER_SANITIZE_EMAIL
+            ],
             "naslov" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "telefon" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "geslo" => [
                 'filter' => FILTER_DEFAULT
             ]
@@ -63,12 +62,12 @@ class UporabnikiController extends AbstractController {
 
             $options = array(
                 'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
                     'content' => http_build_query($captchaRequest)
                 )
             );
-            $context  = stream_context_create($options);
+            $context = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
             // vrne json objekt, kjer je eden izmed atributov 'success'
             $decodedJson = json_decode($result);
@@ -76,20 +75,19 @@ class UporabnikiController extends AbstractController {
                 // ali email ze obstaja v bazi
                 if (UporabnikDB::aliEmailZeObstaja($data['email'])) {
                     echo "<script>alert('Uporabnik s taksnim emailom ze obstaja');
-                            window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+                            window.location.href='" . BASE_URL . "registracija-nov-uporabnik" . "';</script>";
                 } else { // vse ok, dodaj uporabnika
                     $data['vloga'] = 'stranka';
                     UporabnikDB::dodajUporabnika($data);
                     ViewHelper::redirect(BASE_URL . "prijava");
-
                 }
             } else { //recaptcha se ni uspesno resila
                 echo "<script>alert('Niste resili reCaptche.');
-                     window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
-            }          
+                     window.location.href='" . BASE_URL . "registracija-nov-uporabnik" . "';</script>";
+            }
         } else { // sele prisel na link
             echo ViewHelper::render("view/registracija-nov-uporabnik.php");
-        } 
+        }
     }
 
     // administrator lahko 'registrira' novega prodajalca
@@ -114,6 +112,7 @@ class UporabnikiController extends AbstractController {
         $form = new PrijavaForm("prijava");
 
         if ($form->validate()) {
+            // prijavi
             $uporabnik = $form->getValue();
 
             $email = $uporabnik['email'];
@@ -128,13 +127,16 @@ class UporabnikiController extends AbstractController {
 
             // najprej preveri ali uporabnik sploh obstaja
             if ($idInVlogaUporabnika != null) {
+
                 $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
                 // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
                 if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
                     if ($pravilnoGeslo) {
                         session_regenerate_id();
                         $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
-                        $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+
+                        // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
+                        $_SESSION['user_vloga'] = 'stranka';
 
                         if (isset($_SESSION['post_login_redirect'])) {
                             $redirectUrl = $_SESSION['post_login_redirect'];
@@ -143,19 +145,75 @@ class UporabnikiController extends AbstractController {
                         } else {
                             ViewHelper::redirect(BASE_URL);
                         }
-
                     } else {
-                        echo "<script>alert('Napacno geslo.');
-                            window.location.href='".BASE_URL . "prijava"."';</script>";
+//                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
+                        echo "<script>alert('Napačno geslo.');</script>";
                     }
                 } else {
-                    echo "<script>alert('Uporabnik je deaktiviran.');
-                        window.location.href='".BASE_URL . "prijava"."';</script>";
+                    echo "<script>alert('Uporabnik je deaktiviran.');</script>";
                 }
-            } else { 
-                echo "<script>alert('Napacen e-mail naslov.');
-                        window.location.href='".BASE_URL . "prijava"."';</script>";
-                //ViewHelper::redirect(BASE_URL . "prijava");
+            } else {
+                echo "<script>alert('Napacen e-mail naslov.');</script>";
+            }
+        } else {
+            // izriši login form
+            echo ViewHelper::render("view/prijava.php", ["form" => $form]);
+        }
+    }
+
+    public static function x509Prijava() {
+        $client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
+        $cert_data = openssl_x509_parse($client_cert);
+
+        $email = $cert_data['subject']['emailAddress'];
+        $fingerprint = openssl_x509_fingerprint($client_cert);
+
+        $form = new PrijavaForm("prijava");
+        $form->email->setValue($email);
+        $form->email->toggleFrozen(true);
+
+
+        if ($form->validate()) {
+            $uporabnik = $form->getValue();
+
+            $email = $uporabnik['email'];
+            $geslo = $uporabnik['geslo'];
+
+            echo $email;
+            echo $geslo;
+
+            $email = array(
+                "email" => $uporabnik['email']
+            );
+            $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+
+            // najprej preveri ali uporabnik sploh obstaja
+            if ($idInVlogaUporabnika != null) {
+
+
+                // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
+                if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
+
+                    $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
+
+                    if ($pravilnoGeslo) {
+                        session_regenerate_id();
+                        $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                        $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                        if (isset($_SESSION['post_login_redirect'])) {
+
+                            $redirectUrl = $_SESSION['post_login_redirect'];
+                            unset($_SESSION['post_login_redirect']);
+                            ViewHelper::redirect(BASE_URL . $redirectUrl);
+                        } else {
+                            ViewHelper::redirect(BASE_URL . $_SESSION['user_vloga'] . '-nadzorna-plosca');
+                        }
+                    } else {
+                        echo "<script>alert('Napacno geslo.');</script>";
+                    }
+                } else {
+                    echo "<script>alert('Uporabnik je deaktiviran.');</script>";
+                }
             }
         } else {
             echo ViewHelper::render("view/prijava.php", [
@@ -168,57 +226,57 @@ class UporabnikiController extends AbstractController {
         session_destroy();
         ViewHelper::redirect(BASE_URL);
     }
-    
+
     public static function urejanjeZaposlenih() {
         $rules = [
-             "id" => [
+            "id" => [
                 'filter' => FILTER_VALIDATE_INT
             ],
-	    "ime" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+            "ime" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "priimek" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "email" => [
-		'filter' => FILTER_SANITIZE_EMAIL
-	    ]
+                'filter' => FILTER_SANITIZE_EMAIL
+            ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::urejanjeZaposlenega($data);
             if ($data['id'] == $_SESSION['user_id']) {
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
-                        window.location.href='".BASE_URL . "profil"."';</script>";
+                        window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
-                        window.location.href='".BASE_URL . "urejanje-zaposleni-control-panel?id=".$data['id']."';</script>";
+                        window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
-            
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
-        }   
+        }
     }
+
     public static function urejanjeStranke() {
         $rules = [
-             "id" => [
+            "id" => [
                 'filter' => FILTER_VALIDATE_INT
             ],
-	    "ime" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+            "ime" => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "priimek" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "email" => [
-		'filter' => FILTER_SANITIZE_EMAIL
-	    ],
+                'filter' => FILTER_SANITIZE_EMAIL
+            ],
             "naslov" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ],
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ],
             "telefon" => [
-		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
-	    ]
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
@@ -226,66 +284,65 @@ class UporabnikiController extends AbstractController {
             // edit je bil storjen iz uporabnikovega profila
             if ($data['id'] == $_SESSION['user_id']) {
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
-                        window.location.href='".BASE_URL . "profil"."';</script>";
+                        window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
-                        window.location.href='".BASE_URL . "urejanje-stranka-control-panel?id=".$data['id']."';</script>";
+                        window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
-            
-            
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
-        }   
+        }
     }
-    
+
     // Lahko spremeni geslo brez da pozna prejsnje geslo
     public static function spremeniGesloZaposleni() {
         $rules = [
-             "id" => [
+            "id" => [
                 'filter' => FILTER_VALIDATE_INT
             ],
-	    "geslo" => [
-		'filter' => FILTER_DEFAULT
-	    ]        
+            "geslo" => [
+                'filter' => FILTER_DEFAULT
+            ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
             if ($data['id'] == $_SESSION['user_id']) {
                 echo "<script>alert('Geslo je bilo spremenjeno.');
-                    window.location.href='".BASE_URL . "profil"."';</script>";  
+                    window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //sprememba gesla storjena iz nadzorne plosce
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
-                        window.location.href='".BASE_URL . "urejanje-zaposleni-control-panel?id=".$data['id']."';</script>";
+                        window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
-        } 
+        }
     }
+
     public static function spremeniGeslo() {
         $rules = [
-             "id" => [
+            "id" => [
                 'filter' => FILTER_VALIDATE_INT
             ],
-	    "geslo" => [
-		'filter' => FILTER_DEFAULT
-	    ]      
+            "geslo" => [
+                'filter' => FILTER_DEFAULT
+            ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
             if ($data['id'] == $_SESSION['user_id']) {
                 echo "<script>alert('Geslo je bilo spremenjeno.');
-                    window.location.href='".BASE_URL . "profil"."';</script>";  
+                    window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //sprememba gesla storjena iz nadzorne plosce
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
-                        window.location.href='".BASE_URL . "urejanje-stranka-control-panel?id=".$data['id']."';</script>";
+                        window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
         } else {
             ViewHelper::redirect(BASE_URL . "profil");
-        }   
+        }
     }
-    
+
     public static function urejanjeIzCMPstranka() {
         $rules = [
             "id" => [
@@ -296,14 +353,14 @@ class UporabnikiController extends AbstractController {
         $uporabnik = UporabnikDB::get($data);
         if (self::checkValues($data)) {
             echo ViewHelper::render("view/urejanje-stranka.php", [
-                    "podatki" => $uporabnik
-                        ]
-                    );
+                "podatki" => $uporabnik
+                    ]
+            );
         } else {
             echo ViewHelper::redirect(BASE_URL . "prijava");
-        }  
+        }
     }
-    
+
     public static function urejanjeIzCMPzaposleni() {
         $rules = [
             "id" => [
@@ -314,13 +371,14 @@ class UporabnikiController extends AbstractController {
         $uporabnik = UporabnikDB::get($data);
         if (self::checkValues($data)) {
             echo ViewHelper::render("view/urejanje-zaposleni.php", [
-                    "podatki" => $uporabnik
-                        ]
-                    );
+                "podatki" => $uporabnik
+                    ]
+            );
         } else {
             echo ViewHelper::redirect(BASE_URL . "prijava");
-        }  
+        }
     }
+
     public static function profil() {
 
         if (isset($_SESSION['user_id'])) {
@@ -329,16 +387,15 @@ class UporabnikiController extends AbstractController {
                 //prikaz profila uporabika
                 if ($uporabnik['vloga'] == 'stranka') {
                     echo ViewHelper::render("view/urejanje-stranka.php", [
-                    "podatki" => $uporabnik
-                        ]
+                        "podatki" => $uporabnik
+                            ]
                     );
                 } else {
                     echo ViewHelper::render("view/urejanje-zaposleni.php", [
-                    "podatki" => $uporabnik
-                        ]
+                        "podatki" => $uporabnik
+                            ]
                     );
                 }
-                
             } else {
                 echo ViewHelper::redirect(BASE_URL . "prijava");
             }
@@ -384,7 +441,7 @@ class UporabnikiController extends AbstractController {
             UporabnikDB::aktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
-            } elseif($data['oseba'] == 'stranka') {
+            } elseif ($data['oseba'] == 'stranka') {
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
@@ -393,8 +450,7 @@ class UporabnikiController extends AbstractController {
             ViewHelper::redirect(BASE_URL . "izdelki");
         }
     }
-    
-    
+
     //   izbrisi = deaktiviraj uporabnika
     public static function deaktivirajUporabnika() {
         $rules = [
@@ -410,7 +466,7 @@ class UporabnikiController extends AbstractController {
             UporabnikDB::deaktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
-            } elseif($data['oseba'] == 'stranka') {
+            } elseif ($data['oseba'] == 'stranka') {
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
@@ -418,7 +474,7 @@ class UporabnikiController extends AbstractController {
         } else {
             var_dump($_POST);
             //ViewHelper::redirect(BASE_URL . "izdelki");
-        }  
+        }
     }
 
     public static function prodajalecNadzornaPlosca() {
