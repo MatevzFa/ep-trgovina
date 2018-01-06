@@ -13,11 +13,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills">
-                        <li class="active">
-                            <a href="<?= BASE_URL . "izdelki" ?>""> <span class="badge pull-right"></span> 
-                                Nazaj
+                        <?php if ($_GET['vloga'] == 'stranka'): ?>
+                            <a href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>"">
+                                Nazaj na nadzorno plosco
                             </a>
-                        </li>
+                        <?php elseif ($_GET['vloga'] == 'prodajalec'): ?>
+                            <a href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>"">
+                                Nazaj na nadzorno plosco
+                            </a>
+                        <?php endif ?>
                     </ul>
                     <div class="row">
                         <div class="col-md-8">

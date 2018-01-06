@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title>Urejanje in pregled profila</title>
+        <title>Registracija</title>
         <?php include(HEAD); ?>
         <script src='https://www.google.com/recaptcha/api.js'></script>
     </head>

@@ -49,17 +49,20 @@ $urls = [
     "registracija" => function () {
         UporabnikiController::registracija();
     },
-    "registracija-nov-uporabnik" => function () {
-        UporabnikiController::registracijaCaptcha();
-    },
     "registracija-captcha" => function() {
-   UporabnikiController::registrirajUporabnikaCaptcha();
+   UporabnikiController::registracijaCaptcha();
     },
     "registracija-prodajalec" => function () {
         UporabnikiController::registracijaProdajalca();
     },
     "prikaz-uporabnikov" => function () {
         UporabnikiController::prikaziVseUporabnikeZVlogo();
+    },
+    "prikaz-izdelkov-cmp" => function () {
+        IzdelkiController::prikaziVseIzdelke();
+    },
+    "urejanje-izdelka" => function () {
+        IzdelkiController::urejanjeIzdelka();
     },
     "deaktiviraj-uporabnika" => function () {
         UporabnikiController::deaktivirajUporabnika();

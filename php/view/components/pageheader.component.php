@@ -9,7 +9,7 @@
                     <a class="nav-link" href="<?= BASE_URL . "prijava" ?>">Prijava</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL . "registracija-nov-uporabnik" ?>">Registracija</a>
+                    <a class="nav-link" href="<?= BASE_URL . "registracija-captcha" ?>">Registracija</a>
                 </li>
             <?php endif; ?>
 

@@ -29,10 +29,8 @@ class UporabnikiController extends AbstractController {
         }
     }
     
+
     public static function registracijaCaptcha() {
-        echo ViewHelper::render("view/registracija-nov-uporabnik.php");
-    }
-    public static function registrirajUporabnikaCaptcha() {
         $rules = [
 	    "ime" => [
 		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -53,44 +51,45 @@ class UporabnikiController extends AbstractController {
                 'filter' => FILTER_DEFAULT
             ]
         ];
-        
-        // Captcha verification
-        $secretCaptcha = '6LeIVT8UAAAAAAU0jQn2I3e9q5ABxuM--ZR-y0Am';
-        
-        // send a POST request for google to verify it
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $captchaRequest = array('secret' => $secretCaptcha, 'response' => $_POST['g-recaptcha-response']);
+        // ali je izpolnil form
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            // Captcha verification
+            $secretCaptcha = '6LeIVT8UAAAAAAU0jQn2I3e9q5ABxuM--ZR-y0Am';
 
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
-                'content' => http_build_query($captchaRequest)
-            )
-        );
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        // vrne json objekt, kjer je eden izmed atributov 'success'
-        $decodedJson = json_decode($result);
-        if ($decodedJson->success == 'true') { // uspesno opravjena captcha
-            $data = filter_input_array(INPUT_POST, $rules);
-            if (self::checkValues($data)) {
+            // send a POST request for google to verify it
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $captchaRequest = array('secret' => $secretCaptcha, 'response' => $_POST['g-recaptcha-response']);
+
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($captchaRequest)
+                )
+            );
+            $context  = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            // vrne json objekt, kjer je eden izmed atributov 'success'
+            $decodedJson = json_decode($result);
+            if ($decodedJson->success == 'true') { // uspesno opravjena captcha
+                // ali email ze obstaja v bazi
                 if (UporabnikDB::aliEmailZeObstaja($data['email'])) {
                     echo "<script>alert('Uporabnik s taksnim emailom ze obstaja');
                             window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
-                } else {
+                } else { // vse ok, dodaj uporabnika
                     $data['vloga'] = 'stranka';
                     UporabnikDB::dodajUporabnika($data);
-                    
+                    ViewHelper::redirect(BASE_URL . "prijava");
+
                 }
-            } else {
-                echo "<script>alert('Napaka');
-                            window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
-            } 
-        } else {
-            echo "<script>alert('Niste resili reCaptche.');
-                 window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
-        }
+            } else { //recaptcha se ni uspesno resila
+                echo "<script>alert('Niste resili reCaptche.');
+                     window.location.href='".BASE_URL . "registracija-nov-uporabnik"."';</script>";
+            }          
+        } else { // sele prisel na link
+            echo ViewHelper::render("view/registracija-nov-uporabnik.php");
+        } 
     }
 
     // administrator lahko 'registrira' novega prodajalca

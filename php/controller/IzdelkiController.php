@@ -4,7 +4,6 @@ require_once('AbstractController.php');
 require_once('ViewHelper.php');
 require_once('model/db/IzdelekDB.php');
 
-require_once(FORMS . 'DodajanjeIzdelkaForm.php');
 
 class IzdelkiController extends AbstractController {
 
@@ -37,6 +36,72 @@ class IzdelkiController extends AbstractController {
         }
     }
     
+    
+    public static function urejanjeIzdelka() {
+        $rules = [
+	    "ime" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "opis" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "cena" => [
+		'filter' => FILTER_VALIDATE_FLOAT
+	    ],
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1]
+            ]
+        ];
+        // ali je izpolnil form
+        // spremeni v float, ker pride kot string
+
+        $_POST['cena'] = (float)$_POST['cena'];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            IzdelekDB::update($data);
+            echo "<script>alert('Izdelek je bil spremenjen.');
+                     window.location.href='".BASE_URL . "prikaz-izdelkov-cmp"."';</script>";
+        } else {
+            echo "<script>alert('Napaka pri urejanju.');
+                     window.location.href='".BASE_URL . "prikaz-izdelkov-cmp"."';</script>";
+        }
+    }
+    
+    
+    // funkcija se klice iz nadzorne plosce prodajalca...omogoca urejanje izdelkov
+    public static function prikaziVseIzdelke() {
+        
+        // TODO - ce ni prijavljen prodajalec, naredi nedostopno/prijavite se link
+        
+        $rulesDetail = [
+            'id' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1]
+            ]
+        ];
+
+        $dataDetail = filter_input_array(INPUT_GET, $rulesDetail, TRUE);
+        // if se bo izvedel v primeru da izberemo ta izdelek za urejanje
+        if (self::checkValues($dataDetail)) {
+            echo ViewHelper::render('view/urejanje-izdelek.php', [
+                'izdelek' => IzdelekDB::pridobiZOceno($dataDetail),
+                'slike' => IzdelekDB::pridobiSlike($dataDetail)
+                    ]
+            );
+        } else {
+
+            $offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT, array('options' => array('default' => 0)));
+            $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, array('options' => array('default' => 18)));
+
+            echo ViewHelper::render('view/izdelki-cmp-list.php', [
+//                'izdelki' => IzdelekDB::pridobiZOstranjevanjem($dataList),
+                'izdelki' => IzdelekDB::pridobiZOstranjevanjem($offset, $limit),
+                'stIzdelkov' => IzdelekDB::pridobiStIzdelkov()
+            ]);
+        }
+    }
+    
     public static function oceniIzdelek() {
         $rules = [
             "ocena" => [
@@ -65,15 +130,25 @@ class IzdelkiController extends AbstractController {
     }
 
     public static function dodajIzdelek() {
-        $form = new DodajanjeIzdelkaForm('izdelki-add');
-        if ($form->validate()) {
-            $novIzdelek = $form->getValue();
-            IzdelekDB::insert($novIzdelek);
-            ViewHelper::redirect(BASE_URL);
+        $rules = [
+	    "ime" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "opis" => [
+		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+	    ],
+            "cena" => [
+		'filter' => FILTER_VALIDATE_FLOAT
+	    ]
+        ];
+        // ali je izpolnil form
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            IzdelekDB::insert($data);
+            echo "<script>alert('Izdelek je bil dodan.');
+                     window.location.href='".BASE_URL . "prodajalec-nadzorna-plosca"."';</script>";
         } else {
-            echo ViewHelper::render('view/izdelki-add.php', [
-                'form' => $form
-            ]);
+            echo ViewHelper::render("view/izdelki-add.php");
         }
     }
 
