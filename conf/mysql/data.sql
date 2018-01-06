@@ -9,7 +9,7 @@ TRUNCATE slika;
 TRUNCATE narocilo;
 TRUNCATE narocilo_vsebuje;
 
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('administrator', 'Janez', 'Novak', 'jno@mail.com', '$2y$10$F5FYbd8DNyGts4oKoMnNcuSuPjdSMjB0ZbyUz9dtFtQmXsj/uS482'); -- geslo123
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('administrator', 'Janez', 'Novak', 'aj@ep.si', '$2y$10$F5FYbd8DNyGts4oKoMnNcuSuPjdSMjB0ZbyUz9dtFtQmXsj/uS482'); -- geslo123
 INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', '$2y$10$kTqDDNXfTkg.K98WLyFu9.jrBMze1FZ7ieAk6lUS5H7nNcI4/t2ei', 'večšžna 123, lj', '0123456789'); -- heymomma
 
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Mountain Dew', '0.60', 'Get your MLG on');
@@ -19,7 +19,7 @@ INSERT INTO izdelek(ime, cena, opis) VALUES ('USB key - 128GB', '22.99', 'Expand
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (1,2,5);
 INSERT INTO slika(path, izdelek_id) VALUES ('PotDoSlike.png', 2);
 
-INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('prodajalec', 'James', 'Berry', 'james@berry.com', '$2y$10$Tz1PiIfB8WML0VxAsdpDzect3MZ7s9V865mQnmmAIqc6LZU4RpCaK'); -- abcdefg
+INSERT INTO uporabnik (vloga, ime, priimek, email, geslo) VALUES ('prodajalec', 'Prodajalec', 'Andraz', 'pa@ep.si', '$2y$10$Tz1PiIfB8WML0VxAsdpDzect3MZ7s9V865mQnmmAIqc6LZU4RpCaK'); -- abcdefg
 INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon) VALUES ('stranka', 'Ivan', 'Smith', 'ivan@gmail.com', '$2y$10$zc4c3w8WnBsgwFBySYNhluSY7kT9k8CuEf92yXNitzHwIqMVxTeuK', 'Trubarjeva cesta 5, 1000 Ljubljana', '03124519'); -- ivanivanpass
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (2,2,4);
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Xiaomi Mi Robot Vacuum', '274.59', 'Forget about vacuum cleaning. Get a robot.');
