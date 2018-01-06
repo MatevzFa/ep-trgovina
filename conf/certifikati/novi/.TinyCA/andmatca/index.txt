@@ -1,0 +1,4 @@
+V	230105130620Z		01	unknown	/C=SL/L=Ljubljana/OU=AndMat Inc./CN=localhost/emailAddress=info@localhost
+V	230105130656Z		02	unknown	/C=SL/L=Ljubljana/OU=AndMat Inc./CN=Prodajalec Matevz/emailAddress=pm@ep.si
+V	230105130723Z		03	unknown	/C=SL/L=Ljubljana/OU=AndMat Inc./CN=Prodajalec Andraz/emailAddress=pa@ep.si
+V	230105130745Z		04	unknown	/C=SL/L=Ljubljana/OU=AndMat Inc./CN=Admin Janez/emailAddress=aj@ep.si
