@@ -70,7 +70,7 @@ class NarociloDB extends AbstractDB {
     public static function pridobiVsaNarocilaStranke(array $params) {
         return self::query(""
                         . "SELECT * FROM narocilo "
-                        . "WHERE uporabnik_id = :id", $params);
+                        . "WHERE uporabnik_id = :id AND stanje != 'negativna-stornirano' ", $params);
     }
 
     /**

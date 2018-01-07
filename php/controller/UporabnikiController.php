@@ -122,43 +122,48 @@ class UporabnikiController extends AbstractController {
                 "email" => $uporabnik['email']
             );
 
+            // preveri ali obstaja email, ali se bo treba se registrirat
+            if (UporabnikDB::aliEmailZeObstaja($email["email"])) {
+                $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+                // najprej preveri ali uporabnik sploh obstaja
+                if ($idInVlogaUporabnika != null) {
 
-            $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+                    $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
+                    // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
+                    if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
+                        if ($pravilnoGeslo) {
+                            session_regenerate_id();
+                            $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
 
-            // najprej preveri ali uporabnik sploh obstaja
-            if ($idInVlogaUporabnika != null) {
+                            // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
+                            $_SESSION['user_vloga'] = 'stranka';
 
-                $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
-                // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
-                if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
-                    if ($pravilnoGeslo) {
-                        session_regenerate_id();
-                        $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
-
-                        // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
-                        $_SESSION['user_vloga'] = 'stranka';
-
-                        if (isset($_SESSION['post_login_redirect'])) {
-                            $redirectUrl = $_SESSION['post_login_redirect'];
-                            unset($_SESSION['post_login_redirect']);
-                            ViewHelper::redirect(BASE_URL . $redirectUrl);
+                            if (isset($_SESSION['post_login_redirect'])) {
+                                $redirectUrl = $_SESSION['post_login_redirect'];
+                                unset($_SESSION['post_login_redirect']);
+                                ViewHelper::redirect(BASE_URL . $redirectUrl);
+                            } else {
+                                ViewHelper::redirect(BASE_URL);
+                            }
                         } else {
-                            ViewHelper::redirect(BASE_URL);
+    //                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
+                            echo "<script>alert('Napačno geslo.');</script>";
                         }
                     } else {
-//                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
-                        echo "<script>alert('Napačno geslo.');</script>";
+                        echo "<script>alert('Uporabnik je deaktiviran.');</script>";
                     }
                 } else {
-                    echo "<script>alert('Uporabnik je deaktiviran.');</script>";
+                    echo "<script>alert('Napacen e-mail naslov.');</script>";
                 }
-            } else {
-                echo "<script>alert('Napacen e-mail naslov.');</script>";
+            } else { // email ne obstaja...treba se registirat
+                echo "<script>alert('Email ne obstaja. Registrirajte se.');
+                        window.location.href='" . BASE_URL . "registracija" . "';</script>"; 
             }
         } else {
             // izriši login form
             echo ViewHelper::render("view/prijava.php", ["form" => $form]);
         }
+        
     }
 
     public static function x509Prijava() {

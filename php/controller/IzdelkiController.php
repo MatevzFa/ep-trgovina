@@ -144,9 +144,67 @@ class IzdelkiController extends AbstractController {
         // ali je izpolnil form
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            IzdelekDB::insert($data);
-            echo "<script>alert('Izdelek je bil dodan.');
-                     window.location.href='".BASE_URL . "prodajalec-nadzorna-plosca"."';</script>";
+            
+            /**
+             * Še boljše pa bi bilo, da lastništvo mape s slikami prenesete na uporabnika www-data z ukazom chown.
+             * (V tem primeru pa potem uporabnik ep [tj. vi] ne bo smel spreminjati datotek iz te mape. 
+             * To pa bi se potem rešilo tako, da se da mapa v skupno lastništvo teh dveh uporabnikov: 
+             * uporabnika ep dodajte v skupino www-data in hkrati lastništvo nad omenjeno mapo dodelite skupini www-data.)
+             * 
+
+             */ 
+            
+            
+            
+            //dodaj ep v skupino www 'sudo usermod -a -G www-data ep'
+            // spremeni lastnistvo nad mapo img skupini www-data 'sudo chown www-data:www-data img -R
+            $datoteka_slike = "/static/img/";
+            //tip slike. Za ustrezno preimenovanje in kontrolo nad veljavnimi formati
+            $tipSlike = strtolower(pathinfo(basename($_FILES["slika"]["name"]),PATHINFO_EXTENSION));
+            
+            // preimenujemo v skladu z ID v bazi. Najprej query za max ID, potem +1?
+            // dobimo veljavno ime slike za na streznik, da se ne obstaja
+            if ($tipSlike == "jpg") {
+                $_FILES["slika"]["name"] = 'nekoImeSlike.jpg';
+            } else if ($tipSlike == "png") {
+                $_FILES["slika"]["name"] = 'nekoImeSlike.png';
+            } else if ($tipSlike == "jpeg") {
+                $_FILES["slika"]["name"] = 'nekoImeSlike.jpeg';
+            } else { // ni veljaven format
+                echo "<script>alert('Slika ni v veljavnem formatu. Veljavni formati so PNG, JPG, JPEG.');
+                     window.location.href='".BASE_URL . "izdelki-add"."';</script>";
+            } 
+            
+            $potDoSlike = $datoteka_slike . basename($_FILES["slika"]["name"]);
+            
+            // Preveri ali je dejanska slika
+            if(isset($_POST["submit"])) {
+                $check = getimagesize($_FILES["slika"]["name"]);
+                if($check !== false) {
+                    echo "Datoteka je slika";
+                } else {
+                    echo "<script>alert('Nalozena datoteka ni slika.');
+                     window.location.href='".BASE_URL . "izdelki-add"."';</script>";
+                }
+            }
+            // Preveri velikost - 4MB
+            if ($_FILES["slika"]["size"] > 4194304) {
+                echo "<script>alert('Prevelika velikost slike. Najvecja velikost slike znasa 4MB.');
+                     window.location.href='".BASE_URL . "izdelki-add"."';</script>";
+            }
+            // Nalozi sliko
+            if (move_uploaded_file($_FILES["slika"]["name"], $potDoSlike)) {
+                echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+            } else {
+                echo "napaka pri nalaganju";
+                //echo "<script>alert('Napaka pri nalaganju slike.');
+                    // window.location.href='".BASE_URL . "izdelki-add"."';</script>";
+            }
+            // dodaj pot do slike v podatkovno bazo
+            
+            //IzdelekDB::insert($data);
+            //echo "<script>alert('Izdelek je bil dodan.');
+                //     window.location.href='".BASE_URL . "prodajalec-nadzorna-plosca"."';</script>";
         } else {
             echo ViewHelper::render("view/izdelki-add.php");
         }
