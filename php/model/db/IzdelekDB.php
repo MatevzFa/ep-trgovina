@@ -58,12 +58,65 @@ class IzdelekDB extends AbstractDB {
 
     /**
      * 
-     * @param array $params id izdelka
+     * @param array $params id izdelka, path do slike
      */
     public static function dodajSlikoIzdelku(array $params) {
         self::modify(""
                 . "INSERT INTO slika (path, izdelek_id) "
                 . "VALUES (:path, :izdelek_id)", $params);
+    }
+    
+    
+    // dodaj izdelek s sliko. Path je pot slike (dejansko je samo ime - npr: slika.png)
+    public static function dodajIzdelekSSliko($ime, $opis, $cena, $path) {
+        $dbconn = DB::getInstance();
+        
+        $dbconn->beginTransaction();
+
+        $stmtIzdelek = $dbconn->prepare(""
+                . "INSERT INTO izdelek "
+                . "     (ime, opis, cena) "
+                . "VALUES ("
+                . "     :ime, "
+                . "     :opis, "
+                . "     :cena "
+                . ")"
+                . "");
+
+        $stmtIzdelek->bindValue(':ime', $ime);
+        $stmtIzdelek->bindValue(':opis', $opis);
+        $stmtIzdelek->bindValue(':cena', $cena);
+
+
+        if (!$stmtIzdelek->execute()) {
+            $dbconn->rollBack();
+            return FALSE;
+        }
+
+        $stmtSlika = $dbconn->prepare(""
+                . "INSERT INTO slika "
+                . "     (path, izdelek_id) "
+                . "VALUES ("
+                . "     :path, "
+                . "     LAST_INSERT_ID()"
+                . ")"
+                . "");
+
+        $stmtSlika->bindValue(':path', $path);
+        
+        if (!$stmtSlika->execute()) {
+                $dbconn->rollBack();
+                return FALSE;
+        }
+
+        return $dbconn->commit();
+    }
+    
+    // returns maximum ID (primary key number) from slika as 'id'
+    public static function pridobiNovoImeZaSliko() {
+        return self::query(""
+                . "SELECT MAX(id) as id "
+                . "FROM slika")[0];
     }
 
     public static function pridobiStIzdelkov() {

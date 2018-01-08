@@ -412,10 +412,11 @@ class UporabnikiController extends AbstractController {
 
     //prikaz vseh uporabnikov z doloceno vlogo. Uporaba pri nadzornih ploscah
     public static function prikaziVseUporabnikeZVlogo() {
-        if ($_SESSION['user_vloga'] == 'prodajalec') {
+        if ($_SESSION['user_vloga'] == 'prodajalec') { // prodajalec lahko ureja stranke
             $rules = [
                 "vloga" => [
-                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+                    "options"=>array("regexp"=>"^stranka$")
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
@@ -427,7 +428,23 @@ class UporabnikiController extends AbstractController {
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
             }
-        } else {
+        }  elseif ($_SESSION['user_vloga'] == 'administrator') { //administrator lahko ureja prodajalce (in stranke)
+            $rules = [
+                "vloga" => [
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+                    "options"=>array("regexp"=>"^(prodajalec|stranka)$")
+                ]
+            ];
+            $data = filter_input_array(INPUT_GET, $rules);
+            if (self::checkValues($data)) {
+                echo ViewHelper::render("view/uporabniki-list.php", [
+                    "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
+                        ]
+                );
+            } else {
+                ViewHelper::redirect(BASE_URL . "izdelki");
+            }
+        } else { // stranka mogoce
             ViewHelper::redirect(BASE_URL . "izdelki");
         }
     }
