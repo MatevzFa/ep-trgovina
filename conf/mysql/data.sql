@@ -43,16 +43,19 @@ VALUES ('stranka', 'Ivan', 'Smith', 'ivan@gmail.com', '$2y$10$zc4c3w8WnBsgwFBySY
 -- -----------------------------------------------------
 
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Mountain Dew', '0.60', 'Get your MLG on');
+INSERT INTO slika(path, izdelek_id) VALUES ('mtn_dew.jpg', 1);
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Capita DOA Snowboard', '439.90', 'Take on the local hill with this beast');
 INSERT INTO izdelek(ime, cena, opis) VALUES ('USB key - 128GB', '22.99', 'Expand your storage with this.');
+INSERT INTO slika(path, izdelek_id) VALUES ('iron_man_usb.jpg', 3);
 
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (1,2,5);
 INSERT INTO slika(path, izdelek_id) VALUES ('PotDoSlike.png', 2);
 
 INSERT INTO ocena(uporabnik_id, izdelek_id, ocena) VALUES (2,2,4);
 INSERT INTO izdelek(ime, cena, opis) VALUES ('Xiaomi Mi Robot Vacuum', '274.59', 'Forget about vacuum cleaning. Get a robot.');
+INSERT INTO slika(path, izdelek_id) VALUES ('xiaomi_vacuum.jpg', 4);
 
-INSERT INTO slika(path, izdelek_id) VALUES ('PotDoDrugeSlikeIstegaIzdelka', 2);
+INSERT INTO slika(path, izdelek_id) VALUES ('capita_doa_2.jpg', 2);
 
 INSERT INTO narocilo(datum, uporabnik_id, stanje, stornirano, postavka) VALUES ('2016-1-23' , 4, 'oddano', null, '714.89');
 INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id, cena) VALUES (1, 2, 1, '442.3');
