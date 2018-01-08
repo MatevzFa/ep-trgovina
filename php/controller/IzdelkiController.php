@@ -145,16 +145,11 @@ class IzdelkiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             
-            /**
-             * Še boljše pa bi bilo, da lastništvo mape s slikami prenesete na uporabnika www-data z ukazom chown.
-             * (V tem primeru pa potem uporabnik ep [tj. vi] ne bo smel spreminjati datotek iz te mape. 
-             * To pa bi se potem rešilo tako, da se da mapa v skupno lastništvo teh dveh uporabnikov: 
-             * uporabnika ep dodajte v skupino www-data in hkrati lastništvo nad omenjeno mapo dodelite skupini www-data.)
-             */ 
-            
+
             // dodaj v skripto ob zagonu
             //dodaj ep v skupino www 'sudo usermod -a -G www-data ep'
             // spremeni lastnistvo nad mapo img skupini www-data 'sudo chown www-data:www-data img -R
+            
             $datoteka_slike = "static/img/";
             //tip slike. Za ustrezno preimenovanje in kontrolo nad veljavnimi formati
             $tipSlike = strtolower(pathinfo(basename($_FILES["slika"]["name"]),PATHINFO_EXTENSION));

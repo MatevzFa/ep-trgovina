@@ -38,6 +38,14 @@ function a2conf() {
     echo
 }
 
+#Changing permissions for file uploading. Add user ep to group www-data. Give ownership to www-data.
+function permissions() {
+    echo "Nastavljanje dovoljenja za nalaganje slik skupini www-data"
+	sudo usermod -a -G www-data ep
+	sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/static/img -R
+    echo
+}
+
 # Server certificates, CA certificates, CRL
 function certs() {
     echo "Konfiguracija strežniških certifikatov..."
@@ -63,6 +71,7 @@ if (($#)); then
 else
     a2enmods
     a2conf
+    permissions
     certs
     initdb
 fi
