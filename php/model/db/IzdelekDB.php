@@ -70,7 +70,7 @@ class IzdelekDB extends AbstractDB {
     // dodaj izdelek s sliko. Path je pot slike (dejansko je samo ime - npr: slika.png)
     public static function dodajIzdelekSSliko($ime, $opis, $cena, $path) {
         $dbconn = DB::getInstance();
-        
+
         $dbconn->beginTransaction();
 
         $stmtIzdelek = $dbconn->prepare(""
