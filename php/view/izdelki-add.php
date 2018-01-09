@@ -9,7 +9,7 @@
 
     <body>
         <?php include(NAVBAR); ?>
-        <?php if ($_SESSION['user_vloga'] == 'prodajalec'):?>
+        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_vloga'] == 'prodajalec'):?>
             <div class="container">
             <a href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>""> <span class="badge pull-right"></span> 
                 Nazaj na nadzorno plosco
