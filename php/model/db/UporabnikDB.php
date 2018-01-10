@@ -177,8 +177,6 @@ class UporabnikDB extends AbstractDB {
     public static function preveriGeslo($id, $geslo) {
         
         $gesloHash = self::get(array('id' => $id))['geslo'];
-        echo $gesloHash;
-        echo $geslo;
         return password_verify($geslo, $gesloHash);
     }
     

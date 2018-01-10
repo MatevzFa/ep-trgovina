@@ -108,7 +108,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function secureCookie() {
-        
+
         session_regenerate_id();
     }
 
@@ -127,43 +127,37 @@ class UporabnikiController extends AbstractController {
                 "email" => $uporabnik['email']
             );
 
-            // preveri ali obstaja email, ali se bo treba se registrirat
-            if (UporabnikDB::aliEmailZeObstaja($email["email"])) {
-                $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
-                // najprej preveri ali uporabnik sploh obstaja
-                if ($idInVlogaUporabnika != null) {
+            $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
+            // najprej preveri ali uporabnik sploh obstaja
+            if ($idInVlogaUporabnika != null) {
 
-                    $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
-                    // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
-                    if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
-                        if ($pravilnoGeslo) {
-                            self::secureCookie();
-                            $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
+                $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
+                // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
+                if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
+                    if ($pravilnoGeslo) {
+                        self::secureCookie();
+                        $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
 
-                            // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
-                            $_SESSION['user_vloga'] = 'stranka';
+                        // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
+                        $_SESSION['user_vloga'] = 'stranka';
 
-                            if (isset($_SESSION['post_login_redirect'])) {
-                                $redirectUrl = $_SESSION['post_login_redirect'];
-                                unset($_SESSION['post_login_redirect']);
-                                ViewHelper::redirect(BASE_URL . $redirectUrl);
-                            } else {
-                                ViewHelper::redirect(BASE_URL);
-                            }
+                        if (isset($_SESSION['post_login_redirect'])) {
+                            $redirectUrl = $_SESSION['post_login_redirect'];
+                            unset($_SESSION['post_login_redirect']);
+                            ViewHelper::redirect(BASE_URL . $redirectUrl);
                         } else {
-                            //                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
-                            echo "<script>alert('Napačno geslo.');</script>";
+                            ViewHelper::redirect(BASE_URL);
                         }
                     } else {
-                        echo "<script>alert('Uporabnik je deaktiviran.');</script>";
+                        echo ViewHelper::alert('Napačen e-mail naslov ali geslo.', 'prijava');
                     }
                 } else {
-                    echo "<script>alert('Napacen e-mail naslov.');</script>";
+                    echo ViewHelper::alert('Uporabnik je deaktiviran.', 'prijava');
                 }
-            } else { // email ne obstaja...treba se registirat
-                echo "<script>alert('Email ne obstaja. Registrirajte se.');
-                        window.location.href='" . BASE_URL . "registracija" . "';</script>";
+            } else {
+                echo ViewHelper::alert('Napačen e-mail naslov ali geslo.', 'prijava');
             }
+            
         } else {
             // izriši login form
             echo ViewHelper::render("view/prijava.php", ["form" => $form]);
@@ -218,10 +212,10 @@ class UporabnikiController extends AbstractController {
                             ViewHelper::redirect(BASE_URL . $_SESSION['user_vloga'] . '-nadzorna-plosca');
                         }
                     } else {
-                        echo "<script>alert('Napacno geslo.');</script>";
+                        echo ViewHelper::alert('Napačen e-mail naslov ali geslo.', 'x509login');
                     }
                 } else {
-                    echo "<script>alert('Uporabnik je deaktiviran.');</script>";
+                    echo ViewHelper::alert('Uporabnik je deaktiviran.', 'x509login');
                 }
             }
         } else {
@@ -232,7 +226,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function odjava() {
-        
+
         session_regenerate_id();
         session_destroy();
         ViewHelper::redirect(BASE_URL);
