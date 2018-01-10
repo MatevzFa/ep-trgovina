@@ -8,6 +8,7 @@ define("HEAD", realpath(dirname(__FILE__)) . "/view/components/head.component.ph
 define("NAVBAR", realpath(dirname(__FILE__)) . "/view/components/pageheader.component.php");
 
 define("BASE_URL", $_SERVER["SCRIPT_NAME"] . "/");
+define("API_PREFIX", "api" . "/");
 define("IMAGES_URL", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/img/");
 define("CSS_URL", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/css/");
 define("BOOTSTRAP", rtrim($_SERVER["SCRIPT_NAME"], "index.php") . "static/bootstrap/");
@@ -17,6 +18,7 @@ require_once("controller/IzdelkiController.php");
 require_once("controller/UporabnikiController.php");
 require_once("controller/NarocilaController.php");
 require_once("controller/KosaricaController.php");
+require_once("controller/APIController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -120,6 +122,10 @@ $urls = [
     },
     "x509login" => function () {
         UporabnikiController::x509Prijava();
+    },
+//  API controllers
+    API_PREFIX . "izdelki" => function () {
+        APIController::izdelki();
     },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");
