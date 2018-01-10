@@ -40,6 +40,14 @@ class IzdelekDB extends AbstractDB {
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
     
+    public static function izbrisiSliko(array $params) {
+        self::modify(""
+                . "DELETE FROM slika "
+                . "WHERE id = :id", $params);
+    }
+    
+    
+    
     public static function aktivirajIzdelek(array $params) {
         self::modify(""
                 . "UPDATE izdelek SET "
@@ -208,7 +216,7 @@ class IzdelekDB extends AbstractDB {
      */
     public static function pridobiSlike(array $params) {
         return self::query(""
-                        . "SELECT path "
+                        . "SELECT path, id "
                         . "FROM slika WHERE izdelek_id = :id", $params);
     }
 

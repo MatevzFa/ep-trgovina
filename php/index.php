@@ -64,6 +64,12 @@ $urls = [
     "urejanje-izdelka" => function () {
         IzdelkiController::urejanjeIzdelka();
     },
+    "izbrisi-sliko" => function () {
+        IzdelkiController::izbrisiSliko();
+    },
+    "dodaj-sliko-izdelku" => function () {
+        IzdelkiController::dodajSlikoIzdelku();
+    },
     "deaktiviraj-uporabnika" => function () {
         UporabnikiController::deaktivirajUporabnika();
     },

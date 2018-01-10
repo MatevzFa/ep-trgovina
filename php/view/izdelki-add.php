@@ -20,7 +20,7 @@
                         Opis izdelka: <textarea type="text" rows="4" cols="50" name="opis" placeholder="Opis novega izdelka..."></textarea><br>
 
                         Cena izdelka: <input type="number" step="0.01" min="0" name="cena"><br>
-                        Slika izdelka: <input type="file" name="slika"> <br><br>
+                        Slika izdelka: <input accept="image/*" type="file" name="slika"> <br><br>
                         <input type="submit" value="Dodaj izdelek">
                     </form>
             </div>
