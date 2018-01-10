@@ -14,7 +14,7 @@
                 <h2>Prijava</h2>
                 <?php echo $form; ?>
             </div>
-            <a href="/x509login">Prijava za osebje</a>
+            <a href="<?= BASE_URL . "x509login" ?>">Prijava za osebje</a>
         </div>
     </body>
 
