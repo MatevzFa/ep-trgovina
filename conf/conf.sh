@@ -62,7 +62,7 @@ function initdb() {
 }
 
 
-echo "Ustavljam Apache2"
+echo -e "Ustavljam Apache2...\n\n"
 sudo service apache2 stop
 if (($#)); then
 	for arg in $@; do
@@ -75,5 +75,5 @@ else
     certs
     initdb
 fi
-echo "\n\nZaganjam apache2..."
+echo -e "\n\nZaganjam apache2...\n"
 sudo service apache2 start
