@@ -11,8 +11,8 @@
         <?php include(NAVBAR); ?>
         <div class="container-fluid">
             <div class="row">
-                <div class="container col-md-9 border border-top-0 border-bottom-0 border-left-0">
-                    <h1 class="p-md-5">
+                <div class="container col-md-9 border border-top-0 border-bottom-0 border-left-0 p-4">
+                    <h1>
                         Vsi izdelki
                     </h1>
 
@@ -56,8 +56,11 @@
                     </ul>
                 </div>
                 <div class="col-md-3 p-0">
-                    <a href="<?= BASE_URL . 'kosarica' ?>">Košarica</a>
-                    <?php include('components/kosarica.component.php'); ?>
+                    <h2 class="px-3 pt-3"><a href="<?= BASE_URL . 'kosarica' ?>">Košarica</a></h2>
+                    <div class="table-responsive">
+                        <?php include('components/kosarica.component.php'); ?>
+                    </div>
+
                 </div>
             </div>
         </div>
