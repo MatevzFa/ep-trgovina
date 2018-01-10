@@ -44,6 +44,19 @@
                                             </div>                                
                                         </div>
                                     </a>
+                                    <?php if ($izdelek['aktiven'] == 1): ?>
+                                    <div class="alert alert-success"> Izdelek je aktiviran </div>
+                                        <form action="<?= BASE_URL . "deaktivacija-izdelka" ?>" method="POST">
+                                            <input type="hidden" name="id" value="<?= $izdelek['id'] ?>" />
+                                            <input type="submit" value="Deaktiviraj izdelek" />
+                                        </form>
+                                    <?php else: ?>
+                                    <div class="alert alert-danger"> Izdelek je deaktiviran</div>
+                                        <form action="<?= BASE_URL . "aktivacija-izdelka" ?>" method="POST">
+                                            <input type="hidden" name="id" value="<?= $izdelek['id'] ?>" />
+                                            <input type="submit" value="Aktiviraj izdelek" />
+                                        </form>
+                                    <?php endif ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>

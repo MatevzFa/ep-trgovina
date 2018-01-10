@@ -28,18 +28,20 @@
 
                     <div class="row">
                         <?php foreach ($izdelki as $izdelek): ?>
-                            <div class="col-md-4 p-md-1">
-                                <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
-                                    <div class="izdelek card">
-                                        <img class="card-img-top" 
-                                             src="<?= isset($izdelek["slika"]) ? IMAGES_URL . $izdelek['slika'] : IMAGES_URL . 'default.png' ?>">
-                                        <div class="card-body">
-                                            <h4><?= $izdelek["ime"] ?></h4>
-                                            <p>(<?= $izdelek["cena"] ?> €)</p>
+                            <?php if ($izdelek['aktiven'] == 1): ?>
+                                <div class="col-md-4 p-md-1">
+                                    <a href="<?= BASE_URL . "izdelki?id=" . $izdelek["id"] ?>">
+                                        <div class="izdelek card">
+                                            <img class="card-img-top" 
+                                                 src="<?= isset($izdelek["slika"]) ? IMAGES_URL . $izdelek['slika'] : IMAGES_URL . 'default.png' ?>">
+                                            <div class="card-body">
+                                                <h4><?= $izdelek["ime"] ?></h4>
+                                                <p>(<?= $izdelek["cena"] ?> €)</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
 

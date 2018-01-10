@@ -73,6 +73,12 @@ $urls = [
     "oceni-izdelek" => function () {
         IzdelkiController::oceniIzdelek();
     },
+    "aktivacija-izdelka" => function () {
+        IzdelkiController::aktivirajIzdelek();
+    },
+    "deaktivacija-izdelka" => function () {
+        IzdelkiController::deaktivirajIzdelek();
+    },
     "narocila" => function () {
         NarocilaController::narocila();
     },

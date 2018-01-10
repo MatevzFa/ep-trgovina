@@ -39,6 +39,23 @@ class IzdelekDB extends AbstractDB {
     }
 
     //----------------------- CUT 'NON TRIVIAL' QUERIES HERE ------------------------
+    
+    public static function aktivirajIzdelek(array $params) {
+        self::modify(""
+                . "UPDATE izdelek SET "
+                . "aktiven = 1 "
+                . "WHERE id = :id", $params);
+    }
+    
+    public static function deaktivirajIzdelek(array $params) {
+        self::modify(""
+                . "UPDATE izdelek SET "
+                . "aktiven = 0 "
+                . "WHERE id = :id", $params);
+    }
+    
+    
+    
     /*
      * @params izdelek_id in uporabnik_id
      * @return TRUE, ce je ze ocenil, FALSE ce se ni
@@ -160,7 +177,8 @@ class IzdelekDB extends AbstractDB {
                 . "SELECT "
                 . "i.id, "
                 . "i.ime, "
-                . "i.cena, "
+                . "i.cena,"
+                . "i.aktiven, "
                 . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
                 . "FROM izdelek i "
                 . "LIMIT :offset, :limit");

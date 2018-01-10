@@ -102,6 +102,40 @@ class IzdelkiController extends AbstractController {
         }
     }
     
+    // nastavi aktiven = 1
+    public static function aktivirajIzdelek() {
+        $rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            IzdelekDB::aktivirajIzdelek($data);
+            ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
+        } else {
+            ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
+        }
+        
+    }
+    
+    // nastavi aktiven = 0
+    public static function deaktivirajIzdelek() {
+        $rules = [
+            "id" => [
+                'filter' => FILTER_VALIDATE_INT
+            ]
+        ];
+        $data = filter_input_array(INPUT_POST, $rules);
+        if (self::checkValues($data)) {
+            IzdelekDB::deaktivirajIzdelek($data);
+            ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
+        } else {
+            ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
+        }
+        
+    }
+    
     public static function oceniIzdelek() {
         $rules = [
             "ocena" => [
