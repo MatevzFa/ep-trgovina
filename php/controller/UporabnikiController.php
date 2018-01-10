@@ -228,6 +228,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function odjava() {
+        session_regenerate_id();
         session_destroy();
         ViewHelper::redirect(BASE_URL);
     }
