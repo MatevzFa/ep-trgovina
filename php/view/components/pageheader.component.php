@@ -24,9 +24,11 @@
                     </li>
                 <?php elseif ($_SESSION['user_vloga'] == 'prodajalec'): ?>
                      <!-- samo za debugganje, drugace bo samo pri adminu -->
+                     <!--
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "administrator-nadzorna-plosca" ?>">Nadzorna plosca(admin)</a>
                     </li>
+                     -->
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "prodajalec-nadzorna-plosca" ?>">Nadzorna plosca</a>
                     </li>
@@ -34,12 +36,14 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?= BASE_URL . "profil" ?>"><?= UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']))['ime'] ?></a>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . 'kosarica' ?>">Moja košarica</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "narocila" ?>">Pregled narocil</a>
                     </li>
+                    -->
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL . "odjava" ?>">Odjava</a>
                     </li>
