@@ -107,6 +107,11 @@ class UporabnikiController extends AbstractController {
         }
     }
 
+    public static function secureCookie() {
+        
+        session_regenerate_id();
+    }
+
     public static function prijava() {
 
         $form = new PrijavaForm("prijava");
@@ -132,7 +137,7 @@ class UporabnikiController extends AbstractController {
                     // tukaj lahko preveriva ali je uporabnik deaktiviran in ga ne prijaviva?
                     if (UporabnikDB::aliJeAktiviran($idInVlogaUporabnika)) {
                         if ($pravilnoGeslo) {
-                            session_regenerate_id();
+                            self::secureCookie();
                             $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
 
                             // ker se ni prijavil z x509 nastavi vlogo na 'stranka'
@@ -146,7 +151,7 @@ class UporabnikiController extends AbstractController {
                                 ViewHelper::redirect(BASE_URL);
                             }
                         } else {
-    //                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
+                            //                        echo ViewHelper::alert('Napačno geslo', BASE_URL . 'prijava');
                             echo "<script>alert('Napačno geslo.');</script>";
                         }
                     } else {
@@ -157,13 +162,12 @@ class UporabnikiController extends AbstractController {
                 }
             } else { // email ne obstaja...treba se registirat
                 echo "<script>alert('Email ne obstaja. Registrirajte se.');
-                        window.location.href='" . BASE_URL . "registracija" . "';</script>"; 
+                        window.location.href='" . BASE_URL . "registracija" . "';</script>";
             }
         } else {
             // izriši login form
             echo ViewHelper::render("view/prijava.php", ["form" => $form]);
         }
-        
     }
 
     public static function x509Prijava() {
@@ -202,7 +206,7 @@ class UporabnikiController extends AbstractController {
                     $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
                     if ($pravilnoGeslo) {
-                        session_regenerate_id();
+                        self::secureCookie();
                         $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
                         $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
                         if (isset($_SESSION['post_login_redirect'])) {
@@ -228,6 +232,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function odjava() {
+        
         session_regenerate_id();
         session_destroy();
         ViewHelper::redirect(BASE_URL);
@@ -417,7 +422,7 @@ class UporabnikiController extends AbstractController {
             $rules = [
                 "vloga" => [
                     'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    "options"=>array("regexp"=>"^stranka$")
+                    "options" => array("regexp" => "^stranka$")
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
@@ -429,11 +434,11 @@ class UporabnikiController extends AbstractController {
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
             }
-        }  elseif ($_SESSION['user_vloga'] == 'administrator') { //administrator lahko ureja prodajalce (in stranke)
+        } elseif ($_SESSION['user_vloga'] == 'administrator') { //administrator lahko ureja prodajalce (in stranke)
             $rules = [
                 "vloga" => [
                     'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    "options"=>array("regexp"=>"^(prodajalec|stranka)$")
+                    "options" => array("regexp" => "^(prodajalec|stranka)$")
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);

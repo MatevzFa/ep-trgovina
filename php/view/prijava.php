@@ -9,8 +9,12 @@
 
     <body>
         <?php include(NAVBAR); ?>
-        <div class="container">
-            <?php echo $form; ?>
+        <div class="container-fluid p-4 m-auto col-5">
+            <div class="mb-3">
+                <h2>Prijava</h2>
+                <?php echo $form; ?>
+            </div>
+            <a href="/x509login">Prijava za osebje</a>
         </div>
     </body>
 

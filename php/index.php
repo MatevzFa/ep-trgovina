@@ -1,6 +1,8 @@
 <?php
 
 // enables sessions for the entire app
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
 session_start();
 
 define("FORMS", realpath(dirname(__FILE__)) . "/view/forms/");
