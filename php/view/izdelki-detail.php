@@ -40,7 +40,6 @@
                                         <label class="radio-inline"><input type="radio" name="ocena" value="4">4</label>
                                         <label class="radio-inline"><input type="radio" name="ocena" value="5">5</label>
                                         <input type="hidden" name="izdelek_id" value="<?= $izdelek['id'] ?>" />
-                                        <input type="hidden" name="uporabnik_id" value="<?= $_SESSION['user_id'] ?>" /> <br>
                                         <input type="submit" value="Oddaj oceno" />
                                     </form>
                                 <?php else: ?>
