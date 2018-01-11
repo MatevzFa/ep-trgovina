@@ -28,7 +28,7 @@ VALUES ('prodajalec', 'Prodajalec', 'Matevz', 'pm@ep.si', '$2y$10$xClrznsjdlBvKv
 
 -- STRANKE
 INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon)
-VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', '$2y$10$kTqDDNXfTkg.K98WLyFu9.jrBMze1FZ7ieAk6lUS5H7nNcI4/t2ei', 'večšžna 123, lj', '0123456789'); -- heymomma
+VALUES ('stranka', 'Johnny', 'Bravo', 'jbravo@mail.com', '$2y$10$kTqDDNXfTkg.K98WLyFu9.jrBMze1FZ7ieAk6lUS5H7nNcI4/t2ei', 'Večna pot 113, 1000 Ljubljana', '0123456789'); -- heymomma
 
 INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, naslov, telefon)
 VALUES ('stranka', 'Ivan', 'Smith', 'ivan@gmail.com', '$2y$10$zc4c3w8WnBsgwFBySYNhluSY7kT9k8CuEf92yXNitzHwIqMVxTeuK', 'Trubarjeva cesta 5, 1000 Ljubljana', '03124519'); -- ivanivanpass

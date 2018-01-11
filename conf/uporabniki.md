@@ -1,16 +1,21 @@
 
-## Janez Novak, administrator  
-email: `jno@mail.com`  
-geslo: `geslo123`
+## Janez Novak, administrator
+email: `aj@ep.si`  
+geslo: `admin`
 
-## Johnny Bravo, stranka  
+## Prodajalec Andraz, prodajalec
+email: `pa@ep.si`  
+geslo: `ep`
+
+## Prodajalec Matevz, prodajalec
+email: `pm@ep.si`  
+geslo: `ep`
+
+## Johnny Bravo, stranka
 email: `jbravo@mail.com`  
 geslo: `heymomma`
 
-## James Berry, prodajalec  
-email: `james@berry.com`  
-geslo: `abcdefg`
-
-## Ivan Smith, stranka  
+## Ivan Smith, stranka
 email: `ivan@gmail.com`  
 geslo: `ivanivanpass`
+
