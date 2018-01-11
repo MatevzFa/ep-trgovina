@@ -2,7 +2,7 @@
     <a class="navbar-brand" href="<?= BASE_URL ?>">EP trgovina</a>
 
     <div class="navbar-expand" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto">
 
 
             <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_vloga'])): ?>

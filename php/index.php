@@ -20,7 +20,7 @@ require_once("controller/IzdelkiController.php");
 require_once("controller/UporabnikiController.php");
 require_once("controller/NarocilaController.php");
 require_once("controller/KosaricaController.php");
-require_once("controller/APIController.php");
+require_once("controller/IzdelkiRESTController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -125,14 +125,50 @@ $urls = [
     "x509login" => function () {
         UporabnikiController::x509Prijava();
     },
-//  API controllers
-    API_PREFIX . "izdelki" => function () {
-        APIController::izdelki();
-    },
     "" => function () {
         ViewHelper::redirect(BASE_URL . "izdelki");
     },
+    /**
+     * 
+     * API controllers
+     * 
+     */
+    "/^api\/izdelki$/" => function ($method, $id = null) {
+        switch ($method) {
+            case "POST":
+                IzdelkiRESTController::add();
+                break;
+            default: # GET
+                IzdelkiRESTController::index();
+                break;
+        }
+    },
+    "/^api\/izdelki\/(\d+)$/" => function ($method, $id = null) {
+        switch ($method) {
+            case "PUT":
+                IzdelkiRESTController::edit($id);
+                break;
+            default: # GET
+                IzdelkiRESTController::get($id);
+                break;
+        }
+    },
 ];
+    
+foreach ($urls as $pattern => $controller) {
+    if (substr($pattern, 0, 1) == "/" && preg_match($pattern, $path, $params)) {
+        try {
+            $params[0] = $_SERVER["REQUEST_METHOD"];
+            $controller(...$params);
+        } catch (InvalidArgumentException $e) {
+            ViewHelper::error404();
+        } catch (Exception $e) {
+            ViewHelper::displayError($e, true);
+        }
+
+        exit();
+    }
+}
 
 try {
     if (isset($urls[$path])) {
@@ -144,4 +180,4 @@ try {
     ViewHelper::error404();
 } catch (Exception $e) {
     echo "An error occurred: <pre>$e</pre>";
-} 
+}

@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <EditText
-        android:id="@+id/etTitle"
+        android:id="@+id/etIme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/title">
@@ -20,27 +20,12 @@
     </EditText>
 
     <EditText
-        android:id="@+id/etAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/author"
-        android:inputType="textPersonName" />
-
-    <EditText
         android:id="@+id/etPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/price"
         android:inputType="numberDecimal" />
-
-    <EditText
-        android:id="@+id/etYear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/year"
-        android:inputType="number" />
 
     <EditText
         android:id="@+id/etDescription"

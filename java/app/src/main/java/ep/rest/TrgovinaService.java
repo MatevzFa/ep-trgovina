@@ -13,13 +13,15 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public class TrgovinaService {
+    private static final String TAG = TrgovinaService.class.getCanonicalName();
+
     interface RestApi {
-        String URL = "http://10.0.2.2/netbeans/ep-trgovina/php/index.php/api/";
+        String URL = "https://10.0.2.2/netbeans/ep-trgovina/php/index.php/api/";
 
         @GET("izdelki")
         Call<List<Izdelek>> getAll();
 
-        @GET("izdelki?id={id}")
+        @GET("izdelki/{id}")
         Call<Izdelek> get(@Path("id") int id);
 
         @FormUrlEncoded
@@ -31,7 +33,7 @@ public class TrgovinaService {
                           @Field("opis") String description);
 
         @FormUrlEncoded
-        @PUT("izdelki?id={id}")
+        @PUT("izdelki/{id}")
         Call<Void> update(@Path("id") int id,
                           @Field("author") String author,
                           @Field("ime") String title,

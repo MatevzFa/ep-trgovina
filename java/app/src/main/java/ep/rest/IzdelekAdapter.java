@@ -26,11 +26,9 @@ public class IzdelekAdapter extends ArrayAdapter<Izdelek> {
         }
 
         final TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-        final TextView tvAuthor = (TextView) convertView.findViewById(R.id.tv_author);
         final TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
 
         tvTitle.setText(izdelek.ime);
-        tvAuthor.setText(izdelek.author);
         tvPrice.setText(String.format(Locale.ENGLISH, "%.2f EUR", izdelek.cena));
 
         return convertView;
