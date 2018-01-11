@@ -139,7 +139,8 @@ class IzdelkiController extends AbstractController {
     public static function oceniIzdelek() {
         $rules = [
             "ocena" => [
-                'filter' => FILTER_VALIDATE_INT
+                'filter' => FILTER_VALIDATE_INT,
+                'options'   => array('min_range' => 1, 'max_range' => 5)
             ],
             "uporabnik_id" => [
                 'filter' => FILTER_VALIDATE_INT

@@ -415,12 +415,13 @@ class UporabnikiController extends AbstractController {
         if ($_SESSION['user_vloga'] == 'prodajalec') { // prodajalec lahko ureja stranke
             $rules = [
                 "vloga" => [
-                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    "options" => array("regexp" => "^stranka$")
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
-            if (self::checkValues($data)) {
+            
+            $regexCheck = preg_grep("/^stranka$/", $data);
+            if (self::checkValues($data) && $regexCheck != null) {
                 echo ViewHelper::render("view/uporabniki-list.php", [
                     "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
                         ]
@@ -431,12 +432,13 @@ class UporabnikiController extends AbstractController {
         } elseif ($_SESSION['user_vloga'] == 'administrator') { //administrator lahko ureja prodajalce (in stranke)
             $rules = [
                 "vloga" => [
-                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    "options" => array("regexp" => "^(prodajalec|stranka)$")
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
-            if (self::checkValues($data)) {
+            
+            $regexCheck = preg_grep("/^prodajalec$/", $data);
+            if (self::checkValues($data) && $regexCheck != null) {
                 echo ViewHelper::render("view/uporabniki-list.php", [
                     "uporabniki" => UporabnikDB::vsiUporabnikiZVlogo($data)
                         ]
