@@ -33,6 +33,9 @@ class NarocilaController extends AbstractController {
 
     //spremeni stanje narocila. Klice se iz narocila-list
     public static function spremeniStanjeNarocila() {
+
+        self::preveriVlogo('prodajalec');
+
         // TODO - FILTER POST INPUT
         $rules = [
             "id" => [
@@ -80,6 +83,8 @@ class NarocilaController extends AbstractController {
     // vsa narocila, ki so v dolocenem stanju
     public static function vsaNarocilaStanje() {
 
+        self::preveriVlogo('prodajalec');
+
         $rules = [
             "stanje" => [
                 'filter' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -116,6 +121,8 @@ class NarocilaController extends AbstractController {
      * @return boolean TRUE če je naročilo uspešno dodano; FALSE sicer
      */
     public static function dodajNarocilo(array $izdelki) {
+        self::preveriVlogo('prodajalec');
+
         $datum = date("Y-m-d H:i:s");
         $user_id = $_SESSION['user_id'];
         return NarociloDB::dodajNarocilo($datum, $user_id, $izdelki);

@@ -93,6 +93,8 @@ class UporabnikiController extends AbstractController {
     // administrator lahko 'registrira' novega prodajalca
     public static function registracijaProdajalca() {
 
+        self::preveriVlogo('administrator');
+
         $form = new DodajProdajalcaForm("registracija-prodajalec");
 
         if ($form->validate()) {
@@ -233,6 +235,9 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function urejanjeZaposlenih() {
+        
+        self::preveriVlogo('administrator');
+
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -263,6 +268,9 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function urejanjeStranke() {
+        
+        self::preveriVlogo('prodajalec');
+
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -301,6 +309,9 @@ class UporabnikiController extends AbstractController {
 
     // Lahko spremeni geslo brez da pozna prejsnje geslo
     public static function spremeniGesloZaposleni() {
+        
+        self::preveriVlogo('prodajalec');
+
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -450,6 +461,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function aktivirajUporabnika() {
+        self::preveriVlogo('prodajalec');
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -475,6 +487,7 @@ class UporabnikiController extends AbstractController {
 
     //   izbrisi = deaktiviraj uporabnika
     public static function deaktivirajUporabnika() {
+        self::preveriVlogo('prodajalec');
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -500,6 +513,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function prodajalecNadzornaPlosca() {
+        self::preveriVlogo('prodajalec');
         // TODO preveri ce je prodajalec ?
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
@@ -515,6 +529,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function administratorNadzornaPlosca() {
+        self::preveriVlogo('administrator');
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {

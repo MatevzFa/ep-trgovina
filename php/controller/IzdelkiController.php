@@ -38,6 +38,8 @@ class IzdelkiController extends AbstractController {
     
     
     public static function urejanjeIzdelka() {
+        self::preveriVlogo('prodajalec');
+        
         $rules = [
 	    "ime" => [
 		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -71,7 +73,8 @@ class IzdelkiController extends AbstractController {
     
     // funkcija se klice iz nadzorne plosce prodajalca...omogoca urejanje izdelkov
     public static function prikaziVseIzdelke() {
-        
+        self::preveriVlogo('prodajalec');
+
         // TODO - ce ni prijavljen prodajalec, naredi nedostopno/prijavite se link
         
         $rulesDetail = [
@@ -104,6 +107,7 @@ class IzdelkiController extends AbstractController {
     
     // nastavi aktiven = 1
     public static function aktivirajIzdelek() {
+        self::preveriVlogo('prodajalec');
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -121,6 +125,7 @@ class IzdelkiController extends AbstractController {
     
     // nastavi aktiven = 0
     public static function deaktivirajIzdelek() {
+        self::preveriVlogo('prodajalec');
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -137,6 +142,8 @@ class IzdelkiController extends AbstractController {
     }
     
     public static function oceniIzdelek() {
+        self::preveriVlogo('stranka');
+
         $rules = [
             "ocena" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -164,6 +171,8 @@ class IzdelkiController extends AbstractController {
     }
 
     public static function dodajIzdelek() {
+        self::preveriVlogo('prodajalec');
+        
         $rules = [
 	    "ime" => [
 		'filter' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -252,6 +261,8 @@ class IzdelkiController extends AbstractController {
     }
     
     public static function dodajSlikoIzdelku() {
+        self::preveriVlogo('prodajalec');
+        
         $rules = [
             "izdelek_id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -320,7 +331,9 @@ class IzdelkiController extends AbstractController {
     }
     
     public static function izbrisiSliko() {
-         $rules = [
+        self::preveriVlogo('prodajalec');
+        
+        $rules = [
             "slika" => FILTER_SANITIZE_SPECIAL_CHARS,
             "id" => FILTER_VALIDATE_INT,
             "izdelek_id" => FILTER_VALIDATE_INT
