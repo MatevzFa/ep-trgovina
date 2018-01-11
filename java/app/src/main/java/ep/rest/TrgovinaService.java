@@ -16,7 +16,7 @@ public class TrgovinaService {
     private static final String TAG = TrgovinaService.class.getCanonicalName();
 
     interface RestApi {
-        String URL = "https://10.0.2.2/netbeans/ep-trgovina/php/index.php/api/";
+        String URL = "http://10.0.2.2/netbeans/ep-trgovina/php/index.php/api/";
 
         @GET("izdelki")
         Call<List<Izdelek>> getAll();
