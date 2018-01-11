@@ -287,7 +287,7 @@ class UporabnikiController extends AbstractController {
                 UporabnikDB::urejanjeZaposlenega($data);
                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
                 " je uredil prodajalca " . $data['id']);
-                echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
+                echo "<script>alert('Osebni podatki prodajalca so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
         } else {
