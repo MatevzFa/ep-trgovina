@@ -19,5 +19,24 @@ abstract class AbstractController {
 
         return $result;
     }
+    
+    static $VLOGE = [
+        'stranka' => 3,
+        'prodajalec' => 2,
+        'administrator' => 0
+    ];
+
+    /**
+     * V primeru da je podana vloga nadrejena prijavljeni vlogi preusmeri na /
+     * @param string $vloga vloga
+     * @return NULL
+     */
+    protected static function preveriVlogo($vloga = 'prodajalec') {
+        if (isset($_SESSION['vloga']) && self::$VLOGE[$_SESSION['vloga']] <= self::$VLOGE[$vloga]) {
+            return;
+        } else {
+            ViewHelper::alert('Prepovedan dostop', '/');
+        }
+    }
 
 }
