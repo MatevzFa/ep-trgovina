@@ -31,11 +31,12 @@ abstract class AbstractController {
      * @param string $vloga vloga
      * @return NULL
      */
-    protected static function preveriVlogo($vloga = 'prodajalec') {
+    protected static function preveriVlogo($vloga) {
         if (isset($_SESSION['vloga']) && self::$VLOGE[$_SESSION['vloga']] <= self::$VLOGE[$vloga]) {
             return;
         } else {
             ViewHelper::alert('Prepovedan dostop', '/');
+            exit();
         }
     }
 
