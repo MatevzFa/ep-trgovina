@@ -74,6 +74,9 @@ class NarocilaController extends AbstractController {
             } else {
                 NarociloDB::spremeniStanjeNarocila($data);
             }
+             self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                                " je spremenil stanje narocila " . $data['id'] . 
+                     " na: '" . $data['stanje'] . "'");
         } else {
             ViewHelper::redirect(BASE_URL . "prijava");
         }
