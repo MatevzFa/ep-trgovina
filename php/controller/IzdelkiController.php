@@ -6,7 +6,7 @@ require_once('model/db/IzdelekDB.php');
 
 
 class IzdelkiController extends AbstractController {
-
+    
     public static function izdelki() {
         $rulesDetail = [
             'id' => [
@@ -62,6 +62,9 @@ class IzdelkiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             IzdelekDB::update($data);
+            self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je spremenil izdelek " . $data['id']);
+                    
             echo "<script>alert('Izdelek je bil spremenjen.');
                      window.location.href='".BASE_URL . "prikaz-izdelkov-cmp"."';</script>";
         } else {
@@ -116,6 +119,8 @@ class IzdelkiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             IzdelekDB::aktivirajIzdelek($data);
+            self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je aktiviral izdelek " . $data['id']);
             ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
         } else {
             ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
@@ -134,6 +139,8 @@ class IzdelkiController extends AbstractController {
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
             IzdelekDB::deaktivirajIzdelek($data);
+            self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je deaktiviral izdelek " . $data['id']);
             ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
         } else {
             ViewHelper::redirect(BASE_URL . "prikaz-izdelkov-cmp");
@@ -239,6 +246,8 @@ class IzdelkiController extends AbstractController {
                     // dodaj izdelek in pot do slike v podatkovno bazo
                     $status = IzdelekDB::dodajIzdelekSSliko($data['ime'], $data['opis'], $data['cena'], $_FILES["slika"]["name"]);
                     if ($status == True){
+                        self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je dodal nov izdelek z imenom " . $data['ime']);
                         echo "<script>alert('Izdelek je bil dodan.');
                          window.location.href='".BASE_URL . "izdelki-add"."';</script>";
                     } else { // napaka pri transakciji
@@ -314,6 +323,8 @@ class IzdelkiController extends AbstractController {
                     // dodaj sliko v podatkovno bazo
                     $data += array('path' => $_FILES["slika"]["name"]);
                     IzdelekDB::dodajSlikoIzdelku($data);
+                    self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je dodal sliko izdelku " . $data['izdelek_id']);
                     echo "<script>alert('Slika je bila uspesno dodana.');
                          window.location.href='".BASE_URL . "prikaz-izdelkov-cmp?id=".$data['izdelek_id']."';</script>";
                 } else {
@@ -343,6 +354,8 @@ class IzdelkiController extends AbstractController {
             if (unlink($datoteka_slike)) {
                 // pobrisemo se iz baze
                 IzdelekDB::izbrisiSliko($data);
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je izbrisal sliko " . $data['id'] . " izdelku " . $data['izdelek_id']);
                 echo "<script>alert('Slika je bila izbrisana.');
                      window.location.href='".BASE_URL . "prikaz-izdelkov-cmp?id=".$data['izdelek_id']."';</script>";
             } else { //napaka pri brisanju

@@ -42,7 +42,10 @@ function a2conf() {
 function permissions() {
     echo "Nastavljanje dovoljenja za nalaganje slik skupini www-data"
 	sudo usermod -a -G www-data ep
+	# slike
 	sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/static/img -R
+    # logs
+    sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/logs -R
     echo
 }
 

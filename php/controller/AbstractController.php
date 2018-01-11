@@ -38,5 +38,29 @@ abstract class AbstractController {
             ViewHelper::alert('Prepovedan dostop', '/');
         }
     }
-
+    
+    /**
+     * 
+     * @param type $message sporocilo v log
+     * zapis v log za prodajalce
+     */
+    protected static function prodajalec_log($message) {
+        $pot_do_prodajalec_log = "/home/ep/NetBeansProjects/ep-trgovina/php/logs/prodajalec.log";
+        $final_message = date("Y-m-d H:i:s") . "\t\t" . $message . "\n";
+            
+        error_log($final_message, 3, $pot_do_prodajalec_log);
+    }
+    
+    /**
+     * 
+     * @param type $message sporocilo v log
+     * zapis v log za administratorje
+     */
+    protected static function administrator_log($message) {
+        $pot_do_prodajalec_log = "/home/ep/NetBeansProjects/ep-trgovina/php/logs/administrator.log";
+        $final_message = date("Y-m-d H:i:s") . "\t\t" . $message . "\n";
+            
+        error_log($final_message, 3, $pot_do_prodajalec_log);
+    }
+    
 }
