@@ -17,6 +17,7 @@ class UporabnikiController extends AbstractController {
                 $novUporabnik = $form->getValue();
                 $novUporabnik['vloga'] = 'stranka';
                 // preveri ali email ze obstaja - error
+                self::preveriVlogo('prodajalec');
                 UporabnikDB::dodajUporabnika($novUporabnik);
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
                     " je dodal novo stranko z email naslovom " . $novUporabnik['email']);
@@ -257,8 +258,6 @@ class UporabnikiController extends AbstractController {
 
     public static function urejanjeZaposlenih() {
         
-        self::preveriVlogo('administrator');
-
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -275,15 +274,19 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            UporabnikDB::urejanjeZaposlenega($data);
+            
             if ($data['id'] == $_SESSION['user_id']) {
-                self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " se je odjavil iz sistema.");
+                self::preveriVlogo('prodajalec');
+                UporabnikDB::urejanjeZaposlenega($data);
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " si je uredil profil.");
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
+                self::preveriVlogo('administrator');
+                UporabnikDB::urejanjeZaposlenega($data);
                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " je uredil stranko " . $data['id']);
+                " je uredil prodajalca " . $data['id']);
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -294,8 +297,6 @@ class UporabnikiController extends AbstractController {
 
     public static function urejanjeStranke() {
         
-        self::preveriVlogo('prodajalec');
-
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -318,12 +319,17 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            UporabnikDB::urejanjeStranke($data);
+            
             // edit je bil storjen iz uporabnikovega profila
             if ($data['id'] == $_SESSION['user_id']) {
+                UporabnikDB::urejanjeStranke($data);
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
+                self::preveriVlogo('prodajalec');
+                UporabnikDB::urejanjeStranke($data);
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " je uredil profil uporabnika " . $data['id']);
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -349,9 +355,13 @@ class UporabnikiController extends AbstractController {
         if (self::checkValues($data)) {
             UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
             if ($data['id'] == $_SESSION['user_id']) {
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " si je spremenil geslo."); 
                 echo "<script>alert('Geslo je bilo spremenjeno.');
                     window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //sprememba gesla storjena iz nadzorne plosce
+                self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " je spremenil geslo prodajalcu " . $data['id']);
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -371,11 +381,15 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
-            if ($data['id'] == $_SESSION['user_id']) {
+            if ($data['id'] == $_SESSION['user_id']) { // stranka sama sebi spremeni
+                UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
                 echo "<script>alert('Geslo je bilo spremenjeno.');
                     window.location.href='" . BASE_URL . "profil" . "';</script>";
-            } else { //sprememba gesla storjena iz nadzorne plosce
+            } else { //sprememba gesla storjena iz nadzorne plosce - iz strani prodajalca
+                self::preveriVlogo('prodajalec');
+                UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " je spremenil geslo stranki " . $data['id']);
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
                         window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -501,8 +515,12 @@ class UporabnikiController extends AbstractController {
         if (self::checkValues($data)) {
             UporabnikDB::aktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
+                self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " je aktiviral prodajalca " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
             } elseif ($data['oseba'] == 'stranka') {
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " je aktiviral stranko " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
@@ -527,21 +545,24 @@ class UporabnikiController extends AbstractController {
         if (self::checkValues($data)) {
             UporabnikDB::deaktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
+                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " je deaktiviral prodajalca " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
             } elseif ($data['oseba'] == 'stranka') {
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " je deaktiviral stranko " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
             }
         } else {
-            var_dump($_POST);
-            //ViewHelper::redirect(BASE_URL . "izdelki");
+            ViewHelper::redirect(BASE_URL . "izdelki");
         }
     }
 
     public static function prodajalecNadzornaPlosca() {
         self::preveriVlogo('prodajalec');
-        // TODO preveri ce je prodajalec ?
+
         if (isset($_SESSION['user_id'])) {
             $uporabnik = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
             if (isset($uporabnik)) {

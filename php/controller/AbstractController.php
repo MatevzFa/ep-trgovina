@@ -58,10 +58,10 @@ abstract class AbstractController {
      * zapis v log za administratorje
      */
     protected static function administrator_log($message) {
-        $pot_do_prodajalec_log = "/home/ep/NetBeansProjects/ep-trgovina/php/logs/administrator.log";
+        $pot_do_admin_log = "/home/ep/NetBeansProjects/ep-trgovina/php/logs/administrator.log";
         $final_message = date("Y-m-d H:i:s") . "\t\t" . $message . "\n";
             
-        error_log($final_message, 3, $pot_do_prodajalec_log);
+        error_log($final_message, 3, $pot_do_admin_log);
     }
     
 }
