@@ -8,263 +8,328 @@
 %
 \documentclass[a4paper,12pt]{report}
 
-% -----------------------------------------------------------------------------
-% ####################################################
-% # UPORABA PAKETOV - NASTAVITEV JEZIKA in KODIRANJA #
-% ####################################################
-\usepackage[slovene]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[T1]{fontenc}
-\usepackage[sc]{mathpazo}
-\linespread{1.05}
-\usepackage[T1]{fontenc}
-
-% -----------------------------------------------------------------------------
-% ######################################
-% # VNOS KLJUCNIH PARAMETROV BESEDILA  #
-% ######################################
-
-\newcommand{\naslov}     {Vzorčni naslov seminarske naloge}
-\newcommand{\prviavtor}  {Matevž Fabjančič}
-\newcommand{\prviindeks} {63000000}
-\newcommand{\drugiavtor} {Andraž Povše}
-\newcommand{\drugiindeks}{63150224}
-
-\newcommand{\kraj}       {Ljubljana}
-
-% -----------------------------------------------------------------------------
-% ###################
-% # UPORABA PAKETOV #
-% ###################
-\usepackage[a4paper,left=25mm,right=25mm,top=20mm,bottom=30mm,includehead]{geometry}
-
-\usepackage{graphicx, epsfig}
-
-\usepackage{fancyhdr}
-
-\usepackage[
-colorlinks=true, linkcolor=blue, citecolor=red,
-%
-pdftitle={\naslov},
-pdfauthor={\prviavtor, \drugiavtor},
-pdfsubject={Poročilo seminarske naloge pri predmetu Elektronsko Poslovanje},
-pdfkeywords={spletna prodajalna, PHP, SSL, MySQL}, a4paper, pagebackref=true, unicode]{hyperref}
-
-% -----------------------------------------------------------------------------
-\begin{document}
-
-% -----------------------------------------------------------------------------
-% ##################
-% # NASLOVNA STRAN #
-% ##################
-\begin{titlepage}
-	\begin{center}
-	{UNIVERZA V LJUBLJANI\\[10pt] 
-	FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO}
-
-	\vspace{65mm}
-
-	{\Large\textbf{\naslov}}
-
-	\vspace{10mm}
-
-	{\large Poročilo seminarske naloge pri predmetu\\[10pt] Elektronsko poslovanje}
-
-	\vfill
-	\vspace{60mm}
-
-\hspace{20mm}
-\begin{minipage}[t]{70mm}
-	{\bf Študenti}\\
-	{\prviavtor} ({\prviindeks})\\ 
-	{\drugiavtor} ({\drugiindeks})\\
-\end{minipage}
-%\hfill
-\begin{minipage}[t]{50mm}
-	{\bf Mentor}\\
-	David Jelenc
-\end{minipage}
-%\hspace{20mm}
-
-	\vspace{35mm}
-
-	{	\kraj, \today}
-	\end{center}
-\end{titlepage}
-
-% -----------------------------------------------------------------------------
-% ##################
-% # KAZALO VSEBINE #
-% ##################
-
-\tableofcontents
-
-% -----------------------------------------------------------------------------
-% ############
-% # POVZETEK #
-% ############
-%\begin{abstract}
-%\end{abstract}
-
-% -----------------------------------------------------------------------------
-% ##################
-% # UVOD DOKUMENTA #
-% ##################
-\chapter{Uvod}
-
-V uvodu podajte kratko predstavitev teme seminarske naloge ter navedite seznam uporabljene tehnologije.
-
-PHP, MySQL, Bootstrap, QuickForms2 (treba instalirat), MVC arhitektura --
-
-
-
-% -----------------------------------------------------------------------------
-% ###################
-% # JEDRO DOKUMENTA #
-% ###################
-
-% -----------------------------------------------
-\chapter{Navedba realiziranih storitev}
-
-Navedite, katere razširjene storitve ste implementirali. Če ste katero storitev implementirali le deloma, opišite, kako daleč ste z implementacijo prišli. 
-
-Prav tako navedite, če katero od obveznih storitev niste implementirali v celoti.
-
-
-% -----------------------------------------------
-\chapter{Podatkovni model}
-
-\textbf{\textit{Podajte sliko logičnega podatkovnega modela (denimo iz programa MySQL Workbench) ter navedite in kratko opišite uporabljene tabele. Če katera vsebuje netrivialne atribute, jih pojasnite.}}
-
-V podatkovni bazi sva ustvarila naslednje tabele: \\
-- Uporabnik. Tabela vsebuje stranke, prodajalce in administratorje. \\
-- Narocilo. Tabela vsebuje narocila. \\
-- Izdelek. Tabela vsebuje izdelke z imenom, ceno in opisom. \\
-- Slika. Tabela vsebuje tuji kljuc do izdelka in pot do slike v datotecnem sistemu. \\
-- Ocena. Tabela vsebuje tuji kljuc do osebe, izdelka in podano oceno. \\
-- Narocilo\_vsebuje. Tabela vsebuje tuji kljuc do izdelka, narocila in kolicino narocenega izdelka.
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=13cm]{img/logicni_model.png}
-	\caption{Slika logicnega modela}
-\label{fig:1}
-\end{figure}
-
-
-
-% -----------------------------------------------
-\chapter{Varnost sistema}
-
-Opišite implementirane mehanizme za nadzor dostopa ter ostale kontrole, ki ste jih implementirali. Pri vsake navedite, kaj je njen namen oz. katere varnostne grožnje preprečuje.
-
-Shranjevanje gesel - \\
-Preverjanje uporabnikovih vnosov - \\
-
-
-% -----------------------------------------------
-\chapter{Izjava o avtorstvu seminarske naloge}
-
-Spodaj podpisani \textit{\prviavtor}, vpisna številka \textit{\prviindeks}, sem (so)avtor seminarske naloge z naslovom \textit{\naslov}. S svojim podpisom zagotavljam, da sem izdelal ali bil soudeležen pri izdelavi naslednjih sklopov seminarske naloge:
-\begin{itemize}
-    \item Vzorčni sklop 1
-	 \item Vzorčni sklop 2
-\end{itemize}
-
-Podpis: {\prviavtor}, l.r.
-
-\newpage
-
-Spodaj podpisana \textit{\drugiavtor}, vpisna številka \textit{\drugiindeks}, sem (so)avtor seminarske naloge z naslovom \textit{\naslov}. S svojim podpisom zagotavljam, da sem izdelal ali bil soudeležen pri izdelavi naslednjih sklopov seminarske naloge:
-\begin{itemize}
-    \item Vzorčni sklop 1
-	 \item Vzorčni sklop 2
-\end{itemize}
-
-Podpis: {\drugiavtor}, l.r.
-
-\newpage
-
-
-% -----------------------------------------------
-\chapter{Dodatno vzorčno poglavje}
-
-Besedilo poglavja.
-
-\section{Dodatni vzorčni odsek ena}
-
-Besedilo odseka.
-
-\section{Dodatni vzorčni odsek dva}
-
-Besedilo odseka.
-
-\section{Dodatni vzorčni odsek tri}
-
-Besedilo odseka.
-
-\begin{table}[htb]
- \centering
- \begin{tabular}{c || c}
-  \textbf{N} & Vsebina\\ \hline\hline
-  1 & Vrstica 1\\        \hline
-  2 & Vrstica 2\\        \hline
-  ... & ... \\
-\end{tabular}
-\caption{Tabela vrednosti vzorcev}
-\label{tab:1}
-\end{table}
-
-Besedilo odseka.
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=13cm]{img/vzorec.jpg}
-	\caption{Slika določenega vzorca}
-\label{fig:1}
-\end{figure}
-
-Besedilo odseka.
-
-% -----------------------------------------------------------------------------
-% #######################
-% # ZAKLJUCEK DOKUMENTA #
-% #######################
-\chapter{Zaključek}
-
-Zaključek.
-
-% -----------------------------------------------------------------------------
-% ##############
-% # LITERATURA #
-% ##############
-\begin{thebibliography}{99}
-\addtocounter{chapter}{1}
-\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}Literatura}
-\addtocontents{toc}{\protect\vspace{15pt}}
-
-\bibitem{bib:ref} Yank K. \emph{Build Your Own Database-Driven Website Using PHP \& MySQL}. SitePoint, 2003. ISBN-10: 0-957-92181-0.
-
-\bibitem{bib:ref1} Michele D.; Jon P. \emph{Learning PHP and MySQL}. O'Rielly, 2006. ISBN-10: 0-596-10110-4.
-
-\bibitem{bib:ref2} Tim C.; Joyce P.; Clark M. \emph{PHP5 and MySQL Bible}. Wiley Publishing, Inc., 2004. ISBN-10: 0-7645-5746-7
-
-\bibitem{bib:LinuxCommandReference} Red Hat Software inc. \emph{Linux Complete Command Reference}. Sams Publishing, 1997. ISBN-10: 0-672-31104-6.
-
-\bibitem{bib:IPsecHowTo1} Ralf Spennberg. \emph{IPsec HOWTO} (online). 2003. (citirano \today). Dostopno na naslovu:
-\url{http://www.ipsec-howto.org/t1.html}
-
-\end{thebibliography}
-
-% -----------------------------------------------------------------------------
-% ###########
-% # DODATEK #
-% ###########
-
- \appendix
-
-\chapter{Naslov dodatka}
-{\it Po potrebi.}
-
-\end{document}
+    % -----------------------------------------------------------------------------
+    % ####################################################
+    % # UPORABA PAKETOV - NASTAVITEV JEZIKA in KODIRANJA #
+    % ####################################################
+    \usepackage[slovene]{babel}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+    \usepackage[T1]{fontenc}
+    \usepackage[sc]{mathpazo}
+    \linespread{1.05}
+    \usepackage[T1]{fontenc}
+    
+    % -----------------------------------------------------------------------------
+    % ######################################
+    % # VNOS KLJUCNIH PARAMETROV BESEDILA  #
+    % ######################################
+    
+    \newcommand{\naslov}     {Spletna trgovina}
+    \newcommand{\prviavtor}  {Matevž Fabjančič}
+    \newcommand{\prviindeks} {63150086}
+    \newcommand{\drugiavtor} {Andraž Povše}
+    \newcommand{\drugiindeks}{63150224}
+    
+    \newcommand{\kraj}       {Ljubljana}
+    
+    % -----------------------------------------------------------------------------
+    % ###################
+    % # UPORABA PAKETOV #
+    % ###################
+    \usepackage[a4paper,left=25mm,right=25mm,top=20mm,bottom=30mm,includehead]{geometry}
+    
+    \usepackage{graphicx, epsfig}
+    
+    \usepackage{fancyhdr}
+    
+    \usepackage[
+    colorlinks=true, linkcolor=blue, citecolor=red,
+    %
+    pdftitle={\naslov},
+    pdfauthor={\prviavtor, \drugiavtor},
+    pdfsubject={Poročilo seminarske naloge pri predmetu Elektronsko Poslovanje},
+    pdfkeywords={spletna prodajalna, PHP, SSL, MySQL}, a4paper, pagebackref=true, unicode]{hyperref}
+    
+    
+    \usepackage{minted}
+    
+    % -----------------------------------------------------------------------------
+    \begin{document}
+    
+    % -----------------------------------------------------------------------------
+    % ##################
+    % # NASLOVNA STRAN #
+    % ##################
+    \begin{titlepage}
+        \begin{center}
+        {UNIVERZA V LJUBLJANI\\[10pt] 
+        FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO}
+    
+        \vspace{65mm}
+    
+        {\Large\textbf{\naslov}}
+    
+        \vspace{10mm}
+    
+        {\large Poročilo seminarske naloge pri predmetu\\[10pt] Elektronsko poslovanje}
+    
+        \vfill
+        \vspace{60mm}
+    
+    \hspace{20mm}
+    \begin{minipage}[t]{70mm}
+        {\bf Študenti}\\
+        {\prviavtor} ({\prviindeks})\\ 
+        {\drugiavtor} ({\drugiindeks})\\
+    \end{minipage}
+    %\hfill
+    \begin{minipage}[t]{50mm}
+        {\bf Mentor}\\
+        David Jelenc
+    \end{minipage}
+    %\hspace{20mm}
+    
+        \vspace{35mm}
+    
+        {	\kraj, \today}
+        \end{center}
+    \end{titlepage}
+    
+    % -----------------------------------------------------------------------------
+    % ##################
+    % # KAZALO VSEBINE #
+    % ##################
+    
+    \tableofcontents
+    
+    % -----------------------------------------------------------------------------
+    % ############
+    % # POVZETEK #
+    % ############
+    %\begin{abstract}
+    %\end{abstract}
+    
+    % -----------------------------------------------------------------------------
+    % ##################
+    % # UVOD DOKUMENTA #
+    % ##################
+    \chapter{Uvod}
+    
+    V uvodu podajte kratko predstavitev teme seminarske naloge ter navedite seznam uporabljene tehnologije.
+    
+    PHP, MySQL, Bootstrap, QuickForms2 (treba instalirat), MVC arhitektura --
+    
+    
+    
+    % -----------------------------------------------------------------------------
+    % ###################
+    % # JEDRO DOKUMENTA #
+    % ###################
+    
+    % -----------------------------------------------
+    \chapter{Navedba realiziranih storitev}
+    
+    Navedite, katere razširjene storitve ste implementirali. Če ste katero storitev implementirali le deloma, opišite, kako daleč ste z implementacijo prišli. 
+    
+    Prav tako navedite, če katero od obveznih storitev niste implementirali v celoti.
+    
+    
+    % -----------------------------------------------
+    \chapter{Podatkovni model}
+    
+    \textbf{\textit{Podajte sliko logičnega podatkovnega modela (denimo iz programa MySQL Workbench) ter navedite in kratko opišite uporabljene tabele. Če katera vsebuje netrivialne atribute, jih pojasnite.}}
+    
+    V podatkovni bazi sva ustvarila naslednje tabele:
+    \begin{itemize}
+        \item Uporabnik. Tabela vsebuje stranke, prodajalce in administratorje.
+        \item Narocilo. Tabela vsebuje narocila.
+        \item Izdelek. Tabela vsebuje izdelke z imenom, ceno in opisom.
+        \item Slika. Tabela vsebuje tuji kljuc do izdelka in pot do slike v datotecnem sistemu.
+        \item Ocena. Tabela vsebuje tuji kljuc do osebe, izdelka in podano oceno.
+        \item Narocilo\_vsebuje. Tabela vsebuje tuji kljuc do izdelka, narocila in kolicino narocenega izdelka.
+    \end{itemize}
+    
+    \begin{figure}[htb]
+        \centering
+        \includegraphics[width=13cm]{img/logicni_model.png}
+        \caption{Slika logicnega modela}
+    \label{fig:1}
+    \end{figure}
+    
+    
+    
+    % -----------------------------------------------
+    \chapter{Varnost sistema}\label{varnost}
+    
+    Opišite implementirane mehanizme za nadzor dostopa ter ostale kontrole, ki ste jih implementirali. Pri vsake navedite, kaj je njen namen oz. katere varnostne grožnje preprečuje.
+    
+    \section{Preprečevanje injekcije kode SQL}
+    
+    Z uporabo izključno pripravljenih poizvedb (angl. Prepared statements) in preverjanja uporabniških vnosov, kot je opisano v odseku \ref{chk_input}, se nevarnosti injekcije kode SQL odpravijo.
+    
+    \section{Shranjevanje gesel}\label{pass_storage}
+    
+    Geslo, ki po zavarovanem kanalu ob registraciji pride v strežniško okolje, se z uporabo vgrajene funkcije password\_hash() pretvori v zgoščeno vrednost. Funkcija se izvede s privzetimi parametri; uporabi se zgoščevalni algoritem bcrypt, kot sol pa se uporabi naključno proizvedena vrednost. Namen uporabe naključne soli je ta, da so v primeru enakih gesel uporabnikov zgoščene vrednosti različne. Cena (oz. računska zahtevnost zgoščevanja) je prav tako ostala na privzeti vrednosti 10. Ta parameter napadalcu, ki bi poznal zgoščene vrednosti gesel, dodatno oteži iskanje dejanskega gesla.
+    
+    Zgoščena vrednost gesla se nato zapiše v podatkovno bazo. Ob prijavi se geslo, ki ga poda uporabnik, primerja z zgoščeno vrednostjo v podatkovni bazi. Pri tem se uporabi vgrajena funkcija password\_verify().
+    
+    \section{Preverjanje uporabnikovih vnosov}\label{chk_input}
+    
+    Z vnosi uporabnikov vedno ravnajo razredi tipa Controller. V vsaki funkciji, ki ima opravka s potencialno zlonamernim vnosom uporabnika, se ta preveri. Za preverjanje se uporabi vgrajena funkcija filter\_input\_array(). Pravila so podana v ločeni tabeli (v večini primerov imenovani \textdollar rules).
+    
+    \section{Prijava in odjava}\label{prijava}
+    
+    Kontrola prijave in odjave je centralizirana v razredu UporabnikiController. Ko je prijava uspešna (po postopku opisanem v odseku \ref{pass_storage}, se ponovno nastavi identifikator seje, v sejo pa se zapiše tudi ID uporabnika in njegova vloga.
+    
+    % \begin{minipage}{\textwidth
+        Prijava je mogoča na dveh naslovih:
+        \begin{itemize}
+            \item /prijava
+            
+            Če se uporabnik prijavi na tem naslovu, se v sejo vedno zapiše vloga \textit{stranka}. Takrat se tudi prodajalci in administrator postavijo v vlogo stranke.
+            
+            \item /x509login
+            
+            Na tem naslovu se od uporabnika zahteva overitev z digitalnim potrdilom. Ob prijavi se v sejo shrani dejanska vloga uporabnika. Ko se nekdo overi z digitalnim potrdilom, ki vsebuje lastnikov elektronski naslov, se uporabnik prijavi le v tisti račun, ki uporablja enak elektronski naslov.
+            
+        \end{itemize}
+    % \end{minipage}
+    
+    
+    
+    \section{Preverjanje vlog}
+    
+    V razredih, izpeljanih iz razreda AbstractController, se pred izvedbami funkcij za urejanje stanja trgovine po potrebi preveri vloga uporabnika. To preverjanje je implementirano v funkciji preveriVlogo().
+    
+    \begin{minted}{PHP}
+    <?php
+        static $VLOGE = [
+            'stranka' => 3,
+            'prodajalec' => 2,
+            'administrator' => 0
+        ];
+    
+        /**
+         * V primeru da je podana vloga nadrejena prijavljeni vlogi
+         * preusmeri na /
+         * @param string $vloga vloga
+         * @return NULL
+         */
+        protected static function preveriVlogo($vloga = 'prodajalec') {
+            if (isset($_SESSION['vloga']) && 
+                self::$VLOGE[$_SESSION['vloga']] <= self::$VLOGE[$vloga]) {
+                return;
+            } else {
+                ViewHelper::alert('Prepovedan dostop', '/');
+            }
+        }
+    \end{minted}
+    
+    
+    \newcommand*{\fullref}[1]{\ref{#1} \nameref{#1}}
+    % -----------------------------------------------
+    \chapter{Izjava o avtorstvu seminarske naloge}
+    
+    Spodaj podpisani \textit{\prviavtor}, vpisna številka \textit{\prviindeks}, sem (so)avtor seminarske naloge z naslovom \textit{\naslov}. S svojim podpisom zagotavljam, da sem izdelal ali bil soudeležen pri izdelavi naslednjih sklopov seminarske naloge:
+    \begin{itemize}
+        \item \fullref{varnost}
+    \end{itemize}
+    
+    Podpis: {\prviavtor}, l.r.
+    
+    \newpage
+    
+    Spodaj podpisana \textit{\drugiavtor}, vpisna številka \textit{\drugiindeks}, sem (so)avtor seminarske naloge z naslovom \textit{\naslov}. S svojim podpisom zagotavljam, da sem izdelal ali bil soudeležen pri izdelavi naslednjih sklopov seminarske naloge:
+    \begin{itemize}
+        \item Vzorčni sklop 1
+         \item Vzorčni sklop 2
+    \end{itemize}
+    
+    Podpis: {\drugiavtor}, l.r.
+    
+    \newpage
+    
+    
+    % -----------------------------------------------
+    \chapter{Dodatno vzorčno poglavje}
+    
+    Besedilo poglavja.
+    
+    \section{Dodatni vzorčni odsek ena}
+    
+    Besedilo odseka.
+    
+    \section{Dodatni vzorčni odsek dva}
+    
+    Besedilo odseka.
+    
+    \section{Dodatni vzorčni odsek tri}
+    
+    Besedilo odseka.
+    
+    \begin{table}[htb]
+     \centering
+     \begin{tabular}{c || c}
+      \textbf{N} & Vsebina\\ \hline\hline
+      1 & Vrstica 1\\        \hline
+      2 & Vrstica 2\\        \hline
+      ... & ... \\
+    \end{tabular}
+    \caption{Tabela vrednosti vzorcev}
+    \label{tab:1}
+    \end{table}
+    
+    Besedilo odseka.
+    
+    \begin{figure}[htb]
+        \centering
+        \includegraphics[width=13cm]{img/vzorec.jpg}
+        \caption{Slika določenega vzorca}
+    \label{fig:1}
+    \end{figure}
+    
+    Besedilo odseka.
+    
+    % -----------------------------------------------------------------------------
+    % #######################
+    % # ZAKLJUCEK DOKUMENTA #
+    % #######################
+    \chapter{Zaključek}
+    
+    Zaključek.
+    
+    % -----------------------------------------------------------------------------
+    % ##############
+    % # LITERATURA #
+    % ##############
+    \begin{thebibliography}{99}
+    \addtocounter{chapter}{1}
+    \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}Literatura}
+    \addtocontents{toc}{\protect\vspace{15pt}}
+    
+    \bibitem{bib:ref} Yank K. \emph{Build Your Own Database-Driven Website Using PHP \& MySQL}. SitePoint, 2003. ISBN-10: 0-957-92181-0.
+    
+    \bibitem{bib:ref1} Michele D.; Jon P. \emph{Learning PHP and MySQL}. O'Rielly, 2006. ISBN-10: 0-596-10110-4.
+    
+    \bibitem{bib:ref2} Tim C.; Joyce P.; Clark M. \emph{PHP5 and MySQL Bible}. Wiley Publishing, Inc., 2004. ISBN-10: 0-7645-5746-7
+    
+    \bibitem{bib:LinuxCommandReference} Red Hat Software inc. \emph{Linux Complete Command Reference}. Sams Publishing, 1997. ISBN-10: 0-672-31104-6.
+    
+    \bibitem{bib:IPsecHowTo1} Ralf Spennberg. \emph{IPsec HOWTO} (online). 2003. (citirano \today). Dostopno na naslovu:
+    \url{http://www.ipsec-howto.org/t1.html}
+    
+    \end{thebibliography}
+    
+    % -----------------------------------------------------------------------------
+    % ###########
+    % # DODATEK #
+    % ###########
+    
+     \appendix
+    
+    \chapter{Naslov dodatka}
+    {\it Po potrebi.}
+    
+    \end{document}
+    
