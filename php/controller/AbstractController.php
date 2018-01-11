@@ -32,10 +32,10 @@ abstract class AbstractController {
      * @return NULL
      */
     protected static function preveriVlogo($vloga) {
-        if (isset($_SESSION['vloga']) && self::$VLOGE[$_SESSION['vloga']] <= self::$VLOGE[$vloga]) {
+        if (isset($_SESSION['user_vloga']) && self::$VLOGE[$_SESSION['user_vloga']] <= self::$VLOGE[$vloga]) {
             return;
         } else {
-            ViewHelper::alert('Prepovedan dostop', '/');
+            echo ViewHelper::alert('Prepovedan dostop', '/');
             exit();
         }
     }
