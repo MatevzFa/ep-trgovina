@@ -78,10 +78,10 @@ class RegistracijaForm extends HTML_QuickForm2 {
         $this->telefon->addRule('maxlength', 'Naslov naj bo krajši od 30 znakov.', 30);
 
         $this->gumb = new HTML_QuickForm2_Element_InputSubmit(null);
-        $this->gumb->setAttribute('value', 'Registriraj se');
+        $this->gumb->setAttribute('value', 'Registriraj stranko');
 
         $this->fs = new HTML_QuickForm2_Container_Fieldset();
-        $this->fs->setLabel('Registracija novega uporabnika');
+        $this->fs->setLabel('Registracija nove stranke');
         $this->addElement($this->fs);
 
         $this->osebno = new HTML_QuickForm2_Container_Fieldset();

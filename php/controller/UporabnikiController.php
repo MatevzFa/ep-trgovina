@@ -18,6 +18,8 @@ class UporabnikiController extends AbstractController {
                 $novUporabnik['vloga'] = 'stranka';
                 // preveri ali email ze obstaja - error
                 UporabnikDB::dodajUporabnika($novUporabnik);
+                self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                    " je dodal novo stranko z email naslovom " . $novUporabnik['email']);
                 ViewHelper::redirect(BASE_URL);
             } else {
                 echo ViewHelper::render("view/registracija.php", [
@@ -101,6 +103,8 @@ class UporabnikiController extends AbstractController {
             $novProdajalec = $form->getValue();
             $novProdajalec['vloga'] = 'prodajalec';
             UporabnikDB::dodajUporabnika($novProdajalec);
+            self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                    " je dodal novega prodajalca z email naslovom " . $novUporabnik['email']);
             ViewHelper::redirect(BASE_URL);
         } else {
             echo ViewHelper::render("view/registracija-prodajalec.php", [
@@ -201,10 +205,19 @@ class UporabnikiController extends AbstractController {
 
                     $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
-                    if ($pravilnoGeslo) {
+                    if ($pravilnoGeslo) {                      
                         self::secureCookie();
                         $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
                         $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
+                        
+                        if ($_SESSION['user_vloga'] == 'administrator') {
+                            self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                                " se je prijavil v sistem.");
+                        } else {
+                            self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                                " se je prijavil v sistem.");
+                        }
+                        
                         if (isset($_SESSION['post_login_redirect'])) {
 
                             $redirectUrl = $_SESSION['post_login_redirect'];
@@ -228,6 +241,14 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function odjava() {
+        
+        if ($_SESSION['user_vloga'] == 'administrator') {
+            self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " se je odjavil iz sistema.");
+        } else {
+            self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
+                " se je odjavil iz sistema.");
+        }
 
         session_regenerate_id();
         session_destroy();
@@ -256,9 +277,13 @@ class UporabnikiController extends AbstractController {
         if (self::checkValues($data)) {
             UporabnikDB::urejanjeZaposlenega($data);
             if ($data['id'] == $_SESSION['user_id']) {
+                self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " se je odjavil iz sistema.");
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
+                self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                " je uredil stranko " . $data['id']);
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
