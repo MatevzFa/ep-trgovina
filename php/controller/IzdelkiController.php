@@ -149,14 +149,12 @@ class IzdelkiController extends AbstractController {
                 'filter' => FILTER_VALIDATE_INT,
                 'options'   => array('min_range' => 1, 'max_range' => 5)
             ],
-            "uporabnik_id" => [
-                'filter' => FILTER_VALIDATE_INT
-            ],
             "izdelek_id" => [
                 'filter' => FILTER_VALIDATE_INT
             ]
         ];
         $data = filter_input_array(INPUT_POST, $rules);
+        $data['uporabnik_id'] = $_SESSION['user_id'];
         if (self::checkValues($data)) {
             if (!IzdelekDB::aliJeUporabnikZeOcenilIzdelek($data)) { //se ni ocenil izdelka
         	IzdelekDB::oceniIzdelek($data);
