@@ -12,7 +12,7 @@ DROP SCHEMA IF EXISTS `ep_trgovina` ;
 -- -----------------------------------------------------
 -- Schema ep_trgovina
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 ;
+CREATE SCHEMA IF NOT EXISTS `ep_trgovina` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
 USE `ep_trgovina` ;
 
 -- -----------------------------------------------------
