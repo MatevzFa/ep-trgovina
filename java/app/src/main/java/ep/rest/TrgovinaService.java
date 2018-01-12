@@ -24,6 +24,7 @@ import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -39,6 +40,7 @@ public class TrgovinaService {
 
 
     interface RestApi {
+
         String URL = "https://10.0.2.2/netbeans/ep-trgovina/php/index.php/api/";
 
         @GET("izdelki")
@@ -69,11 +71,14 @@ public class TrgovinaService {
         Call<LoginState> prijava(@Field("email") String email,
                                  @Field("geslo") String geslo);
 
-        @GET("odjava")
+        @POST("odjava")
         Call<LoginState> odjava(@Header("Authorization") String token);
 
         @GET("podatki")
         Call<LoginState> podatki(@Header("Authorization") String token);
+
+        @POST("narocila")
+        Call<NarociloResponse> naroci(@Body Narocilo narocilo);
     }
 
     private static RestApi instance;
@@ -144,54 +149,4 @@ public class TrgovinaService {
             throw new RuntimeException(e);
         }
     }
-
-//    public static class AddCookiesInterceptor implements Interceptor {
-//
-//
-//        private Context context;
-//
-//        public AddCookiesInterceptor(Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        public Response intercept(Chain chain) throws IOException {
-//            Request.Builder builder = chain.request().newBuilder();
-//            HashSet<String> preferences = (HashSet<String>) PreferenceManager.getDefaultSharedPreferences(context).getStringSet("PREF_COOKIES", new HashSet<String>());
-//            for (String cookie : preferences) {
-//                builder.addHeader("Cookie", cookie);
-//                Log.v("OkHttp", "Adding Header: " + cookie); // This is done so I know which headers are being added; this interceptor is used after the normal logging of OkHttp
-//            }
-//            return chain.proceed(builder.build());
-//        }
-//    }
-//
-//    public static class ReceivedCookiesInterceptor implements Interceptor {
-//
-//        private Context context;
-//
-//        public ReceivedCookiesInterceptor(Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        public Response intercept(Chain chain) throws IOException {
-//            Response originalResponse = chain.proceed(chain.request());
-//
-//            if (!originalResponse.headers("Set-Cookie").isEmpty()) {
-//                HashSet<String> cookies = new HashSet<>();
-//
-//                for (String header : originalResponse.headers("Set-Cookie")) {
-//                    cookies.add(header);
-//                    Log.d("OkHttp", "intercept: " + header);
-//                }
-//
-//                PreferenceManager.getDefaultSharedPreferences(context).edit()
-//                        .putStringSet("PREF_COOKIES", cookies)
-//                        .apply();
-//            }
-//
-//            return originalResponse;
-//        }
-//    }
 }

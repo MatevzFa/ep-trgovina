@@ -44,6 +44,7 @@ public class PrijavaActivity extends Activity {
                                 if (response.body().loggedIn) {
                                     setToken(response);
                                     setResult(RESULT_OK, null);
+                                    Log.i("PRIJAVA", response.body().token);
                                     finish();
                                 } else recreate();
                             }

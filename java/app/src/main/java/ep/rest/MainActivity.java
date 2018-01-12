@@ -23,8 +23,6 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements Callback<List<Izdelek>> {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
-    private String token;
-
     private SwipeRefreshLayout container;
     private Button button;
     private ListView list;
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null);
-        Log.d(TAG, "" + token);
         list = (ListView) findViewById(R.id.items);
 
         adapter = new IzdelekAdapter(this);
@@ -66,22 +62,12 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
             }
         });
 
-//        button = (Button) findViewById(R.id.add_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final Intent intent = new Intent(MainActivity.this, IzdelekFormActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
         prijava = findViewById(R.id.btn_login);
         prijava.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(MainActivity.this, PrijavaActivity.class);
                 startActivityForResult(intent, 1);
-                recreate();
             }
         });
         odjava = findViewById(R.id.btn_logout);
@@ -89,10 +75,11 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
             @Override
             public void onClick(View view) {
                 TrgovinaService.getInstance()
-                        .odjava(token)
+                        .odjava(getToken())
                         .enqueue(new Callback<LoginState>() {
                             @Override
                             public void onResponse(Call<LoginState> call, Response<LoginState> response) {
+                                setToken(null);
                                 recreate();
                             }
 
@@ -103,34 +90,19 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
                         });
             }
         });
+
         logindata = findViewById(R.id.logindata);
 
         getApiInstance().getAll().enqueue(MainActivity.this);
-        if (token != null) {
 
-            Log.i(TAG, token + "");
-            getApiInstance()
-                    .podatki(token)
-                    .enqueue(new Callback<LoginState>() {
-                        @Override
-                        public void onResponse(Call<LoginState> call, Response<LoginState> response) {
-                            logindata.setText(response.body().toString());
-                        }
-
-                        @Override
-                        public void onFailure(Call<LoginState> call, Throwable t) {
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("token", null).apply();
-                            recreate();
-                        }
-                    });
-        }
+        updateUserdata();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            recreate();
+            updateUserdata();
         }
     }
 
@@ -163,5 +135,43 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
 
     public TrgovinaService.RestApi getApiInstance() {
         return TrgovinaService.getInstance(getApplicationContext());
+    }
+
+    public void setToken(String token) {
+        PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putString("token", token)
+                .apply();
+    }
+
+    public String getToken() {
+        return PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getString("token", null);
+    }
+
+    public void updateUserdata() {
+
+
+        getApiInstance()
+                .podatki(getToken())
+                .enqueue(new Callback<LoginState>() {
+                    @Override
+                    public void onResponse(Call<LoginState> call, Response<LoginState> response) {
+                        if (response.body().ime != null && response.body().priimek != null)
+                            logindata.setText(response.body().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginState> call, Throwable t) {
+                        PreferenceManager
+                                .getDefaultSharedPreferences(getApplicationContext())
+                                .edit()
+                                .putString("token", null)
+                                .apply();
+                        recreate();
+                    }
+                });
     }
 }
