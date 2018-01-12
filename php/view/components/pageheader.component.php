@@ -4,19 +4,20 @@
     <div class="navbar-expand" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 
-
+            <!-- search button -->
+            <form action="<?= BASE_URL . 'binarno-iskanje' ?>" method="GET" class="navbar-form navbar-left">
+                <div class="input-group">
+                    <input type="text" name="iskanje" placeholder="Iskanje po izdelkih..." class="form-control" />
+                    <input type="submit" class="btn btn-primary" value="Iskanje" />
+                </div>
+             </form>
+            
             <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_vloga'])): ?>
 
                 <?php
                 $pagehdrUser = UporabnikDB::podatkiOUporabniku(array('id' => $_SESSION['user_id']));
                 ?>
-                <!-- search button -->
-                <form action="<?= BASE_URL . 'binarno-iskanje' ?>" method="GET" class="navbar-form navbar-right">
-                    <div class="input-group">
-                        <input type="text" name="iskanje" placeholder="Iskanje po izdelkih..." class="form-control" />
-                        <input type="submit" class="btn btn-primary" value="Iskanje" />
-                    </div>
-                 </form>
+                
 
                 <?php if ($_SESSION['user_vloga'] == 'administrator'): ?>,
 

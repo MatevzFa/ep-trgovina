@@ -14,15 +14,21 @@ class IzdelkiController extends AbstractController {
                 'options' => ['min_range' => 1]
             ]
         ];
-
+        
         $dataDetail = filter_input_array(INPUT_GET, $rulesDetail, TRUE);
         if (self::checkValues($dataDetail)) {
+            // Preveri ce je prijavljen preden pogledas ali je ocenil izdelek
+            if (isset($_SESSION['user_id'])) {
+                $aliJeOcenilIzdelek = IzdelekDB::aliJeUporabnikZeOcenilIzdelek(
+                            array('izdelek_id' => $dataDetail['id'],
+                                'uporabnik_id' => $_SESSION['user_id']));
+            } else {
+                $aliJeOcenilIzdelek = False;
+            }
             echo ViewHelper::render('view/izdelki-detail.php', [
                 'izdelek' => IzdelekDB::pridobiZOceno($dataDetail),
                 'slike' => IzdelekDB::pridobiSlike($dataDetail),
-                'jeOcenil' => IzdelekDB::aliJeUporabnikZeOcenilIzdelek(
-                        array('izdelek_id' => $dataDetail['id'],
-                            'uporabnik_id' => $_SESSION['user_id']))
+                'jeOcenil' => $aliJeOcenilIzdelek
                     ]
             );
         } else {
