@@ -34,18 +34,24 @@ class UporabnikRESTController {
         );
 
         $idInVlogaUporabnika = UporabnikDB::pridobiIdInVlogo($email);
-        
+
         $token = UporabnikDB::mobileLogin($idInVlogaUporabnika['id'], $geslo);
-        
-        $user = UporabnikDB::get(array('id' => $token['user_id']));
-        echo json_encode([
-            'ime' => $user['ime'],
-            'priimek' => $user['priimek'],
-            'loggedIn' => TRUE,
-            'token' => $token['token'],
-        ]);
+
+        if ($token != null) {
+            $user = UporabnikDB::get(array('id' => $token['user_id']));
+            echo json_encode([
+                'ime' => $user['ime'],
+                'priimek' => $user['priimek'],
+                'loggedIn' => TRUE,
+                'token' => $token['token'],
+            ]);
+        } else {
+            echo json_encode([
+                'loggedIn' => FALSE,
+            ]);
+        }
     }
-    
+
     public static function odjava($token) {
         if ($token == NULL) {
             echo json_encode([
@@ -56,7 +62,7 @@ class UporabnikRESTController {
         UporabnikDB::mobileLogout($token);
         self::userdata(NULL);
     }
-    
+
     public static function userdata($token) {
         if ($token == NULL) {
             echo json_encode([

@@ -207,6 +207,8 @@ class UporabnikDB extends AbstractDB {
             } else {
 
                 $dbconn = DB::getInstance();
+                
+                $token = bin2hex(random_bytes(16));
 
                 $stmtIzdelek = $dbconn->prepare(""
                         . "INSERT INTO mobile_info "
@@ -214,11 +216,12 @@ class UporabnikDB extends AbstractDB {
                         . "VALUES ("
                         . "     :id, "
                         . "     NOW(), "
-                        . "     UUID()"
+                        . "     :token"
                         . ")"
                         . "");
 
                 $stmtIzdelek->bindValue(":id", $id, PDO::PARAM_INT);
+                $stmtIzdelek->bindValue(":token", $token);
 
                 $stmtIzdelek->execute();
 
