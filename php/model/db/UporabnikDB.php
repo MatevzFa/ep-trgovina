@@ -230,7 +230,7 @@ class UporabnikDB extends AbstractDB {
     }
     
     public static function mobileLogout($token) {
-        $mobileinfo = self::modify("DELETE FROM mobile_info WHERE token = :token", array('token' => $token));
+        self::modify("DELETE FROM mobile_info WHERE token = :token", array('token' => $token));
     }
     
     public static function mobileVerify($token) {

@@ -69,6 +69,9 @@ public class TrgovinaService {
         Call<LoginState> prijava(@Field("email") String email,
                                  @Field("geslo") String geslo);
 
+        @GET("odjava")
+        Call<LoginState> odjava(@Header("Authorization") String token);
+
         @GET("podatki")
         Call<LoginState> podatki(@Header("Authorization") String token);
     }

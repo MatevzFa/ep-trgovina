@@ -23,6 +23,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements Callback<List<Izdelek>> {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
+    private String token;
+
     private SwipeRefreshLayout container;
     private Button button;
     private ListView list;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null);
+        Log.d(TAG, "" + token);
         list = (ListView) findViewById(R.id.items);
 
         adapter = new IzdelekAdapter(this);
@@ -62,42 +66,72 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
             }
         });
 
-        button = (Button) findViewById(R.id.add_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(MainActivity.this, IzdelekFormActivity.class);
-                startActivity(intent);
-            }
-        });
+//        button = (Button) findViewById(R.id.add_button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final Intent intent = new Intent(MainActivity.this, IzdelekFormActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         prijava = findViewById(R.id.btn_login);
         prijava.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(MainActivity.this, PrijavaActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
+                recreate();
             }
         });
         odjava = findViewById(R.id.btn_logout);
+        odjava.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TrgovinaService.getInstance()
+                        .odjava(token)
+                        .enqueue(new Callback<LoginState>() {
+                            @Override
+                            public void onResponse(Call<LoginState> call, Response<LoginState> response) {
+                                recreate();
+                            }
+
+                            @Override
+                            public void onFailure(Call<LoginState> call, Throwable t) {
+                                Log.w(TAG, "Logout fail");
+                            }
+                        });
+            }
+        });
         logindata = findViewById(R.id.logindata);
 
         getApiInstance().getAll().enqueue(MainActivity.this);
-        String token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null);
-        Log.i(TAG, token + "");
-        getApiInstance()
-                .podatki(token)
-                .enqueue(new Callback<LoginState>() {
-                    @Override
-                    public void onResponse(Call<LoginState> call, Response<LoginState> response) {
-                        logindata.setText(response.body().toString());
-                    }
+        if (token != null) {
 
-                    @Override
-                    public void onFailure(Call<LoginState> call, Throwable t) {
+            Log.i(TAG, token + "");
+            getApiInstance()
+                    .podatki(token)
+                    .enqueue(new Callback<LoginState>() {
+                        @Override
+                        public void onResponse(Call<LoginState> call, Response<LoginState> response) {
+                            logindata.setText(response.body().toString());
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<LoginState> call, Throwable t) {
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("token", null).apply();
+                            recreate();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            recreate();
+        }
     }
 
     @Override
