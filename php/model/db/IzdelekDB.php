@@ -198,6 +198,31 @@ class IzdelekDB extends AbstractDB {
     }
 
     /**
+     * 
+     * Kot zgoraj, le da pride se iskalni niz v $data
+     * SELECT * FROM izdelek WHERE MATCH (ime,opis) AGAINST ('Xiaomi' IN BOOLEAN MODE);
+     */
+    public static function pridobiZOstranjevanjemBinarnoIskanje($offset=0, $limit=18, $data) {
+        $stmt = AbstractDB::getConnection()->prepare(""
+                . "SELECT "
+                . "i.id, "
+                . "i.ime, "
+                . "i.cena,"
+                . "i.aktiven, "
+                . "(SELECT path FROM slika WHERE izdelek_id = i.id LIMIT 1) AS slika "
+                . "FROM izdelek i "
+                . "WHERE MATCH (ime, opis) "
+                . "AGAINST (:iskanje IN BOOLEAN MODE) "
+                . "LIMIT :offset, :limit");
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':iskanje', $data['iskanje'], PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchall();
+    }
+    
+    /**
      * Podatki o dolocenem izdelku
      * @param array $params array z 'id' => id
      * @return vse o izdelku, povprecna ocena 

@@ -39,6 +39,36 @@ class IzdelkiController extends AbstractController {
         }
     }
     
+    /**
+     * Binarno iskanje po izdelkih
+     * 
+     * + stands for AND
+     * - stands for NOT
+     * [no operator] implies OR
+     * 
+     */
+    
+    public static function binarno_iskanje() {
+        $rulesDetail = [
+            'iskanje' => [
+                'filter' => FILTER_SANITIZE_SPECIAL_CHARS
+            ]
+        ];
+        $data = filter_input_array(INPUT_GET, $rulesDetail);
+        if (self::checkValues($data)) {
+            $offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT, array('options' => array('default' => 0)));
+            $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, array('options' => array('default' => 18)));
+            
+            $najdeni_izdelki = IzdelekDB::pridobiZOstranjevanjemBinarnoIskanje($offset, $limit, $data);
+            $stevilo_izdelkov = sizeof($najdeni_izdelki);
+            echo ViewHelper::render('view/izdelki-list.php', [
+                'izdelki' => $najdeni_izdelki,
+                'stIzdelkov' => $stevilo_izdelkov,
+                'kosarica' => isset($_SESSION['cart']) ? $_SESSION['cart'] : []
+            ]);
+        }
+    }
+    
     
     public static function urejanjeIzdelka() {
         self::preveriVlogo('prodajalec');

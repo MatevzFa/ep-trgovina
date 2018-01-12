@@ -69,6 +69,9 @@ $urls = [
     "urejanje-izdelka" => function () {
         IzdelkiController::urejanjeIzdelka();
     },
+    "binarno-iskanje" => function () {
+    IzdelkiController::binarno_iskanje();
+    },
     "izbrisi-sliko" => function () {
         IzdelkiController::izbrisiSliko();
     },
