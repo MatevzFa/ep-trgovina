@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `datum` DATETIME NOT NULL,
   `uporabnik_id` INT NOT NULL,
-  `stanje` VARCHAR(45) NOT NULL DEFAULT 'oddano' COMMENT 'Stanje narocila:\n- oddano (neobdelano)\n- potrjeno\n- preklicano\n- stornirano\nponovno vpisano narocilo z negativnim zneskom (stornacija) pa ima lahko stanje ‘stornirano_narocilo’. V atribut ‘stornirano’ pa gre ID narocila, ki ga stornira.',
+  `stanje` VARCHAR(45) NOT NULL COMMENT 'Stanje narocila:\n- oddano (neobdelano)\n- potrjeno\n- preklicano\n- stornirano\nponovno vpisano narocilo z negativnim zneskom (stornacija) pa ima lahko stanje ‘stornirano_narocilo’. V atribut ‘stornirano’ pa gre ID narocila, ki ga stornira.',
   `stornirano` INT NULL COMMENT 'kaze na ID narocila, ki ga stornira. Postavka je negativna postavka tistega narocila',
   `postavka` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id`),
@@ -143,6 +143,24 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`narocilo_vsebuje` (
   CONSTRAINT `fk_narocilo_vsebuje_narocilo1`
     FOREIGN KEY (`narocilo_id`)
     REFERENCES `ep_trgovina`.`narocilo` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ep_trgovina`.`mobile_info`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ep_trgovina`.`mobile_info` ;
+
+CREATE TABLE IF NOT EXISTS `ep_trgovina`.`mobile_info` (
+  `user_id` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `token` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `fk_mobile_to_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ep_trgovina`.`uporabnik` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
