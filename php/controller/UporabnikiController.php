@@ -20,7 +20,7 @@ class UporabnikiController extends AbstractController {
                 self::preveriVlogo('prodajalec');
                 UporabnikDB::dodajUporabnika($novUporabnik);
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                    " je dodal novo stranko z email naslovom " . $novUporabnik['email']);
+                        " je dodal novo stranko z email naslovom " . $novUporabnik['email']);
                 ViewHelper::redirect(BASE_URL);
             } else {
                 echo ViewHelper::render("view/registracija.php", [
@@ -164,7 +164,6 @@ class UporabnikiController extends AbstractController {
             } else {
                 echo ViewHelper::alert('Napačen e-mail naslov ali geslo.', 'prijava');
             }
-            
         } else {
             // izriši login form
             echo ViewHelper::render("view/prijava.php", ["form" => $form]);
@@ -206,19 +205,19 @@ class UporabnikiController extends AbstractController {
 
                     $pravilnoGeslo = UporabnikDB::preveriGeslo($idInVlogaUporabnika['id'], $geslo);
 
-                    if ($pravilnoGeslo) {                      
+                    if ($pravilnoGeslo) {
                         self::secureCookie();
                         $_SESSION['user_id'] = $idInVlogaUporabnika['id'];
                         $_SESSION['user_vloga'] = $idInVlogaUporabnika['vloga'];
-                        
+
                         if ($_SESSION['user_vloga'] == 'administrator') {
                             self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                                " se je prijavil v sistem.");
+                                    " se je prijavil v sistem.");
                         } else {
                             self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                                " se je prijavil v sistem.");
+                                    " se je prijavil v sistem.");
                         }
-                        
+
                         if (isset($_SESSION['post_login_redirect'])) {
 
                             $redirectUrl = $_SESSION['post_login_redirect'];
@@ -242,13 +241,13 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function odjava() {
-        
+
         if ($_SESSION['user_vloga'] == 'administrator') {
             self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " se je odjavil iz sistema.");
+                    " se je odjavil iz sistema.");
         } else {
             self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " se je odjavil iz sistema.");
+                    " se je odjavil iz sistema.");
         }
 
         session_regenerate_id();
@@ -257,7 +256,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function urejanjeZaposlenih() {
-        
+
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -274,19 +273,19 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            
+
             if ($data['id'] == $_SESSION['user_id']) {
                 self::preveriVlogo('prodajalec');
                 UporabnikDB::urejanjeZaposlenega($data);
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " si je uredil profil.");
+                        " si je uredil profil.");
                 echo "<script>alert('Osebni podatki so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //edit bil storjen iz nadzorne plosce
                 self::preveriVlogo('administrator');
                 UporabnikDB::urejanjeZaposlenega($data);
                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " je uredil prodajalca " . $data['id']);
+                        " je uredil prodajalca " . $data['id']);
                 echo "<script>alert('Osebni podatki prodajalca so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -296,7 +295,7 @@ class UporabnikiController extends AbstractController {
     }
 
     public static function urejanjeStranke() {
-        
+
         $rules = [
             "id" => [
                 'filter' => FILTER_VALIDATE_INT
@@ -319,7 +318,7 @@ class UporabnikiController extends AbstractController {
         ];
         $data = filter_input_array(INPUT_POST, $rules);
         if (self::checkValues($data)) {
-            
+
             // edit je bil storjen iz uporabnikovega profila
             if ($data['id'] == $_SESSION['user_id']) {
                 UporabnikDB::urejanjeStranke($data);
@@ -329,7 +328,7 @@ class UporabnikiController extends AbstractController {
                 self::preveriVlogo('prodajalec');
                 UporabnikDB::urejanjeStranke($data);
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " je uredil profil uporabnika " . $data['id']);
+                        " je uredil profil uporabnika " . $data['id']);
                 echo "<script>alert('Osebni podatki stranke so bili uspesno spremenjeni.');
                         window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -340,7 +339,7 @@ class UporabnikiController extends AbstractController {
 
     // Lahko spremeni geslo brez da pozna prejsnje geslo
     public static function spremeniGesloZaposleni() {
-        
+
         self::preveriVlogo('prodajalec');
 
         $rules = [
@@ -356,12 +355,12 @@ class UporabnikiController extends AbstractController {
             UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
             if ($data['id'] == $_SESSION['user_id']) {
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " si je spremenil geslo."); 
+                        " si je spremenil geslo.");
                 echo "<script>alert('Geslo je bilo spremenjeno.');
                     window.location.href='" . BASE_URL . "profil" . "';</script>";
             } else { //sprememba gesla storjena iz nadzorne plosce
                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " je spremenil geslo prodajalcu " . $data['id']);
+                        " je spremenil geslo prodajalcu " . $data['id']);
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
                         window.location.href='" . BASE_URL . "urejanje-zaposleni-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -389,7 +388,7 @@ class UporabnikiController extends AbstractController {
                 self::preveriVlogo('prodajalec');
                 UporabnikDB::posodobiGeslo($data['id'], $data['geslo']);
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " je spremenil geslo stranki " . $data['id']);
+                        " je spremenil geslo stranki " . $data['id']);
                 echo "<script>alert('Geslo uporabnika spremenjeno.');
                         window.location.href='" . BASE_URL . "urejanje-stranka-control-panel?id=" . $data['id'] . "';</script>";
             }
@@ -469,7 +468,7 @@ class UporabnikiController extends AbstractController {
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
-            
+
             $regexCheck = preg_grep("/^stranka$/", $data);
             if (self::checkValues($data) && $regexCheck != null) {
                 echo ViewHelper::render("view/uporabniki-list.php", [
@@ -486,7 +485,7 @@ class UporabnikiController extends AbstractController {
                 ]
             ];
             $data = filter_input_array(INPUT_GET, $rules);
-            
+
             $regexCheck = preg_grep("/^prodajalec$/", $data);
             if (self::checkValues($data) && $regexCheck != null) {
                 echo ViewHelper::render("view/uporabniki-list.php", [
@@ -516,11 +515,11 @@ class UporabnikiController extends AbstractController {
             UporabnikDB::aktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " je aktiviral prodajalca " . $data['id']);
+                        " je aktiviral prodajalca " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
             } elseif ($data['oseba'] == 'stranka') {
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " je aktiviral stranko " . $data['id']);
+                        " je aktiviral stranko " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");
@@ -545,12 +544,12 @@ class UporabnikiController extends AbstractController {
         if (self::checkValues($data)) {
             UporabnikDB::deaktivirajUporabnika($data);
             if ($data['oseba'] == 'prodajalec') {
-                 self::administrator_log("Administrator " . $_SESSION['user_id'] .
-                " je deaktiviral prodajalca " . $data['id']);
+                self::administrator_log("Administrator " . $_SESSION['user_id'] .
+                        " je deaktiviral prodajalca " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=prodajalec");
             } elseif ($data['oseba'] == 'stranka') {
                 self::prodajalec_log("Prodajalec " . $_SESSION['user_id'] .
-                " je deaktiviral stranko " . $data['id']);
+                        " je deaktiviral stranko " . $data['id']);
                 ViewHelper::redirect(BASE_URL . "prikaz-uporabnikov?vloga=stranka");
             } else {
                 ViewHelper::redirect(BASE_URL . "izdelki");

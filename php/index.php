@@ -135,13 +135,31 @@ $urls = [
      * 
      */
     "/^api\/prijava$/" => function ($token, $method, $id = null) {
-        UporabnikRESTController::prijava();
+        switch ($method) {
+            case "POST":
+                UporabnikRESTController::prijava();
+                break;
+            default:
+                break;
+        }
     },
     "/^api\/odjava$/" => function ($token, $method, $id = null) {
-        UporabnikRESTController::odjava($token);
+        switch ($method) {
+            case "POST":
+                UporabnikRESTController::odjava($token);
+                break;
+            default:
+                break;
+        }
     },
     "/^api\/podatki$/" => function ($token, $method, $id = null) {
-        UporabnikRESTController::userdata($token);
+        switch ($method) {
+            case "GET":
+                UporabnikRESTController::userdata($token);
+                break;
+            default:
+                break;
+        }
     },
     "/^api\/izdelki$/" => function ($token, $method, $id = null) {
         switch ($method) {
@@ -163,6 +181,9 @@ $urls = [
                 break;
         }
     },
+    "/^api\/kosarica$/" => function ($token, $method) {
+        
+    }
 ];
 
 $headers = apache_request_headers();

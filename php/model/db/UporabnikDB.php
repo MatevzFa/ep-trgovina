@@ -200,46 +200,46 @@ class UporabnikDB extends AbstractDB {
 
         if (self::preveriGeslo($id, $geslo)) {
 
-            $mobileinfo = self::query("SELECT * FROM mobile_info WHERE user_id = :id", array('id' => $id));
+            self::modify("DELETE FROM mobile_info WHERE user_id = :id", array('id' => $id));
 
-            if ($mobileinfo != NULL) {
-                return $mobileinfo[0];
-            } else {
+            $dbconn = DB::getInstance();
 
-                $dbconn = DB::getInstance();
-                
-                $token = bin2hex(random_bytes(16));
+            $token_raw = bin2hex(random_bytes(16));
+            $token = password_hash($token_raw, PASSWORD_BCRYPT, array('salt' => 'saltintensified1234567'));
 
-                $stmtIzdelek = $dbconn->prepare(""
-                        . "INSERT INTO mobile_info "
-                        . "     (user_id, date, token) "
-                        . "VALUES ("
-                        . "     :id, "
-                        . "     NOW(), "
-                        . "     :token"
-                        . ")"
-                        . "");
+            $stmtIzdelek = $dbconn->prepare(""
+                    . "INSERT INTO mobile_info "
+                    . "     (user_id, date, token) "
+                    . "VALUES "
+                    . "     (:id, NOW(), :token)");
 
-                $stmtIzdelek->bindValue(":id", $id, PDO::PARAM_INT);
-                $stmtIzdelek->bindValue(":token", $token);
+            $stmtIzdelek->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmtIzdelek->bindValue(":token", $token);
 
-                $stmtIzdelek->execute();
+            $stmtIzdelek->execute();
 
-                return self::query("SELECT * FROM mobile_info WHERE user_id = :id", array('id' => $id))[0];
-            }
+            $data = self::query("SELECT * FROM mobile_info WHERE user_id = :id", array('id' => $id))[0];
+            $data['token'] = $token_raw;
+//            var_dump($data);
+            return $data;
+            
         } else {
             return null;
         }
     }
-    
+
     public static function mobileLogout($token) {
+        $token = password_hash($token, PASSWORD_BCRYPT, array('salt' => 'saltintensified1234567'));
         self::modify("DELETE FROM mobile_info WHERE token = :token", array('token' => $token));
     }
-    
+
     public static function mobileVerify($token) {
+
         if ($token == NULL) {
             return NULL;
         }
+
+        $token = password_hash($token, PASSWORD_BCRYPT, array('salt' => 'saltintensified1234567'));
         $id = self::query("SELECT user_id FROM mobile_info WHERE token = :token", array('token' => $token));
         if ($token != NULL) {
             return $id[0]['user_id'];
