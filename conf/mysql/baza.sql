@@ -156,7 +156,7 @@ DROP TABLE IF EXISTS `ep_trgovina`.`mobile_info` ;
 CREATE TABLE IF NOT EXISTS `ep_trgovina`.`mobile_info` (
   `user_id` INT NOT NULL,
   `date` DATETIME NOT NULL,
-  `token` VARCHAR(45) NOT NULL,
+  `token` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`user_id`),
   CONSTRAINT `fk_mobile_to_user`
     FOREIGN KEY (`user_id`)
