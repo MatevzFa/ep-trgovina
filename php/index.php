@@ -21,6 +21,7 @@ require_once("controller/UporabnikiController.php");
 require_once("controller/NarocilaController.php");
 require_once("controller/KosaricaController.php");
 require_once("controller/IzdelkiRESTController.php");
+require_once("controller/UporabnikRESTController.php");
 
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 
@@ -133,20 +134,29 @@ $urls = [
      * API controllers
      * 
      */
-    "/^api\/izdelki$/" => function ($method, $id = null) {
+    "/^api\/prijava$/" => function ($token, $method, $id = null) {
+        UporabnikRESTController::prijava();
+    },
+    "/^api\/odjava$/" => function ($token, $method, $id = null) {
+        UporabnikRESTController::odjava($token);
+    },
+    "/^api\/podatki$/" => function ($token, $method, $id = null) {
+        UporabnikRESTController::userdata($token);
+    },
+    "/^api\/izdelki$/" => function ($token, $method, $id = null) {
         switch ($method) {
             case "POST":
-                IzdelkiRESTController::add();
+                IzdelkiRESTController::add($token);
                 break;
             default: # GET
                 IzdelkiRESTController::index();
                 break;
         }
     },
-    "/^api\/izdelki\/(\d+)$/" => function ($method, $id = null) {
+    "/^api\/izdelki\/(\d+)$/" => function ($token, $method, $id = null) {
         switch ($method) {
             case "PUT":
-                IzdelkiRESTController::edit($id);
+                IzdelkiRESTController::edit($token, $id);
                 break;
             default: # GET
                 IzdelkiRESTController::get($id);
@@ -154,19 +164,26 @@ $urls = [
         }
     },
 ];
-    
+
+$headers = apache_request_headers();
+
 foreach ($urls as $pattern => $controller) {
     if (substr($pattern, 0, 1) == "/" && preg_match($pattern, $path, $params)) {
-        try {
-            $params[0] = $_SERVER["REQUEST_METHOD"];
-            $controller(...$params);
-        } catch (InvalidArgumentException $e) {
-            ViewHelper::error404();
-        } catch (Exception $e) {
-            ViewHelper::displayError($e, true);
+//        try {
+        $params[0] = $_SERVER["REQUEST_METHOD"];
+        $token = null;
+        if (isset(apache_request_headers()['Authorization'])) {
+            $token = apache_request_headers()['Authorization'];
         }
-
+        $controller($token, ...$params);
+//        } catch (InvalidArgumentException $e) {
+//            v
+//            ViewHelper::error404();
+//        } catch (Exception $e) {
+//            ViewHelper::error404();
+//        } finally {
         exit();
+//        }
     }
 }
 

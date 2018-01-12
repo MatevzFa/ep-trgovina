@@ -2,6 +2,7 @@ package ep.rest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -26,8 +28,13 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
     private ListView list;
     private IzdelekAdapter adapter;
 
+    private Button prijava;
+    private Button odjava;
+    private TextView logindata;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -51,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
         container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                TrgovinaService.getInstance().getAll().enqueue(MainActivity.this);
+                getApiInstance().getAll().enqueue(MainActivity.this);
             }
         });
 
@@ -64,7 +71,33 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
             }
         });
 
-        TrgovinaService.getInstance().getAll().enqueue(MainActivity.this);
+        prijava = findViewById(R.id.btn_login);
+        prijava.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(MainActivity.this, PrijavaActivity.class);
+                startActivity(intent);
+            }
+        });
+        odjava = findViewById(R.id.btn_logout);
+        logindata = findViewById(R.id.logindata);
+
+        getApiInstance().getAll().enqueue(MainActivity.this);
+        String token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null);
+        Log.i(TAG, token + "");
+        getApiInstance()
+                .podatki(token)
+                .enqueue(new Callback<LoginState>() {
+                    @Override
+                    public void onResponse(Call<LoginState> call, Response<LoginState> response) {
+                        logindata.setText(response.body().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginState> call, Throwable t) {
+
+                    }
+                });
     }
 
     @Override
@@ -92,5 +125,9 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
     public void onFailure(Call<List<Izdelek>> call, Throwable t) {
         Log.w(TAG, "Error: " + t.getMessage(), t);
         container.setRefreshing(false);
+    }
+
+    public TrgovinaService.RestApi getApiInstance() {
+        return TrgovinaService.getInstance(getApplicationContext());
     }
 }

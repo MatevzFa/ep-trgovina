@@ -29,6 +29,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ep.rest.MainActivity" />
         </activity>
+        <activity
+            android:name=".PrijavaActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ep.rest.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

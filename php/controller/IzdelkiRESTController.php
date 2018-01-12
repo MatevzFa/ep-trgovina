@@ -24,6 +24,10 @@ class IzdelkiRESTController {
         $izdelek['slike'] = $slike;
         echo json_encode($izdelek, JSON_PRETTY_PRINT);
     }
+    
+    public static function add() {
+        
+    }
 
     public static function headers() {
         header('Content-Type: application/json');
