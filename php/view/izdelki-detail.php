@@ -28,23 +28,35 @@
                             <p><?= $izdelek['cena'] ?> €</p>
                             <p><?= $izdelek['opis'] ?></p>
                             <div class="p-3 mb-2 bg-info text-white">
+                                <?php $percentOcena = isset($izdelek['povprecnaOcena']) ? $izdelek['povprecnaOcena'] : 0 ?>
                                 Povprecna ocena: <?= isset($izdelek['povprecnaOcena']) ? $izdelek['povprecnaOcena'] : "Ni ocen" ?></p>
-                            </div>
+                            <br>    
+                            <div class="ocenaDIV">
+                                    <div>
+                                        <img style="max-width: 300px;" src="https://image.ibb.co/jpMUXa/stars_blank.png" alt="img">
+                                    </div>
+                                    <div class="ocenaSlika" style="width:<?=($percentOcena/5)*100 ?>%;">
+                                        <img style="max-width: 300px;" src="https://image.ibb.co/caxgdF/stars_full.png" alt="">
+                                    </div>
+                             </div>
+                            <br><br><br>
                             <div class="container">
-                                Oceni izdelek
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <form action="<?= BASE_URL . "oceni-izdelek" ?>" method="post">
-                                        <label class="radio-inline"><input type="radio" name="ocena" value="1">1</label>
-                                        <label class="radio-inline"><input type="radio" name="ocena" value="2">2</label>
-                                        <label class="radio-inline"><input type="radio" name="ocena" value="3">3</label>
-                                        <label class="radio-inline"><input type="radio" name="ocena" value="4">4</label>
-                                        <label class="radio-inline"><input type="radio" name="ocena" value="5">5</label>
-                                        <input type="hidden" name="izdelek_id" value="<?= $izdelek['id'] ?>" />
-                                        <input type="submit" value="Oddaj oceno" />
-                                    </form>
-                                <?php else: ?>
-                                    <a href="<?= BASE_URL . "prijava" ?>">Prijavite se</a>
-                                <?php endif; ?>
+                                <?php if ($jeOcenil == False): ?>
+                                    Oceni izdelek
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <form action="<?= BASE_URL . "oceni-izdelek" ?>" method="post">                                             
+                                            <label class="radio-inline"><input type="radio" name="ocena" value="1">1</label>
+                                            <label class="radio-inline"><input type="radio" name="ocena" value="2">2</label>
+                                            <label class="radio-inline"><input type="radio" name="ocena" value="3">3</label>
+                                            <label class="radio-inline"><input type="radio" name="ocena" value="4">4</label>
+                                            <label class="radio-inline"><input type="radio" name="ocena" value="5">5</label>
+                                            <input type="hidden" name="izdelek_id" value="<?= $izdelek['id'] ?>" />
+                                            <input type="submit" value="Oddaj oceno" />
+                                        </form>
+                                    <?php else: ?>
+                                        <a href="<?= BASE_URL . "prijava" ?>">Prijavite se</a>
+                                    <?php endif; ?>
+                                <?php endif; ?> 
                             </div>
                             <div class="container">
                                 <form action="<?= BASE_URL . "kosarica" ?>" method="post">

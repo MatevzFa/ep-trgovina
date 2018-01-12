@@ -19,7 +19,10 @@ class IzdelkiController extends AbstractController {
         if (self::checkValues($dataDetail)) {
             echo ViewHelper::render('view/izdelki-detail.php', [
                 'izdelek' => IzdelekDB::pridobiZOceno($dataDetail),
-                'slike' => IzdelekDB::pridobiSlike($dataDetail)
+                'slike' => IzdelekDB::pridobiSlike($dataDetail),
+                'jeOcenil' => IzdelekDB::aliJeUporabnikZeOcenilIzdelek(
+                        array('izdelek_id' => $dataDetail['id'],
+                            'uporabnik_id' => $_SESSION['user_id']))
                     ]
             );
         } else {
