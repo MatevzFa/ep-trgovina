@@ -25,7 +25,7 @@
   border: 0;
   float: left;
   position: relative;
-  width: 300px;
+  width: 200px;
 } 
 .ocenaSlika {
   border: 0;
@@ -34,6 +34,10 @@
   left: 0;
   overflow: hidden;
  } 
+ img{
+   max-width: 350px;
+ }
+
 @media (min-width:34em) {
     .card-deck > .card
     {

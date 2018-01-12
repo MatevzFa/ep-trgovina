@@ -69,13 +69,13 @@ INSERT INTO narocilo_vsebuje(kolicina, izdelek_id, narocilo_id, cena) VALUES (1,
 -- Generirano na http://www.mockaroo.com/
 insert into izdelek (ime, cena, opis) values ('Ecolab - Medallion', '28.97', 'Excision of Inferior Mesenteric Vein, Open Approach');
 insert into izdelek (ime, cena, opis) values ('Food Colouring - Green', '45.31', 'Destruction of Right Thorax Bursa and Ligament, Open Approach');
-INSERT INTO slika(path, izdelek_id) VALUES ('7.jpg', 6);
+INSERT INTO slika(path, izdelek_id) VALUES ('powder.jpg', 6);
 insert into izdelek (ime, cena, opis) values ('Spinach - Packaged', '33.59', 'Drainage of Left Lacrimal Duct, Open Approach');
-INSERT INTO slika(path, izdelek_id) VALUES ('10.jpg', 7);
+INSERT INTO slika(path, izdelek_id) VALUES ('spinach.jpg', 7);
 insert into izdelek (ime, cena, opis) values ('Grapes - Green', '36.65', 'Fragmentation in Anus, Via Natural or Artificial Opening');
-INSERT INTO slika(path, izdelek_id) VALUES ('8.jpg', 8);
+INSERT INTO slika(path, izdelek_id) VALUES ('grapes.jpg', 8);
 insert into izdelek (ime, cena, opis) values ('Cocoa Butter', '43.80', 'Drainage of Azygos Vein with Drainage Device, Percutaneous Endoscopic Approach');
-INSERT INTO slika(path, izdelek_id) VALUES ('9.jpg', 9);
+INSERT INTO slika(path, izdelek_id) VALUES ('cocoa.jpg', 9);
 insert into izdelek (ime, cena, opis) values ('Grouper - Fresh', '33.15', 'Dilation of Left Femoral Artery with Four or More Intraluminal Devices, Open Approach');
 insert into izdelek (ime, cena, opis) values ('Lid - Translucent, 3.5 And 6 Oz', '34.51', 'Restriction of Upper Vein with Intraluminal Device, Open Approach');
 insert into izdelek (ime, cena, opis) values ('Vodka - Lemon, Absolut', '38.43', 'Revision of Internal Fixation Device in Left Upper Femur, Percutaneous Approach');

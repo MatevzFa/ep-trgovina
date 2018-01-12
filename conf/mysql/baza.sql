@@ -46,7 +46,10 @@ CREATE TABLE IF NOT EXISTS `ep_trgovina`.`izdelek` (
   `cena` DECIMAL(10,2) NOT NULL,
   `opis` VARCHAR(1000) NULL,
   `aktiven` TINYINT(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  FULLTEXT INDEX `ime` (`ime` ASC),
+  FULLTEXT INDEX `opis` (`opis` ASC),
+  FULLTEXT INDEX `ime_opis` (`opis` ASC, `ime` ASC))
 ENGINE = InnoDB;
 
 
@@ -174,15 +177,15 @@ DROP TRIGGER IF EXISTS `ep_trgovina`.`uporabnik_BEFORE_INSERT` $$
 USE `ep_trgovina`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `ep_trgovina`.`uporabnik_BEFORE_INSERT` BEFORE INSERT ON `uporabnik` FOR EACH ROW
 BEGIN
-  IF NEW.vloga = 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
-    SIGNAL SQLSTATE '45000' SET message_text = 'Obstaja lahko le en administrator';
-  END IF;
-  IF NEW.vloga NOT IN ('stranka', 'administrator', 'prodajalec') THEN
+	IF NEW.vloga = 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
+		SIGNAL SQLSTATE '45000' SET message_text = 'Obstaja lahko le en administrator';
+	END IF;
+	IF NEW.vloga NOT IN ('stranka', 'administrator', 'prodajalec') THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Nedovoljena vloga';
     END IF;
-  IF NEW.vloga IN ('stranka') AND (NEW.naslov IS NULL OR NEW.telefon IS NULL) THEN
-    SIGNAL SQLSTATE '45000' SET message_text = 'Za uporabnika `naslov` ali `telefon` ni nastavljeno';
-  END IF;
+	IF NEW.vloga IN ('stranka') AND (NEW.naslov IS NULL OR NEW.telefon IS NULL) THEN
+		SIGNAL SQLSTATE '45000' SET message_text = 'Za uporabnika `naslov` ali `telefon` ni nastavljeno';
+	END IF;
 END;$$
 
 
@@ -191,15 +194,15 @@ DROP TRIGGER IF EXISTS `ep_trgovina`.`uporabnik_BEFORE_UPDATE` $$
 USE `ep_trgovina`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `ep_trgovina`.`uporabnik_BEFORE_UPDATE` BEFORE UPDATE ON `uporabnik` FOR EACH ROW
 BEGIN
-  IF NEW.vloga = 'administrator' AND OLD.vloga != 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
-    SIGNAL SQLSTATE '45000' SET message_text = 'Obstaja lahko le en administrator';
-  END IF;
+	IF NEW.vloga = 'administrator' AND OLD.vloga != 'administrator' AND EXISTS (SELECT * FROM uporabnik WHERE vloga = 'administrator') THEN
+		SIGNAL SQLSTATE '45000' SET message_text = 'Obstaja lahko le en administrator';
+	END IF;
     IF NEW.vloga NOT IN ('stranka', 'administrator', 'prodajalec') THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Nedovoljena vloga';
     END IF;
-  IF NEW.vloga = 'stranka' AND (NEW.naslov IS NULL OR NEW.telefon IS NULL) THEN
-    SIGNAL SQLSTATE '45000' SET message_text = 'Za uporabnika `naslov` ali `telefon` ni nastavljeno';
-  END IF;
+	IF NEW.vloga = 'stranka' AND (NEW.naslov IS NULL OR NEW.telefon IS NULL) THEN
+		SIGNAL SQLSTATE '45000' SET message_text = 'Za uporabnika `naslov` ali `telefon` ni nastavljeno';
+	END IF;
 END;$$
 
 
