@@ -1,4 +1,4 @@
-UPORABNIKI
+# UPORABNIKI
 
 ## Janez Novak, administrator
 email: `aj@ep.si`  
@@ -21,8 +21,9 @@ email: `ivan@gmail.com`
 geslo: `ivanivanpass`
 
 
-GESLA ZA UVOZE: ep
+#GESLA ZA UVOZE: 
+ep
 
-KORAKI ZA ZAGON:
-- pognati skripto 'conf.sh', ki se nahaja v tem direktoriju.
+# KORAKI ZA ZAGON:
+* pognati skripto 'conf.sh', ki se nahaja v tem direktoriju.
 
