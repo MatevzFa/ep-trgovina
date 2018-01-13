@@ -21,8 +21,8 @@ email: `ivan@gmail.com`
 geslo: `ivanivanpass`
 
 
-#GESLA ZA UVOZE: 
-ep
+# GESLO ZA UVOZE: 
+'ep'
 
 # KORAKI ZA ZAGON:
 * pognati skripto 'conf.sh', ki se nahaja v tem direktoriju.
