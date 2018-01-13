@@ -8,8 +8,14 @@ APACHE="/etc/apache2"
 
 # Apache2 mods
 function a2enmods() {
+    # ce direktorij /ssl se ne obstaja, ga ustvari
+    if [ ! -d $APACHE/ssl ]; then
+        echo "Kreiranje direktorija ssl"
+    sudo mkdir $APACHE/ssl
+    fi
+    
     echo "Konfiguracija Apache2 modulov..."
-	sudo a2enmod rewrite ssl
+    sudo a2enmod rewrite ssl
     echo
 }
 
@@ -17,16 +23,16 @@ function a2enmods() {
 function a2conf() {
     echo "Konfiguracija strežnika Apache2..."
 
-	for conffile in $conf_apache2/*conf; do
+    for conffile in $conf_apache2/*conf; do
 
-		diff $conffile $APACHE/sites-available/${conffile##*/} >/dev/null
-		isdiff=$?
+        diff $conffile $APACHE/sites-available/${conffile##*/} >/dev/null
+        isdiff=$?
 
-		if (($isdiff)); then
-			sudo mv "$APACHE/sites-available/${conffile##*/}" "$APACHE/sites-available/${conffile##*/}.$(date +%Y%m%d_%H%M%S).bak"
-			sudo cp "$conffile" "$APACHE/sites-available/"
-			echo "Datoteka $conffile kopirana v $APACHE/sites-available/"
-		else
+        if (($isdiff)); then
+            sudo mv "$APACHE/sites-available/${conffile##*/}" "$APACHE/sites-available/${conffile##*/}.$(date +%Y%m%d_%H%M%S).bak"
+            sudo cp "$conffile" "$APACHE/sites-available/"
+            echo "Datoteka $conffile kopirana v $APACHE/sites-available/"
+        else
             echo "V $conffile ni sprememb."
         fi
 
@@ -34,16 +40,16 @@ function a2conf() {
             echo "v sites-enabled dodajam symlink na sites-available za ${conffile##*/}"
             sudo ln -s $APACHE/sites-available/${conffile##*/} $APACHE/sites-enabled/${conffile##*/}
         fi
-	done
+    done
     echo
 }
 
 #Changing permissions for file uploading. Add user ep to group www-data. Give ownership to www-data.
 function permissions() {
     echo "Nastavljanje dovoljenja za nalaganje slik skupini www-data"
-	sudo usermod -a -G www-data ep
-	# slike
-	sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/static/img -R
+    sudo usermod -a -G www-data ep
+    # slike
+    sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/static/img -R
     # logs
     sudo chown www-data:www-data /home/ep/NetBeansProjects/ep-trgovina/php/logs -R
     echo
@@ -52,15 +58,26 @@ function permissions() {
 # Server certificates, CA certificates, CRL
 function certs() {
     echo "Konfiguracija strežniških certifikatov..."
-	sudo cp $conf_certs/*.pem $APACHE/ssl/
+    sudo cp $conf_certs/*.pem $APACHE/ssl/
     echo
+}
+
+# Pear QuickForm2 install
+function pearQF2() {
+
+    if [ ! -f /usr/share/php/HTML/QuickForm2.php ]; then
+        echo "Namestitev Pear HTML_QuickForm2"
+    sudo pear install HTML_QuickForm2
+    echo
+    fi
+    
 }
 
 function initdb() {
     echo "Inicializacija podatkovne baze..."
-	cd $conf_db
-	cat baza.sql data.sql | mysql -uroot -p
-	cd ..
+    cd $conf_db
+    cat baza.sql data.sql | mysql -uroot -p
+    cd ..
     echo
 }
 
@@ -68,14 +85,15 @@ function initdb() {
 echo -e "Ustavljam Apache2...\n\n"
 sudo service apache2 stop
 if (($#)); then
-	for arg in $@; do
-		$arg
-	done
+    for arg in $@; do
+        $arg
+    done
 else
     a2enmods
     a2conf
     permissions
     certs
+    pearQF2
     initdb
 fi
 echo -e "\n\nZaganjam apache2...\n"
