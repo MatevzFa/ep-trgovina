@@ -124,7 +124,7 @@ class NarocilaController extends AbstractController {
      * @return boolean TRUE če je naročilo uspešno dodano; FALSE sicer
      */
     public static function dodajNarocilo(array $izdelki) {
-        self::preveriVlogo('prodajalec');
+        self::preveriVlogo('stranka');
 
         $datum = date("Y-m-d H:i:s");
         $user_id = $_SESSION['user_id'];
