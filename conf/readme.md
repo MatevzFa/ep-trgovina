@@ -22,7 +22,7 @@ geslo: `ivanivanpass`
 
 
 # GESLO ZA UVOZE: 
-'ep'
+`ep`
 
 # KORAKI ZA ZAGON:
 * pognati skripto 'conf.sh', ki se nahaja v tem direktoriju.
