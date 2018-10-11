@@ -2,6 +2,7 @@ package ep.rest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import okhttp3.Headers;
 import retrofit2.Call;
@@ -27,7 +32,7 @@ public class IzdelekDetailActivity extends AppCompatActivity implements Callback
     private TextView tvIzdelekCena;
     private TextView tvIzdelekOcena;
     private CollapsingToolbarLayout toolbarLayout;
-    private FloatingActionButton fabEdit;
+    private FloatingActionButton btnVKosarico;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +47,13 @@ public class IzdelekDetailActivity extends AppCompatActivity implements Callback
         tvIzdelekCena = (TextView) findViewById(R.id.izdelek_cena);
         tvIzdelekOcena = (TextView) findViewById(R.id.izdelek_ocena);
 
-        fabEdit = (FloatingActionButton) findViewById(R.id.fab_edit);
-        fabEdit.setOnClickListener(new View.OnClickListener() {
+        btnVKosarico = (FloatingActionButton) findViewById(R.id.fab_edit);
+        btnVKosarico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent intent = new Intent(IzdelekDetailActivity.this, IzdelekFormActivity.class);
-                intent.putExtra("ep.rest.izdelek", izdelek);
-                startActivity(intent);
+                vKosarico();
             }
         });
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -109,6 +111,48 @@ public class IzdelekDetailActivity extends AppCompatActivity implements Callback
     @Override
     public void onFailure(Call<Izdelek> call, Throwable t) {
         Log.w(TAG, "Error: " + t.getMessage(), t);
+    }
+
+    public void vKosarico() {
+
+        if (izdelek == null)
+            return;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(izdelek.id);
+
+        Set<String> kosarica = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getStringSet("kosarica", new HashSet<String>());
+
+        kosarica.add(json);
+        Log.i(TAG, kosarica.toString());
+        PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putStringSet("kosarica", kosarica)
+                .apply();
+    }
+
+    public void odstraniIzKosarice() {
+
+        if (izdelek == null)
+            return;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(izdelek.id);
+
+        Set<String> kosarica = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getStringSet("kosarica", new HashSet<String>());
+
+        kosarica.remove(json);
+
+        PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putStringSet("kosarica", kosarica)
+                .apply();
     }
 
 

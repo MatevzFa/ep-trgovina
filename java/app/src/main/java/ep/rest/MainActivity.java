@@ -165,11 +165,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Izd
 
                     @Override
                     public void onFailure(Call<LoginState> call, Throwable t) {
-                        PreferenceManager
-                                .getDefaultSharedPreferences(getApplicationContext())
-                                .edit()
-                                .putString("token", null)
-                                .apply();
+                        setToken(null);
                         recreate();
                     }
                 });
